@@ -748,7 +748,9 @@ POST STYLING
     margin: 0 auto;
     display: block; }
 .post img {
-  margin-bottom: 2rem; }
+  margin-bottom: 2rem;
+  margin-left: -20%;
+  max-width: 140%; }
 .post .highlight {
   clear: both;
   margin-bottom: 2rem; }

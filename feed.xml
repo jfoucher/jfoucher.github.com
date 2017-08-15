@@ -5,14 +5,16 @@
     <description>Jonathan Foucher's blog &lt;span class=&quot;amp&quot;&gt;&amp;amp;&lt;/span&gt; web development notebook</description>
     <link>https://jfoucher.com/</link>
     <atom:link href="https://jfoucher.com/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 15 Aug 2017 21:52:02 +0200</pubDate>
-    <lastBuildDate>Tue, 15 Aug 2017 21:52:02 +0200</lastBuildDate>
+    <pubDate>Tue, 15 Aug 2017 22:09:06 +0200</pubDate>
+    <lastBuildDate>Tue, 15 Aug 2017 22:09:06 +0200</lastBuildDate>
     <generator>Jekyll v3.3.1</generator>
     
       
       <item>
         <title>Communication between iframes with React and postMessage for an html template editor</title>
         <description>&lt;p&gt;I’m working on a project where I need some sort of simple landing page editor, where “blocks” are defined at the template level and they can be rearranged, text changed or added, and not much more. Most of the software I could find was either way too complex for my needs, gave the user the freedom to &lt;em&gt;completely&lt;/em&gt; destroy the template, or were otherwise pretty useless.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/uploads/2017/08/leanr.jpg&quot; alt=&quot;Editor in action&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;If it was frustrating for me I imagine how it would feel for my users who need to do this quickly and efficiently. What I needed would’t have drag and drop, nor 300 sliders for everything, neither would it give the user the ability to completely modify the template. (Users can provide custom HTML for their pages if they so choose). Anyway, all I &lt;em&gt;need&lt;/em&gt; was the ability to place some template blocks on a page, move them up and down, remove them, and change the text bits.&lt;/p&gt;
 

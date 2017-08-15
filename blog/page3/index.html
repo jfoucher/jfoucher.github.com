@@ -73,47 +73,121 @@ ga('send', 'pageview');
 
   <div class="post">
     
-    <h1 class="postTitle">CSS minification library for codeigniter</h1>
-    <p class="meta">April 11, 2011 | <span class="time">2</span> Minutes Read</p>
+    <h1 class="postTitle">A Phing task to update your Twitter status</h1>
+    <p class="meta">June 29, 2011 | <span class="time">4</span> Minutes Read</p>
 
-    <p>For my latest project, I wanted to be able to easily minify CSS stylesheets, using the simplest syntax possible, ideally using a simple tag in the header, like</p>
-<figure class="highlight"><pre><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">css</span><span class="o">-&gt;</span><span class="na">link</span><span class="p">(</span><span class="k">array</span><span class="p">(</span><span class="s1">'/assets/css/fonts.css'</span><span class="p">,</span><span class="s1">'/assets/css/layout.css'</span><span class="p">);</span><span class="cp">?&gt;</span></code></pre></figure>
+    <h3 id="phing-and-twitter">Phing and Twitter</h3>
 
-<p>After some searching, I found a css minification library for PHP, <a href="https://code.google.com/p/minify/">minify</a></p>
+<p>I recently starting working with <a title="PHP build and deployment tool" href="http://www.phing.info">phing</a> to automate the build and deployement process for the web apps I’m building. I use it to compile my LESS files to CSS and minimize then, to compress and concatenate the javascript files, to optimize images using <a href="http://www.smushit.com/">smushit</a>, etc…</p>
 
-<p>It was very easy to modify it so that It could be used in our CodeIgniter applications like any other libraries.
-All I did was wrap the main minification function in Codeigniter specific code.
-I modelled the interaction on the image library, as I guess that’s what most people are used to.</p>
+<p>I like to be able to comunicate exactly what I’m doing, and thankfully Phing has a built in task to email a message to a list of recipients, which is good, but slightly old school. I wanted something that would be able to integrate readily with twitter, i.e. update my status when a build was completed. I saw <a href="http://codeinthehole.com/archives/14-Phing-task-to-update-Twitter-status.html">this post</a>, which unfortunately uses Basic Auth. As you doubtless know, <a href="http://dev.twitter.com/pages/basic_auth_shutdown">Twitter deprecated this form of authentication</a>, and now asks all users to authenticate using <a href="http://dev.twitter.com/pages/basic_to_oauth">OAuth</a>.</p>
 
-<div class="image-with-caption aligncenter" style="width:300px"><div class="caption">css minification library for codeigniter</div><a href="http://jfoucher.com/uploads/2011/04/Screenshot.png"><img class="size-medium wp-image-450" title="css minification for codeigniter" src="http://jfoucher.com/uploads/2011/04/Screenshot-300x162.png" alt="css minification for codeigniter" width="300" height="162" /></a></div>
+<h3 id="download-twitteroauth-library">Download twitterOAuth library</h3>
 
-<h3>How to use</h3>
-<p>Using the library involves loading it, setting up an array with some configuration values, such as the source css file(s), the destination file (optional) or the time that the generated file should be cached, and finally initializing the library with the configuration array() .</p>
+<p>That meant I had to roll my own phing task… However, thanks to great work by cleverer people, doing it was quite simple. Using <a href="http://abrah.am/">Abraham Williams’</a> <a href="https://github.com/abraham/twitteroauth">twitteroauth</a> library means that the coding I’d have to do was greatly reduced. Awesome, because <a href="http://www.codinghorror.com/blog/2005/08/how-to-be-lazy-dumb-and-successful.html">I aim to be lazy</a>.</p>
 
-<p>The following code, which should go in your controller, will look very familiar to Codeigniter users.</p>
+<p>The first step is to <a href="https://github.com/abraham/twitteroauth/tarball/master">download the twitteroauth library</a> from github. Extract it to a temporary folder and copy the subfolder</p>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">twitteroauth</code></pre></figure>
+<p>to the folder where your fing tasks are stored (on my system it is</p>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">/usr/share/php/phing/tasks/my/</code></pre></figure>
+<p>. Please note you might have to create the</p>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">my/</code></pre></figure>
+<p>folder within</p>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">/usr/share/php/phing/tasks/</code></pre></figure>
+<p>. You will need root privileges for these steps.</p>
 
-<figure class="highlight"><pre><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
-<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">load</span><span class="o">-&gt;</span><span class="na">library</span><span class="p">(</span><span class="s1">'css'</span><span class="p">);</span>
-<span class="c1">//array of files to concatenate and minify
-</span><span class="nv">$config</span><span class="p">[</span><span class="s1">'source_file'</span><span class="p">]</span><span class="o">=</span><span class="k">array</span><span class="p">(</span><span class="s1">'/assets/css/layout.css'</span><span class="p">,</span><span class="s1">'/assets/css/fonts.css'</span><span class="p">);</span>
-<span class="c1">//where to output the result
-</span><span class="nv">$config</span><span class="p">[</span><span class="s1">'dest_file'</span><span class="p">]</span><span class="s1">'/assets/css/css.min.css'</span><span class="p">;</span>
-<span class="c1">//Cache time in hours
-</span><span class="nv">$config</span><span class="p">[</span><span class="s1">'cache_time'</span><span class="p">]</span><span class="o">=</span><span class="mi">48</span><span class="p">;</span>
-<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">css</span><span class="o">-&gt;</span><span class="na">initialize</span><span class="p">(</span><span class="nv">$config</span><span class="p">);</span>
-<span class="k">echo</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">css</span><span class="o">-&gt;</span><span class="na">link</span><span class="p">();</span>
-<span class="cp">?&gt;</span></code></pre></figure>
+<h3 id="register-application-with-twitter">Register application with Twitter</h3>
 
-<p>Will output the following stylesheet tag:</p>
+<p>Secondly, you need to <a href="https://dev.twitter.com/apps/new">register an application with twitter</a>, as you will need a consumer key and consumer secret later on. Please <a href="https://dev.twitter.com/apps/new">do so now</a>, and come back once you have your app data available.</p>
 
-<figure class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">"stylesheet"</span> <span class="na">href=</span><span class="s">"/assets/css/css.min.css"</span> <span class="na">type=</span><span class="s">"text/css"</span> <span class="na">media=</span><span class="s">"screen"</span> <span class="nt">/&gt;</span></code></pre></figure>
+<h3 id="create-the-custom-phing-task">Create the custom phing task</h3>
 
-<h3>Get It!</h3>
-<p>You can <a href="https://github.com/jfoucher/codeigniter-css-library">get it from GitHub</a>. Don’t forget to fork it if you think you can make it better!</p>
-<h3>Finally</h3>
-<p>I’m not sure the way I’ve done it, using a</p>
-<figure class="highlight"><pre><code class="language-php" data-lang="php">$config</code></pre></figure>
-<p>array and so on, is the best way. It might be a bit overkill for such a simple library. I’d love to hear your thoughts on the subject.</p>
+<p>Next up is creating the actual task PHP class. Create an empty file named TwitterUpdateTask.php</p>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">sudo touch /usr/share/php/phing/tasks/my/TwitterUpdateTask.php</code></pre></figure>
+<p>and open it for editing with your favorite editor. We’ll use gedit :</p>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">gksu gedit /usr/share/php/phing/tasks/my/TwitterUpdateTask.php</code></pre></figure>
+
+<p>The code for this file is as shown below:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;?php
+require_once ("phing/Task.php");
+require_once ("phing/tasks/my/twitteroauth/twitteroauth.php");
+/* get the lines below from http://twittertokens.6px.eu/ */
+define('CONSUMER_KEY', 'Your Consumer Key Here');
+define('CONSUMER_SECRET', 'Your Consumer Secret Here');
+define('OAUTH_TOKEN', 'Your OAuth Token Here');
+define('OAUTH_TOKEN_SECRET', 'Your Oauth Token Secret Here');
+class TwitterUpdateTask extends Task {
+    private $message;
+    /*
+     * The setter for the status message
+     */
+    public function setMessage($str){
+        $this-&gt;message=$str;
+    }
+    public function main(){
+        /* Connect to twitter */
+        $connection = new TwitterOAuth(CONSUMER_KEY, CONSUMER_SECRET, OAUTH_TOKEN, OAUTH_TOKEN_SECRET);
+        /* Pass the status message as a parameter */
+        $parameters = array('status' =&gt; $this-&gt;message);
+        /* Post the data to the API endpoint */
+        $status = $connection-&gt;post('statuses/update', $parameters);
+        if (isset($status-&gt;error)){
+            /* if there is an error, fail the build */
+            throw new BuildException($status-&gt;error);
+        }else{
+            /* if there is no error, show a success message */
+            $this-&gt;log ("Status posted to twitter");
+        }
+    }
+}
+</code></pre>
+</div>
+
+<h3 id="get-the-oauth-token-and-secret">Get the OAuth token and secret</h3>
+
+<p>Don’t close this file, we still need to add the authentication data to it. You can already place your consumer key and consumer secret in the apropriate</p>
+<figure class="highlight"><pre><code class="language-php" data-lang="php">define()</code></pre></figure>
+<p>calls (the first two lines), but if not, we’ll do it now.</p>
+
+<p>Navigate to <a href="http://twittertokens.6px.eu">http://twittertokens.6px.eu</a>, put your consumer data and consumer secret in the apropriate fields and click on “Sign in with Twitter”. A twitter page will open asking for your confirmation. Click “Sign in” and you are redirected to http://twittertokens.6px.eu/. You should see 4 lines of code appear, that look like this:</p>
+
+<figure class="highlight"><pre><code class="language-php" data-lang="php">    define('CONSUMER_KEY', 'V1UsnZJrgfhgKJFoqsQ');
+    define('CONSUMER_SECRET', 'UUazcBfXrWW1jcpiSU564hg654t1EMki8gzptQU');
+    define('OAUTH_TOKEN', '325454656-EuCudghg8tTYwKf9yjt5nhqr14i5egHJPeVRGVxQv');
+    define('OAUTH_TOKEN_SECRET', 'gh6854hg6tyGEvGEiEi15XmUtOmDpaONM');</code></pre></figure>
+
+<p>Copy this code to the corresponding spot in the TwitterUpdateTask.php file, overwriting what’s already there.</p>
+
+<p>Please note though that I’m not making any claims as to how secure this is or whatever. I don’t store any of your data anywhere, but if sending your application consumer token and secret worries you, find another way to get the Oauth tokens.</p>
+
+<h3 id="create-the-build-file">Create the build file</h3>
+
+<p>First, we define the custom task:</p>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;taskdef</span> <span class="na">name=</span><span class="s">"twitterupdate"</span> <span class="na">classname=</span><span class="s">"phing.tasks.my.TwitterUpdateTask"</span> <span class="nt">/&gt;</span></code></pre></figure>
+
+<p>Secondly, let’s create a custom target that will send a tweet with the message we want.</p>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml">    <span class="nt">&lt;target</span> <span class="na">name=</span><span class="s">"tweet"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;twitterupdate</span> <span class="na">message=</span><span class="s">"${twitter.status}"</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;/target&gt;</span></code></pre></figure>
+
+<p>Now we can call this task from another one, but we need to make that the twitter.status is set. Let’s we have a “staging” target. Part of it could look like this:</p>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml">    <span class="c">&lt;!-- Set the timestamp to be used in the twitter update --&gt;</span>
+    <span class="nt">&lt;tstamp&gt;</span>
+        <span class="nt">&lt;format</span> <span class="na">property=</span><span class="s">"build.time"</span> <span class="na">pattern=</span><span class="s">"%Y-%m-%d %H:%I"</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;/tstamp&gt;</span>
+    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"twitter.status"</span> <span class="na">value=</span><span class="s">"Staging build completed at ${build.time}"</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;phingcall</span> <span class="na">target=</span><span class="s">"tweet"</span> <span class="nt">/&gt;</span></code></pre></figure>
+
+<p>This will post the message to twitter, replacing the</p>
+<figure class="highlight"><pre><code class="language-php" data-lang="php">${build.time}</code></pre></figure>
+<p>token by the actual build and time.</p>
+
+<p>Do you use Phing for your webapp build and deployment? If so, please share any custom tasks you might have created.</p>
+
 
   </div>
 
@@ -123,9 +197,17 @@ I modelled the interaction on the image library, as I guess that’s what most p
 
     
       <li>
+        <span class="date">April 11, 2011</span>
+        <h3><a class="post-link" href="/2011/04/css-minification-library-for-codeigniter.html">CSS minification library for codeigniter</a></h3>
+        <p class="meta">June 29, 2011 | <span class="time">4</span> Minutes Read</p>
+        <p class="description">This library allows you to serve cached minimized css to your users without any action on your part.</p>
+      </li>
+
+    
+      <li>
         <span class="date">April 03, 2011</span>
         <h3><a class="post-link" href="/2011/04/the-making-of-flickholdr-an-image-placeholder-generator.html">The making of flickholdr.com, an image placeholder generator</a></h3>
-        <p class="meta">April 11, 2011 | <span class="time">2</span> Minutes Read</p>
+        <p class="meta">June 29, 2011 | <span class="time">4</span> Minutes Read</p>
         <p class="description">Flickholdr.com takes your chosen image dimensions, your tags, and returns Creative Commons licensed images from flickr that fit your criteria.</p>
       </li>
 
@@ -133,7 +215,7 @@ I modelled the interaction on the image library, as I guess that’s what most p
       <li>
         <span class="date">February 13, 2011</span>
         <h3><a class="post-link" href="/2011/02/installing-running-apc-cache-codeigniter.html">Installing and running APC cache with CodeIgniter</a></h3>
-        <p class="meta">April 11, 2011 | <span class="time">2</span> Minutes Read</p>
+        <p class="meta">June 29, 2011 | <span class="time">4</span> Minutes Read</p>
         <p class="description">We take advantage of Codeigniter 2's cached mechanism to dramatically speed up our sites with APC.</p>
       </li>
 
@@ -141,7 +223,7 @@ I modelled the interaction on the image library, as I guess that’s what most p
       <li>
         <span class="date">January 22, 2011</span>
         <h3><a class="post-link" href="/2011/01/wordpress-email-404-notification.html">Wordpress 404 notification by email</a></h3>
-        <p class="meta">April 11, 2011 | <span class="time">2</span> Minutes Read</p>
+        <p class="meta">June 29, 2011 | <span class="time">4</span> Minutes Read</p>
         <p class="description">A Wordpress plugin that sends an email to the site admin when a user gets a 404 error.</p>
       </li>
 
@@ -149,16 +231,8 @@ I modelled the interaction on the image library, as I guess that’s what most p
       <li>
         <span class="date">January 14, 2011</span>
         <h3><a class="post-link" href="/2011/01/spanish-characters-on-qwerty-keyboard-for-ubuntu-10-10.html">Spanish characters on Qwerty keyboard for Ubuntu 10.10</a></h3>
-        <p class="meta">April 11, 2011 | <span class="time">2</span> Minutes Read</p>
+        <p class="meta">June 29, 2011 | <span class="time">4</span> Minutes Read</p>
         <p class="description">Set a configuration option to be able to easily type acendted character on Ubuntu 10.10.</p>
-      </li>
-
-    
-      <li>
-        <span class="date">January 14, 2011</span>
-        <h3><a class="post-link" href="/2011/01/python-skype-notifier-for-ubuntu.html">Python skype notifier for Ubuntu</a></h3>
-        <p class="meta">April 11, 2011 | <span class="time">2</span> Minutes Read</p>
-        <p class="description">Learning python by building a semi-useful Skype instant message notifier.</p>
       </li>
 
     

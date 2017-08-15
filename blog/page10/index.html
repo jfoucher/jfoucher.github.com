@@ -73,16 +73,36 @@ ga('send', 'pageview');
 
   <div class="post">
     
-    <h1 class="postTitle">Idec en route vers Cadix.</h1>
-    <p class="meta">October 06, 2004 | <span class="time">0</span> Minutes Read</p>
+    <h1 class="postTitle">Rérents de l'article</h1>
+    <p class="meta">October 06, 2004 | <span class="time">1</span> Minutes Read</p>
 
-    <p>Francis Joyon, sur <a href="http://www.trimaran-idec.com">Idec</a>, va tenter d’établir un nouveau record Cadix - San salvador (Bahamas) sur un parcours que l’on appelle la ‘Route de la découverte’</p>
+    <p>C’est un plugin pour <a hreflang="en" href="http://wordpress.org">Wordpress</a> Qui montre les derniers sites d’où sont venus vos visiteurs. Vous aurez besoin du plugin <a hreflang="en" href="http://randypeterman.com/StatTraq">Stattraq</a>.</p>
 
-<p>Francis est “[…] sur le trimaran matin, midi et soir, je n’arrète pas de bricoler, car il y a
-toujours une foule de petites choses   faire” Il fait tout lui même, sur un bateau qui est censé être mené par un équipage de gaillards surentraînés et pris en charge par une équipe à terre imposante…</p>
+<p>Installation :</p>
+<ol>
+	<li>Téléchargez et installez <a hreflang="en" href="http://randypeterman.com/StatTraq">Stattraq</a>.</li>
+	<li>Envoyer le fichier résultant à votre dossier /wp-content/plugins</li>
+	<li>Activez le plugin dans votre interface d'administration</li>
+</ol>
+<p>L’utilisation est simple :</p>
 
-<p>Il part prochainement de La Trinité afin de se placer en stand-by à Cadix. Aucun temps n’a encore été établi sur ce parcours en solitaire, et la seule référence est le record de Playstation, bateau plus grand mené par un équipage au complet. Francis ne pense pas pouvoir battre ce record, mais essaira de “[…] (s’) en
-approcher, dans la mesure du possible”.</p>
+<p>Ajouter le code suivant dans votre fichier index.php</p>
+
+<figure class="highlight"><pre><code class="language-php" data-lang="php">post_referrers(8, "<span class="nt">&lt;li&gt;</span>", "<span class="nt">&lt;/li&gt;</span>", "Pas encore...", "self");</code></pre></figure>
+
+<p>où 8 est le nombre pe pages référentes à afficher, ‘&lt;li&gt;’ est le texte   afficher avant chaque lien, ‘&lt;/li&gt;’ est le texte   afficher après chaque lien, ‘Pas encore…’ est le texte   afficher s’il n’y a pas encore de page référente. La derniére option sert à exclure certains sites : En mettant ‘self’ (défault), les référents internes ne seront pas affichés. Sinon, vous pouvez ecrire une liste de sites à ignorer, comme ceci :</p>
+
+<figure class="highlight"><pre><code class="language-php" data-lang="php">post_referrers('', '', '', '', 'google.com yahoo.com exemple.com');</code></pre></figure>
+
+<p>Pour ne pas afficher les référents sur une page où il y a plusieurs articles, utilisez une condition comme ceci:</p>
+
+<figure class="highlight"><pre><code class="language-php" data-lang="php">if ($single) post_referrers();</code></pre></figure>
+
+<p>Vous pouvez voir une démonstration en bas des pages de ce blog, et n’hésitez pas   laisser un commentaire si vous avez des problèmes.</p>
+
+<p>Version 0.21 : utilisation de la redirection Google pour essayer de diminuer les <a href="/?p=20">spams de référents</a>.</p>
+
+<p><a hreflang="en" href="/?p=37">English version</a></p>
 
   </div>
 
@@ -93,8 +113,16 @@ approcher, dans la mesure du possible”.</p>
     
       <li>
         <span class="date">October 06, 2004</span>
+        <h3><a class="post-link" href="/2004/10/idec-en-route-vers-cadix.html">Idec en route vers Cadix.</a></h3>
+        <p class="meta">October 06, 2004 | <span class="time">1</span> Minutes Read</p>
+        <p class="description">Francis Joyon, sur Idec, va tenter d’établir un nouveau record Cadix - San salvador (Bahamas) sur un parcours que l’on appelle la ‘Route de la découverte’</p>
+      </li>
+
+    
+      <li>
+        <span class="date">October 06, 2004</span>
         <h3><a class="post-link" href="/2004/10/censored-comment-wordpress-plugin.html">Censored Comment Wordpress plugin</a></h3>
-        <p class="meta">October 06, 2004 | <span class="time">0</span> Minutes Read</p>
+        <p class="meta">October 06, 2004 | <span class="time">1</span> Minutes Read</p>
         <p class="description">Another wordpress plugin. This one shows a user definable text on comments that have been edited or censored. I got the idea from Michael Heilemann complaining about some useless comments on his site.</p>
       </li>
 
@@ -102,7 +130,7 @@ approcher, dans la mesure du possible”.</p>
       <li>
         <span class="date">October 05, 2004</span>
         <h3><a class="post-link" href="/2004/10/new-generation-acronym-replacer.html">New generation acronym replacer</a></h3>
-        <p class="meta">October 06, 2004 | <span class="time">0</span> Minutes Read</p>
+        <p class="meta">October 06, 2004 | <span class="time">1</span> Minutes Read</p>
         <p class="description">This post describes a new kind of acronym replacer, where you don’t need to touch a line of PHP to define new acronyms, and can make them link directly to some place. For example, AOL could become AOL.</p>
       </li>
 
@@ -110,7 +138,7 @@ approcher, dans la mesure du possible”.</p>
       <li>
         <span class="date">October 04, 2004</span>
         <h3><a class="post-link" href="/2004/10/teaser-style-wordpress-plugin.html">Teaser Style Wordpress plugin</a></h3>
-        <p class="meta">October 06, 2004 | <span class="time">0</span> Minutes Read</p>
+        <p class="meta">October 06, 2004 | <span class="time">1</span> Minutes Read</p>
         <p class="description">Another useless wordpress plugin from my little factory here :). This one takes the teaser text, delimited between the beginning of a post and the &lt;!–more–&gt; tag, and wraps it in a &lt;div&gt; with class morediv. This then allows you style it differently using your style sheet, doing for example: .morediv{      font-weight:bold; }which is exactly what I have here.To install it, either put the source code in a php file or get the gzip file and uncompress it.Utterly deprecated. This is her...</p>
       </li>
 
@@ -118,16 +146,8 @@ approcher, dans la mesure du possible”.</p>
       <li>
         <span class="date">October 03, 2004</span>
         <h3><a class="post-link" href="/2004/10/author-page-wordpress-plugin.html">Author page wordpress plugin</a></h3>
-        <p class="meta">October 06, 2004 | <span class="time">0</span> Minutes Read</p>
+        <p class="meta">October 06, 2004 | <span class="time">1</span> Minutes Read</p>
         <p class="description">This plugin shows a specific page for each author, showing the number of posts published and some of the data entered in the Wordpress admin section, i.e. URL, AIM ICQ number, etc… except email! But it can provide a contact form that will send an email to the author’s address.</p>
-      </li>
-
-    
-      <li>
-        <span class="date">October 03, 2004</span>
-        <h3><a class="post-link" href="/2004/10/mise-jour-de-securite-pour-firefox-10pr.html">Mise à jour de sécurité pour Firefox 1.0PR</a></h3>
-        <p class="meta">October 06, 2004 | <span class="time">0</span> Minutes Read</p>
-        <p class="description">Disponible sur Mozillazine</p>
       </li>
 
     

@@ -5,9 +5,79 @@
     <description>Jonathan Foucher's blog &lt;span class=&quot;amp&quot;&gt;&amp;amp;&lt;/span&gt; web development notebook</description>
     <link>https://jfoucher.com/</link>
     <atom:link href="https://jfoucher.com/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 15 Aug 2017 18:17:15 +0200</pubDate>
-    <lastBuildDate>Tue, 15 Aug 2017 18:17:15 +0200</lastBuildDate>
+    <pubDate>Tue, 15 Aug 2017 19:22:54 +0200</pubDate>
+    <lastBuildDate>Tue, 15 Aug 2017 19:22:54 +0200</lastBuildDate>
     <generator>Jekyll v3.3.1</generator>
+    
+      
+      <item>
+        <title>Communication between iframes with React and postMessage for an html template editor</title>
+        <description>&lt;p&gt;I’m working on a project where I need some sort of simple landing page editor, where “blocks” are defined at the template level and they can be rearranged, text changed or added, and not much more. Most of the software I could find was either way too complex for my needs, gave the user the freedom to &lt;em&gt;completely&lt;/em&gt; destroy the template, or were otherwise pretty useless.&lt;/p&gt;
+
+&lt;p&gt;If it was frustrating for me I imagine how it would feel for my users who need to do this quickly and efficiently. What I needed would’t have drag and drop, nor 300 sliders for everything, neither would it give the user the ability to completely modify the template. (Users can provide custom HTML for their pages if they so choose). Anyway, all I &lt;em&gt;need&lt;/em&gt; was the ability to place some template blocks on a page, move them up and down, remove them, and change the text bits.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;em&gt;“How hard can it be ?”&lt;/em&gt; &lt;br /&gt;&lt;small&gt;- me, at 3 AM on thursday night.&lt;/small&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;How hard indeed ? Well, as it turns out, &lt;em&gt;quite&lt;/em&gt;. But it’s my fault. Scope creep. I decided it would also be possible to change the images. And also upload them. And maybe add custom buttons. And edit the background images. And the background colors. Anyway, here we are now, and this is how I’ve (almost, anyday now) done it :&lt;/p&gt;
+
+&lt;p&gt;I used an iframe to hold the displayed template, as that allows complete style (and everything else) isolation, and gives a good preview of the final result. &lt;em&gt;However&lt;/em&gt;, javascript between the iframe and the “controlling” page is not that easy. Because of &lt;a href=&quot;https://developer.mozilla.org/en-US/docs/Web/Security/Same-origin_policy&quot;&gt;same origin policy&lt;/a&gt; we can’t just tell the iframe to do this or that, or read it’s elements to see the html that’s in them.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;em&gt;“Inter-frame communication is like inter-process communication”&lt;/em&gt; &lt;br /&gt;&lt;small&gt;- My buddy who does C (or C++ maybe?)&lt;/small&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Oh I forgot to say, I want to store somewhat structured data about the edits, not just the raw HTML, to enable easier further edits if necessary. &lt;a href=&quot;https://github.com/bustle/mobiledoc-kit&quot;&gt;mobiledoc&lt;/a&gt; seemed promising. I spent about an hour investigating it (my internet was slow that day, I swear!) before I realised it’s basically markdown. I thought adapting it to my use case, but it felt futile (as in: too much work). So what was I on about ? ah yes, iframes ! Mmmm who doesn’t love a  good iframe? You don’t? Good, ‘cause me neither. Anyway, inter-frame communication is like inter-process communication (or so says my buddy that does printer drivers for HP – Yeah, I’ll curse him on your behalf if you have an HP printer): you have to pass messages around, in our case with &lt;a href=&quot;https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;window.postMessage()&lt;/code&gt;&lt;/a&gt;. It works, it’s great!&lt;/p&gt;
+
+&lt;p&gt;Anyway, here’s how it works: I like to think of it as communication between say a frontend and an API, mostly because of the asynchronous nature of the communication. So basically, the parent page get ready to receive messages from the iframe by listening to the “message” event, like so:&lt;/p&gt;
+
+&lt;div class=&quot;language-js highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;nb&quot;&gt;window&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;addEventListener&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'message'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;handleFrameTasks&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;bind&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;I’m using react for the frontend, so this went in the &lt;code class=&quot;highlighter-rouge&quot;&gt;componentDidMount()&lt;/code&gt; method, but you could place it anywhere, really, as long as it runs when you want to start editing on the iframe side.&lt;/p&gt;
+
+&lt;p&gt;And then on the iframe side I have something like this:&lt;/p&gt;
+
+&lt;div class=&quot;language-js highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;c1&quot;&gt;// Send message to react&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;data&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;action&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'deleteBlock'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;blockId&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;blockId&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;top&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;postMessage&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'*'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;In fact at the start I was &lt;code class=&quot;highlighter-rouge&quot;&gt;JSON.stringify()&lt;/code&gt;ing the data I sent, as I remember it being necessary a few years ago, but that’s not required anymore.&lt;/p&gt;
+
+&lt;p&gt;Then on the parent React side, the &lt;code class=&quot;highlighter-rouge&quot;&gt;handleFrameTasks&lt;/code&gt; dispatches the actions required depending on what the iframe requested. For example in the case above it will delete the page block with id &lt;code class=&quot;highlighter-rouge&quot;&gt;blockId&lt;/code&gt; from it’s page data structure.&lt;/p&gt;
+
+&lt;p&gt;Did I mention that the iframe content is generated dynamically and injected in the iframe src with a data blob URL? Well then, maybe I’ll post about that the next time.&lt;/p&gt;
+
+&lt;p&gt;Until then, keep coding !&lt;/p&gt;
+
+&lt;p&gt;PS Oh about that &lt;a href=&quot;/2017/03/one-project-per-month-first-budget-tracking.html&quot;&gt;“One project per month challenge”&lt;/a&gt;? This one is bigger than I expected, so it will (has already been) longer than a month. It will be great, I hope. Everything you need for an early stage startup. &lt;a href=&quot;/contact.html&quot;&gt;Contact me&lt;/a&gt; if you’d like some more info.&lt;/p&gt;
+
+</description>
+        
+          <description>I decided to roll my own HTML template editor because most opensource ones, while good looking and well designed, are impossible to use.</description>
+        
+        <pubDate>Thu, 10 Aug 2017 00:00:00 +0200</pubDate>
+        <link>https://jfoucher.com/2017/08/interframe-communication-with-postmessage.html</link>
+        <guid isPermaLink="true">https://jfoucher.com/2017/08/interframe-communication-with-postmessage.html</guid>
+        
+        <category>javascript</category>
+        
+        <category>react</category>
+        
+        <category>iframe</category>
+        
+        <category>webdev</category>
+        
+        
+      </item>
+      
     
       
       <item>
@@ -785,32 +855,6 @@ For me this is one of the killer features of &lt;a href=&quot;http://vessenger.c
         <category>sysadmin</category>
         
         <category>php</category>
-        
-        
-      </item>
-      
-    
-      
-      <item>
-        <title>Moving from Wordpress to Jekyll and Github</title>
-        <description>&lt;p&gt;The web server where my blog was hosted seemed to slow down by the day, and I’m looking for ways to move some stuff out of the way. I had heard of github pages, that allow one to host a static site for free, on a url like &lt;a href=&quot;http://jfoucher.github.com&quot;&gt;http://jfoucher.github.com&lt;/a&gt;. Git hub recently added the abilily to do a CNAME (kind of a DNS reidrect) from a custom domain name to a gituhub page.&lt;/p&gt;
-
-&lt;p&gt;The last element that decided me in favor of this setup is jekyll, a static site generator written in ruby. You write your posts in markdown, type “jekyll” on the command line, and your site is generated in a few seconds.&lt;/p&gt;
-
-&lt;p&gt;Afterwards, just commit and push to github, and voilà, your site is live!&lt;/p&gt;
-</description>
-        
-          <description>I stopped using Wordpress for this blog a long time ago. This is how I did it.</description>
-        
-        <pubDate>Sat, 27 Aug 2011 00:00:00 +0200</pubDate>
-        <link>https://jfoucher.com/2011/08/moving-to-jekyll-and-github.html</link>
-        <guid isPermaLink="true">https://jfoucher.com/2011/08/moving-to-jekyll-and-github.html</guid>
-        
-        <category>webdev</category>
-        
-        <category>ruby</category>
-        
-        <category>github</category>
         
         
       </item>

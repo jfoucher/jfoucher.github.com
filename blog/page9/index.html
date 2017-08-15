@@ -73,36 +73,22 @@ ga('send', 'pageview');
 
   <div class="post">
     
-    <h1 class="postTitle">Avis aux utilisateurs des extensions pour StatTraq</h1>
-    <p class="meta">October 14, 2004 | <span class="time">0</span> Minutes Read</p>
+    <h1 class="postTitle">Hacker</h1>
+    <p class="meta">November 01, 2004 | <span class="time">0</span> Minutes Read</p>
 
-    <h3 id="le-problème">Le Problème</h3>
+    <p>This plugin allows you to show some text in ‘hacker language’, as shown below. The install instructions are repeated below in clear text if you have trouble reading this…</p>
 
-<p>C’est que si vous utilisez une structure des permaliens où l’id du billet n’est pas présente, telle que celle-ci:</p>
+<p>To install this plugin, download the <a href="http://jfoucher.com/source/hacker.gz">gzip archive</a>, unpack the hacker.php file within and upload it to your wp-content/plugins directory.</p>
 
-<figure class="highlight"><pre><code class="language-php" data-lang="php">     /%year%/%monthnum%/%day%/%postname%/</code></pre></figure>
+<p>Once you have done this, activate it from the admin interface.</p>
 
-<p>L’id du billet n’est pas ajouté à la table de Stat Traq, ce qui fait que mon plugin <a href="http://jfoucher.com/2004/10/popular-posts-wordpress-plugin">Populaires</a> ne comprend plus ce qu’il lui arrive. La solution est en fait très simple</p>
+<p>Any text between <hacker> and </hacker> tags will now show in what I call ‘hacker style’, or ‘hacker language’, but there must be a better name for this, so please let me know what it is…</p>
 
-<h3 id="la-solution-jespère">La Solution (j’espère)</h3>
+<p>That’s it ! Pretty useless, but enjoy it anyway…</p>
 
-<p>Dans le fichier stattraq.php, vous trouverez les lignes suivantes (25 et 26)</p>
+<p>One big limitation of this version is that you can only have one <hacker></hacker> block in each post due to regex problems. If you can fix that, please do ;)</p>
 
-<figure class="highlight"><pre><code class="language-php" data-lang="php">    if (($p != '')){
-    $p = intval($p);</code></pre></figure>
-
-<p>Mais la variable</p>
-<figure class="highlight"><pre><code class="language-php" data-lang="php">$p</code></pre></figure>
-<p>n’existe que si le billet est sélectionné par son id. S’il a été selectionné par nom,</p>
-<figure class="highlight"><pre><code class="language-php" data-lang="php">$p</code></pre></figure>
-<p>est nul.</p>
-
-<p>Il faut donc remplacer les lignes ci-dessus par celles-la</p>
-
-<figure class="highlight"><pre><code class="language-php" data-lang="php">     if (($post-&gt;ID != '')){
-     $p = intval($post-&gt;ID);</code></pre></figure>
-
-<p>Et ça a l’air de marcher avec tous les schémas de réécriture.</p>
+<p>Edit: The example doesn’t work anymore because I’m not using Wordpress at this time. However, you can still download it (I hope ;).</p>
 
   </div>
 
@@ -113,8 +99,16 @@ ga('send', 'pageview');
     
       <li>
         <span class="date">October 14, 2004</span>
+        <h3><a class="post-link" href="/2004/10/avis-aux-utilisateurs-des-extensions-pour-stattraq.html">Avis aux utilisateurs des extensions pour StatTraq</a></h3>
+        <p class="meta">November 01, 2004 | <span class="time">0</span> Minutes Read</p>
+        <p class="description">Le ProblèmeC’est que si vous utilisez une structure des permaliens où l’id du billet n’est pas présente, telle que celle-ci:     /%year%/%monthnum%/%day%/%postname%/L’id du billet n’est pas ajouté à la table de Stat Traq, ce qui fait que mon plugin Populaires ne comprend plus ce qu’il lui arrive. La solution est en fait très simpleLa Solution (j’espère)Dans le fichier stattraq.php, vous trouverez les lignes suivantes (25 et 26)    if (($p != '')){    $p = intval($p);Mais la variable$pn’existe...</p>
+      </li>
+
+    
+      <li>
+        <span class="date">October 14, 2004</span>
         <h3><a class="post-link" href="/2004/10/spam-dans-les-refrents.html">Spam dans les référents</a></h3>
-        <p class="meta">October 14, 2004 | <span class="time">0</span> Minutes Read</p>
+        <p class="meta">November 01, 2004 | <span class="time">0</span> Minutes Read</p>
         <p class="description">Comme vous avez pu le voir si vous êtes venu sur ce blog récemment, j’ai été sujet à une attaque de spam dans les référents. Je pense avoir réglé le problème en empêchant certains mots d’apparaître dans les logs de StatTraq, mais n’hésitez pas à me contacter si cela devait se reproduire.</p>
       </li>
 
@@ -122,7 +116,7 @@ ga('send', 'pageview');
       <li>
         <span class="date">October 11, 2004</span>
         <h3><a class="post-link" href="/2004/10/articles-populaires.html">Articles populaires</a></h3>
-        <p class="meta">October 14, 2004 | <span class="time">0</span> Minutes Read</p>
+        <p class="meta">November 01, 2004 | <span class="time">0</span> Minutes Read</p>
         <p class="description">Ce plugin est une autre extension de StatTraq de ma création, donc n’oubliez pas de télécharger StatTraq. Ce plugin récupère les articles les plus lus de la table de StatTraq et les affiche selon le format de votre choix.</p>
       </li>
 
@@ -130,7 +124,7 @@ ga('send', 'pageview');
       <li>
         <span class="date">October 09, 2004</span>
         <h3><a class="post-link" href="/2004/10/external-links-wordpress-plugin.html">External Links Wordpress Plugin</a></h3>
-        <p class="meta">October 14, 2004 | <span class="time">0</span> Minutes Read</p>
+        <p class="meta">November 01, 2004 | <span class="time">0</span> Minutes Read</p>
         <p class="description">External links:</p>
       </li>
 
@@ -138,16 +132,8 @@ ga('send', 'pageview');
       <li>
         <span class="date">October 08, 2004</span>
         <h3><a class="post-link" href="/2004/10/plugin-wordpress-page-auteur.html">Plugin Wordpress : Page Auteur</a></h3>
-        <p class="meta">October 14, 2004 | <span class="time">0</span> Minutes Read</p>
+        <p class="meta">November 01, 2004 | <span class="time">0</span> Minutes Read</p>
         <p class="description">Cette extension de Wordpress créé une page spécifique pour chaque auteur, qui montre le nombre d’articles publiés, et les données du compte wordpress de cet utilisateur, tels que biographie, addresse du site web, etc… et optionellement l’adresse email (si vous n’avez pas peur du spam…) Il est aussi possible d’afficher un formulaire qui enverra un message à l’auteur par email, mais sans que l’adresse soit visible.</p>
-      </li>
-
-    
-      <li>
-        <span class="date">October 06, 2004</span>
-        <h3><a class="post-link" href="/2004/10/referents-de-larticle.html">Rérents de l'article</a></h3>
-        <p class="meta">October 14, 2004 | <span class="time">0</span> Minutes Read</p>
-        <p class="description">C’est un plugin pour Wordpress Qui montre les derniers sites d’où sont venus vos visiteurs. Vous aurez besoin du plugin Stattraq.Installation :	Téléchargez et installez Stattraq.	Envoyer le fichier résultant à votre dossier /wp-content/plugins	Activez le plugin dans votre interface d'administrationL’utilisation est simple :Ajouter le code suivant dans votre fichier index.phppost_referrers(8, "&lt;li&gt;", "&lt;/li&gt;", "Pas encore...", "self");où 8 est le nombre pe pages référentes à affiche...</p>
       </li>
 
     

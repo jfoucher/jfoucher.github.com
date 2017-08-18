@@ -9,7 +9,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
-    <title>Geeky Nuggets</title>
+    <title>Timeseries charts with Chart.js</title>
 
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="/assets/img/favicon.ico" />
@@ -19,7 +19,7 @@
     
     
     <!--[if IE 8]><link rel="stylesheet" href="/assets/css/ie.css"><![endif]-->
-    <link rel="canonical" href="https://jfoucher.com/blog/page11/">
+    <link rel="canonical" href="https://jfoucher.com/2017/08/timeseries-charts-with-chart.js.html">
 
     <!-- Modernizr -->
     <!--[if lt IE 9]>
@@ -82,143 +82,84 @@
 
    <div class="content">
       <div class="container">
-         <div class="home" id="home">
+         <div class="post">
+  
+  <h1 class="postTitle">Timeseries charts with Chart.js</h1>
+  <p class="meta">August 18, 2017 | <span class="time">1</span> Minute Read</p>
+  
+  <p>Somehow I always end up having to do timeseries charts. Chart.js is my tool of choice for that task, but I never seem to remember what options to pass and what format the data should have. Yesterday I must have spent 2 hours looking at the docs and trying various things, mostly because it didn’t occur to me to check the last project where I used them, <a href="https://budgt.eu">Budgt</a></p>
 
-  <div class="post">
-    
-    <h1 class="postTitle">Author page wordpress plugin</h1>
-    <p class="meta">October 03, 2004 | <span class="time">2</span> Minutes Read</p>
+<p>So anyway, note to self : this is how you do timeseries graphs in chart.js</p>
 
-    <p>This plugin shows a specific page for each author, showing the number of posts published and some of the data entered in the Wordpress admin section, i.e. URL, AIM ICQ number, etc… except email! But it can provide a contact form that will send an email to the author’s address.</p>
+<p>```` js</p>
 
-<p>You can use it as an <a href="http://binarybonsai.com/about/">‘About’ page</a> for a personnal weblog or to give each author their own page in a collaborative blog.</p>
+<p>const ctx = document.getElementById(‘chartCanvas’).getContext(‘2d’);
+const data = {
+            labels: [new Date(2017, 08, 16), new Date(2017, 08, 17), new Date(2017, 08, 18)],
+            datasets: [{
+                fill: false,
+                label: ‘Page Views’,
+                data: [280, 250, 340],
+                borderColor: ‘#fe8b36’,
+                backgroundColor: ‘#fe8b36’,
+                lineTension: 0,
+              }
+            ]
+          }
+const options = {
+    type: ‘line’,
+    data: data,
+    options: {
+        fill: false,
+        responsive: true,
+        scales: {
+            xAxes: [{
+                type: ‘time’,
+                display: true,
+                scaleLabel: {
+                    display: true,
+                    labelString: “Date”,
+                }
+            }],
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true,
+                },
+                display: true,
+                scaleLabel: {
+                    display: true,
+                    labelString: “Hours”,
+                }
+            }]
+        }
+    }
+}
+const chart = new Chart(ctx, options);</p>
 
-<p>To install it, download the <a href="http://jfoucher.com/source/author/">source code</a> and save it in a php file or get the <a href="http://jfoucher.com/source/author.gz">gzip file</a> and unpack it.</p>
+<p>```</p>
 
-<p>Upload the resulting file to your wp-content/plugins directory and activate it from the admin interface.</p>
+<p>That’s it. Hopefully I’ll remember I posted this here next time I need timeseries charts in chart.js</p>
 
-<p>To use it put the author() function in you index.php template,
-where it normally shows the message that there are no posts.</p>
 
-<p>In the default template, it looks like this:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code> &lt;?php endforeach; else: ?&gt;
- &lt;p&gt;&lt;?php _e('Sorry, no posts matched your criteria.'); ?&gt;&lt;/p&gt;
- &lt;?php endif; ?&gt;
-</code></pre>
 </div>
 
-<p>Replace this by :</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code> &lt;?php endforeach; else: ?&gt;
- &lt;?php author(true, 5); ?&gt;
- &lt;?php endif; ?&gt;
-</code></pre>
+<h4 id="comments" style="margin-top:4em">Comments from <a href="https://news.ycombinator.com/item?id=15022078">HN</a> <a href="https://news.ycombinator.com/item?id=15022078" style="font-weight:normal; font-size: 0.8em;margin-left:20px">Discuss</a></h4>
+
+<script>hnId = 15022078 </script>
+<script src="/assets/js/hn.js"></script>
+
+
+<!-- POST NAVIGATION -->
+<div class="postNav clearfix">
+   
+    <a class="prev" href="/2017/08/interframe-communication-with-postmessage.html"><span>&laquo;&nbsp;Communication between iframes with React and postMessage for an html template editor</span>
+    
+  </a>
+    
+   
 </div>
-
-<p>The first optionnal boolean parameter gives you the opportunity to show or hide
-a contact form for the author. Defaults to ‘true’ (show the form).</p>
-
-<p>In version 0.2+, the second parameter is an integer an defines the number of latest posts to show. The default is ‘0’.
-You may want to change some of the text in the plugin file to your own language.</p>
-
-<p>To do a link to the author page, you have to do something like this:</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code> &lt;a href="index.php?author_name=&lt;?php the_author_login(); ?&gt;"&gt;
- &lt;?php the_author(); ?&gt;&lt;/a&gt;
-</code></pre>
-</div>
-
-<p>if you do not wish to or can’t use rewrite rules.</p>
-
-<p>On this site, I use the following rewrite rule:</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code> RewriteRule ^about/? /index.php?author_name=jonathan [QSA]
-</code></pre>
-</div>
-
-<p>With a link to the ‘About’ page simply like this :</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code> &lt;a href="http://jfoucher.com/about/"&gt;About&lt;/a&gt;
-</code></pre>
-</div>
-
-<p>On a multiuser blog, you could do this:</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>RewriteRule ^author/?(.*)/? /index.php?author_name=$1 [QSA]
-</code></pre>
-</div>
-
-<p>and so the link to the page is like this:</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code> &lt;a href="http://jfoucher.com/author/&lt;?php the_author_login(); ?&gt;
- &lt;?php the_author(); ?&gt;&lt;/a&gt;
-</code></pre>
-</div>
-
-<p>Version 0.3+ use native Wordpress functions to display the author data, making it more compatible (I hope) with future versions of Wordpress.</p>
-
-<p><a href="http://jfoucher.com/2004/10/08/plugin-wordpress-page-auteur/" hreflang="fr">En Français</a></p>
-
-  </div>
-
-  <h3 style="text-align: center; margin-top: 2em">Older posts</h3>
-
-  <ul class="posts noList">
-
-    
-      <li>
-        <span class="date">October 03, 2004</span>
-        <h3><a class="post-link" href="/2004/10/mise-jour-de-securite-pour-firefox-10pr.html">Mise à jour de sécurité pour Firefox 1.0PR</a></h3>
-        <p class="meta">October 03, 2004 | <span class="time">2</span> Minutes Read</p>
-        <p class="description">Disponible sur Mozillazine</p>
-      </li>
-
-    
-      <li>
-        <span class="date">October 02, 2004</span>
-        <h3><a class="post-link" href="/2004/10/parts-de-marche-de-firefox-sur-ce-blog.html">Parts de marché de Firefox (sur ce blog)</a></h3>
-        <p class="meta">October 03, 2004 | <span class="time">2</span> Minutes Read</p>
-        <p class="description"></p>
-      </li>
-
-    
-      <li>
-        <span class="date">September 27, 2004</span>
-        <h3><a class="post-link" href="/2004/09/sending-your-email-database-to-your-gmail-account.html">Sending your email database to your GMail account</a></h3>
-        <p class="meta">October 03, 2004 | <span class="time">2</span> Minutes Read</p>
-        <p class="description">After I got my GMail account, I wanted to transfer all my local emails there. Why? I don’t know, beacause it doesn’t seem like the best thing to do. I tried Mark Lyon’s Google Mail Loader, but it kept locking up, so I wrote a little php script to read an mBox file and send the emails it contains one by one to a GMail account.</p>
-      </li>
-
-    
-      <li>
-        <span class="date">September 26, 2004</span>
-        <h3><a class="post-link" href="/2004/09/record-de-la-traversee-de-la-mediterranee.html">Record de la traversée de la Méditerranée.</a></h3>
-        <p class="meta">October 03, 2004 | <span class="time">2</span> Minutes Read</p>
-        <p class="description">17 heures 56 minutes 13 secondes ! Voila le temps qu’ Orange II a mis pour naviguer de Marseille à Carthage (Tunisie). Ils ont donc battu de 50 minutes le précédent record établi par Steve Fosset et Playstation, à une vitesse moyenne absolument extraordinaire de 25,53 noeuds sur la distance de 548 miles !</p>
-      </li>
-
-    
-      <li>
-        <span class="date">September 25, 2004</span>
-        <h3><a class="post-link" href="/2004/09/wordpress-and-stattraq.html">Wordpress and StatTraq</a></h3>
-        <p class="meta">October 03, 2004 | <span class="time">2</span> Minutes Read</p>
-        <p class="description">StatTraq seems to be getting more popular. Another Wordpress plugin using it has been published by Rich Boakes. It gives the number of times that a particular post has been viewed, and is quite attractive. I think I’ll be installing it. Also don’t forget to take a look at the latest version of StatTraq. A great many improvements.</p>
-      </li>
-
-    
-  </ul>
-  <!-- Pagination links -->
-  <div class="pagination">
-    
-      <a href="/blog/page10/" class="previous button__outline">Newer Posts</a> 
-    
-    
-      <a href="/blog/page12/" class="next button__outline">Even older Posts</a>
-    
-  </div>
-</div>
-
       </div>
    </div><!-- end .content -->
 

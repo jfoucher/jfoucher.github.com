@@ -86,121 +86,57 @@
 
   <div class="post">
     
-    <h1 class="postTitle">A Phing task to update your Twitter status</h1>
-    <p class="meta">June 29, 2011 | <span class="time">4</span> Minutes Read</p>
+    <h1 class="postTitle">Remote debugging with Xdebug and PhpStorm on Ubuntu</h1>
+    <p class="meta">August 18, 2011 | <span class="time">2</span> Minutes Read</p>
 
-    <h3 id="phing-and-twitter">Phing and Twitter</h3>
+    <p>Being able to debug your php application right from your IDE is something that you can’t fully realise the power of, unless you’ve tried it. The advantages are immediately obvious: as soon as the connection from Xdebug is successful, you are blinded by variable inspection, code stepping, breakpoints, etc… Debugging heaven!
+It took me… a few months to finally find the time figure out how to set up everything properly, so I hope this post can help someone, somewhere. But don’t worry: it retrospect, it’s not that difficult at all.</p>
+<h3>First things first : install xdebug</h3>
+<p>On Ubuntu and Debian, it couldn’t be easier: just open a terminal and type</p>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">sudo apt-get install
+php5-xdebug</code></pre></figure>
+<p>This will also install Apache and PHP if you don’t have them already.</p>
+<h3>Setup Xdebug on server</h3>
+<p>Done? Right, so this created a config file in /etc/php5/conf.d called xdebug.ini, which is read by php and contains xdebug’s configuration options. You’ll need to open this file for editing as root, as we need to make a few changes in there. you can copy/paste the command below in the terminal, or do it your own way.</p>
 
-<p>I recently starting working with <a title="PHP build and deployment tool" href="http://www.phing.info">phing</a> to automate the build and deployement process for the web apps I’m building. I use it to compile my LESS files to CSS and minimize then, to compress and concatenate the javascript files, to optimize images using <a href="http://www.smushit.com/">smushit</a>, etc…</p>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">gksu gedit /etc/apache2/conf.d/xdebug.ini</code></pre></figure>
 
-<p>I like to be able to comunicate exactly what I’m doing, and thankfully Phing has a built in task to email a message to a list of recipients, which is good, but slightly old school. I wanted something that would be able to integrate readily with twitter, i.e. update my status when a build was completed. I saw <a href="http://codeinthehole.com/archives/14-Phing-task-to-update-Twitter-status.html">this post</a>, which unfortunately uses Basic Auth. As you doubtless know, <a href="http://dev.twitter.com/pages/basic_auth_shutdown">Twitter deprecated this form of authentication</a>, and now asks all users to authenticate using <a href="http://dev.twitter.com/pages/basic_to_oauth">OAuth</a>.</p>
+<p>Within this file, there will be a single line, referencing the xdebug zend extension, something like this (the path can vary slightly)</p>
 
-<h3 id="download-twitteroauth-library">Download twitterOAuth library</h3>
+<figure class="highlight"><pre><code class="language-ini" data-lang="ini"><span class="py">zend_extension</span><span class="p">=</span><span class="s">/usr/lib/php5/20090626/xdebug.so</span></code></pre></figure>
 
-<p>That meant I had to roll my own phing task… However, thanks to great work by cleverer people, doing it was quite simple. Using <a href="http://abrah.am/">Abraham Williams’</a> <a href="https://github.com/abraham/twitteroauth">twitteroauth</a> library means that the coding I’d have to do was greatly reduced. Awesome, because <a href="http://www.codinghorror.com/blog/2005/08/how-to-be-lazy-dumb-and-successful.html">I aim to be lazy</a>.</p>
+<p>This is what we’re going to add:</p>
 
-<p>The first step is to <a href="https://github.com/abraham/twitteroauth/tarball/master">download the twitteroauth library</a> from github. Extract it to a temporary folder and copy the subfolder</p>
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash">twitteroauth</code></pre></figure>
-<p>to the folder where your fing tasks are stored (on my system it is</p>
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash">/usr/share/php/phing/tasks/my/</code></pre></figure>
-<p>. Please note you might have to create the</p>
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash">my/</code></pre></figure>
-<p>folder within</p>
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash">/usr/share/php/phing/tasks/</code></pre></figure>
-<p>. You will need root privileges for these steps.</p>
+<figure class="highlight"><pre><code class="language-ini" data-lang="ini"><span class="py">xdebug.remote_enable</span><span class="p">=</span><span class="s">On #this enables remote debugging
+</span>
+<span class="py">xdebug.remote_host</span><span class="p">=</span><span class="s">192.168.1.83 #change this IP adress for the one of the computer you are typing on
+</span>
+<span class="py">xdebug.remote_port</span><span class="p">=</span><span class="s">9000 #this is the default, leave it as is</span></code></pre></figure>
 
-<h3 id="register-application-with-twitter">Register application with Twitter</h3>
+<p>Now we restart apache so that the new configuration is taken into account:</p>
 
-<p>Secondly, you need to <a href="https://dev.twitter.com/apps/new">register an application with twitter</a>, as you will need a consumer key and consumer secret later on. Please <a href="https://dev.twitter.com/apps/new">do so now</a>, and come back once you have your app data available.</p>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">sudo /etc/init.d/apache2 restart</code></pre></figure>
 
-<h3 id="create-the-custom-phing-task">Create the custom phing task</h3>
+<p>And we that we are <strong>done</strong> on the server side of things</p>
+<h3>Prepare PhpStorm</h3>
+<p>Switch to the computer where PhpStorm is installed, and open your project. All you have to do is click on the “Accept debug connections” button, and activate Xdebug by using a browser extension. Here are four extensions to do this:</p>
+<ul>
+	<li><a href="https://addons.mozilla.org/en-US/firefox/addon/58688">Firefox</a></li>
+	<li><a href="https://chrome.google.com/extensions/detail/eadndfjplgieldjbigjakmdgkmoaaaoc">Chrome</a></li>
+	<li><a href="http://benmatselby.posterous.com/xdebug-toggler-for-safari">Safari</a></li>
+	<li><a href="https://addons.opera.com/addons/extensions/details/xdebug-launcher/?display=en">Opera</a></li>
+</ul>
+<p>Use your preferred extension to activate Xdebug for the page you’re on. Go back to PhpStorm, and instruct it to listen to incoming debug connections by clicking on the “Listen PHP debug connections” button <img class="alignnone" title="accept connection button" src="http://i.imgur.com/uMBOg.png" alt="" width="28" height="26" /></p>
 
-<p>Next up is creating the actual task PHP class. Create an empty file named TwitterUpdateTask.php</p>
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash">sudo touch /usr/share/php/phing/tasks/my/TwitterUpdateTask.php</code></pre></figure>
-<p>and open it for editing with your favorite editor. We’ll use gedit :</p>
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash">gksu gedit /usr/share/php/phing/tasks/my/TwitterUpdateTask.php</code></pre></figure>
+<p>Now all you have to is set a breakpoint and reload your page.</p>
 
-<p>The code for this file is as shown below:</p>
+<div class="image-with-caption aligncenter" style="width:319px"><div class="caption">Setting a breakpoint in PhpStorm</div><img title="Setting breakpoint" src="http://i.imgur.com/9AuKc.png" alt="Setting breakpoint" width="319" height="173" /></div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>&lt;?php
-require_once ("phing/Task.php");
-require_once ("phing/tasks/my/twitteroauth/twitteroauth.php");
-/* get the lines below from http://twittertokens.6px.eu/ */
-define('CONSUMER_KEY', 'Your Consumer Key Here');
-define('CONSUMER_SECRET', 'Your Consumer Secret Here');
-define('OAUTH_TOKEN', 'Your OAuth Token Here');
-define('OAUTH_TOKEN_SECRET', 'Your Oauth Token Secret Here');
-class TwitterUpdateTask extends Task {
-    private $message;
-    /*
-     * The setter for the status message
-     */
-    public function setMessage($str){
-        $this-&gt;message=$str;
-    }
-    public function main(){
-        /* Connect to twitter */
-        $connection = new TwitterOAuth(CONSUMER_KEY, CONSUMER_SECRET, OAUTH_TOKEN, OAUTH_TOKEN_SECRET);
-        /* Pass the status message as a parameter */
-        $parameters = array('status' =&gt; $this-&gt;message);
-        /* Post the data to the API endpoint */
-        $status = $connection-&gt;post('statuses/update', $parameters);
-        if (isset($status-&gt;error)){
-            /* if there is an error, fail the build */
-            throw new BuildException($status-&gt;error);
-        }else{
-            /* if there is no error, show a success message */
-            $this-&gt;log ("Status posted to twitter");
-        }
-    }
-}
-</code></pre>
-</div>
+<p>A window will popup asking you if PhpStorm should accept the connection from Xdebug</p>
 
-<h3 id="get-the-oauth-token-and-secret">Get the OAuth token and secret</h3>
+<div class="image-with-caption aligncenter" style="width:331px"><div class="caption">Accepting connection from Xdebug on PhpStorm</div><img title="Accepting connection from Xdebug" src="http://i.imgur.com/2fZKq.png" alt="Accepting connection from Xdebug" width="331" height="398" /></div>
 
-<p>Don’t close this file, we still need to add the authentication data to it. You can already place your consumer key and consumer secret in the apropriate</p>
-<figure class="highlight"><pre><code class="language-php" data-lang="php">define()</code></pre></figure>
-<p>calls (the first two lines), but if not, we’ll do it now.</p>
-
-<p>Navigate to <a href="http://twittertokens.6px.eu">http://twittertokens.6px.eu</a>, put your consumer data and consumer secret in the apropriate fields and click on “Sign in with Twitter”. A twitter page will open asking for your confirmation. Click “Sign in” and you are redirected to http://twittertokens.6px.eu/. You should see 4 lines of code appear, that look like this:</p>
-
-<figure class="highlight"><pre><code class="language-php" data-lang="php">    define('CONSUMER_KEY', 'V1UsnZJrgfhgKJFoqsQ');
-    define('CONSUMER_SECRET', 'UUazcBfXrWW1jcpiSU564hg654t1EMki8gzptQU');
-    define('OAUTH_TOKEN', '325454656-EuCudghg8tTYwKf9yjt5nhqr14i5egHJPeVRGVxQv');
-    define('OAUTH_TOKEN_SECRET', 'gh6854hg6tyGEvGEiEi15XmUtOmDpaONM');</code></pre></figure>
-
-<p>Copy this code to the corresponding spot in the TwitterUpdateTask.php file, overwriting what’s already there.</p>
-
-<p>Please note though that I’m not making any claims as to how secure this is or whatever. I don’t store any of your data anywhere, but if sending your application consumer token and secret worries you, find another way to get the Oauth tokens.</p>
-
-<h3 id="create-the-build-file">Create the build file</h3>
-
-<p>First, we define the custom task:</p>
-
-<figure class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;taskdef</span> <span class="na">name=</span><span class="s">"twitterupdate"</span> <span class="na">classname=</span><span class="s">"phing.tasks.my.TwitterUpdateTask"</span> <span class="nt">/&gt;</span></code></pre></figure>
-
-<p>Secondly, let’s create a custom target that will send a tweet with the message we want.</p>
-
-<figure class="highlight"><pre><code class="language-xml" data-lang="xml">    <span class="nt">&lt;target</span> <span class="na">name=</span><span class="s">"tweet"</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;twitterupdate</span> <span class="na">message=</span><span class="s">"${twitter.status}"</span> <span class="nt">/&gt;</span>
-    <span class="nt">&lt;/target&gt;</span></code></pre></figure>
-
-<p>Now we can call this task from another one, but we need to make that the twitter.status is set. Let’s we have a “staging” target. Part of it could look like this:</p>
-
-<figure class="highlight"><pre><code class="language-xml" data-lang="xml">    <span class="c">&lt;!-- Set the timestamp to be used in the twitter update --&gt;</span>
-    <span class="nt">&lt;tstamp&gt;</span>
-        <span class="nt">&lt;format</span> <span class="na">property=</span><span class="s">"build.time"</span> <span class="na">pattern=</span><span class="s">"%Y-%m-%d %H:%I"</span> <span class="nt">/&gt;</span>
-    <span class="nt">&lt;/tstamp&gt;</span>
-    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"twitter.status"</span> <span class="na">value=</span><span class="s">"Staging build completed at ${build.time}"</span> <span class="nt">/&gt;</span>
-    <span class="nt">&lt;phingcall</span> <span class="na">target=</span><span class="s">"tweet"</span> <span class="nt">/&gt;</span></code></pre></figure>
-
-<p>This will post the message to twitter, replacing the</p>
-<figure class="highlight"><pre><code class="language-php" data-lang="php">${build.time}</code></pre></figure>
-<p>token by the actual build and time.</p>
-
-<p>Do you use Phing for your webapp build and deployment? If so, please share any custom tasks you might have created.</p>
-
+<p>Just click debug and happy bug squishing!</p>
 
   </div>
 
@@ -210,9 +146,17 @@ class TwitterUpdateTask extends Task {
 
     
       <li>
+        <span class="date">June 29, 2011</span>
+        <h3><a class="post-link" href="/2011/06/phing-task-to-update-twitter-status.html">A Phing task to update your Twitter status</a></h3>
+        <p class="meta">August 18, 2011 | <span class="time">2</span> Minutes Read</p>
+        <p class="description">Phing, a build tool for PHP, written in PHP, allows one to do practically anything when building your project. Today we write a custom task to update your twitter status upon a succcessfull build.</p>
+      </li>
+
+    
+      <li>
         <span class="date">April 11, 2011</span>
         <h3><a class="post-link" href="/2011/04/css-minification-library-for-codeigniter.html">CSS minification library for codeigniter</a></h3>
-        <p class="meta">June 29, 2011 | <span class="time">4</span> Minutes Read</p>
+        <p class="meta">August 18, 2011 | <span class="time">2</span> Minutes Read</p>
         <p class="description">This library allows you to serve cached minimized css to your users without any action on your part.</p>
       </li>
 
@@ -220,7 +164,7 @@ class TwitterUpdateTask extends Task {
       <li>
         <span class="date">April 03, 2011</span>
         <h3><a class="post-link" href="/2011/04/the-making-of-flickholdr-an-image-placeholder-generator.html">The making of flickholdr.com, an image placeholder generator</a></h3>
-        <p class="meta">June 29, 2011 | <span class="time">4</span> Minutes Read</p>
+        <p class="meta">August 18, 2011 | <span class="time">2</span> Minutes Read</p>
         <p class="description">Flickholdr.com takes your chosen image dimensions, your tags, and returns Creative Commons licensed images from flickr that fit your criteria.</p>
       </li>
 
@@ -228,7 +172,7 @@ class TwitterUpdateTask extends Task {
       <li>
         <span class="date">February 13, 2011</span>
         <h3><a class="post-link" href="/2011/02/installing-running-apc-cache-codeigniter.html">Installing and running APC cache with CodeIgniter</a></h3>
-        <p class="meta">June 29, 2011 | <span class="time">4</span> Minutes Read</p>
+        <p class="meta">August 18, 2011 | <span class="time">2</span> Minutes Read</p>
         <p class="description">We take advantage of Codeigniter 2's cached mechanism to dramatically speed up our sites with APC.</p>
       </li>
 
@@ -236,16 +180,8 @@ class TwitterUpdateTask extends Task {
       <li>
         <span class="date">January 22, 2011</span>
         <h3><a class="post-link" href="/2011/01/wordpress-email-404-notification.html">Wordpress 404 notification by email</a></h3>
-        <p class="meta">June 29, 2011 | <span class="time">4</span> Minutes Read</p>
+        <p class="meta">August 18, 2011 | <span class="time">2</span> Minutes Read</p>
         <p class="description">A Wordpress plugin that sends an email to the site admin when a user gets a 404 error.</p>
-      </li>
-
-    
-      <li>
-        <span class="date">January 14, 2011</span>
-        <h3><a class="post-link" href="/2011/01/spanish-characters-on-qwerty-keyboard-for-ubuntu-10-10.html">Spanish characters on Qwerty keyboard for Ubuntu 10.10</a></h3>
-        <p class="meta">June 29, 2011 | <span class="time">4</span> Minutes Read</p>
-        <p class="description">Set a configuration option to be able to easily type acendted character on Ubuntu 10.10.</p>
       </li>
 
     

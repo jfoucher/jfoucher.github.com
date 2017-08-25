@@ -96,85 +96,38 @@
 
   <div class="post">
     
-    <h1 class="postTitle">Author page wordpress plugin</h1>
-    <p class="meta">October 03, 2004 | <span class="time">2</span> Minutes Read</p>
+    <h1 class="postTitle">Teaser Style Wordpress plugin</h1>
+    <p class="meta">October 04, 2004 | <span class="time">0</span> Minutes Read</p>
 
-    <p>This plugin shows a specific page for each author, showing the number of posts published and some of the data entered in the Wordpress admin section, i.e. URL, AIM ICQ number, etc… except email! But it can provide a contact form that will send an email to the author’s address.</p>
+    <p>Another useless wordpress plugin from my little factory here :). This one takes the teaser text, delimited between the beginning of a post and the &lt;!–more–&gt; tag, and wraps it in a &lt;div&gt; with class morediv. This then allows you style it differently using your style sheet, doing for example:</p>
 
-<p>You can use it as an <a href="http://binarybonsai.com/about/">‘About’ page</a> for a personnal weblog or to give each author their own page in a collaborative blog.</p>
-
-<p>To install it, download the <a href="http://jfoucher.com/source/author/">source code</a> and save it in a php file or get the <a href="http://jfoucher.com/source/author.gz">gzip file</a> and unpack it.</p>
-
-<p>Upload the resulting file to your wp-content/plugins directory and activate it from the admin interface.</p>
-
-<p>To use it put the author() function in you index.php template,
-where it normally shows the message that there are no posts.</p>
-
-<p>In the default template, it looks like this:</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code> &lt;?php endforeach; else: ?&gt;
- &lt;p&gt;&lt;?php _e('Sorry, no posts matched your criteria.'); ?&gt;&lt;/p&gt;
- &lt;?php endif; ?&gt;
+<div class="highlighter-rouge"><pre class="highlight"><code> .morediv{
+      font-weight:bold;
+ }
 </code></pre>
 </div>
 
-<p>Replace this by :</p>
+<p>which is exactly what I have <a href="http://jfoucher.com/author-page-wordpress-plugin/">here</a>.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code> &lt;?php endforeach; else: ?&gt;
- &lt;?php author(true, 5); ?&gt;
- &lt;?php endif; ?&gt;
-</code></pre>
-</div>
+<p><del datetime="2011-04-28T11:11:42+00:00">To install it, either put the <a href="http://jfoucher.com/source/morediv/">source code</a> in a php file or get the <a href="http://jfoucher.com/source/morediv.gz">gzip file</a> and uncompress it.</del></p>
 
-<p>The first optionnal boolean parameter gives you the opportunity to show or hide
-a contact form for the author. Defaults to ‘true’ (show the form).</p>
+<p>Utterly deprecated. This is here for archeological perspective, but you’d be mad to try and use it. Actually, the files can’t be downloaded anymore</p>
 
-<p>In version 0.2+, the second parameter is an integer an defines the number of latest posts to show. The default is ‘0’.
-You may want to change some of the text in the plugin file to your own language.</p>
-
-<p>To do a link to the author page, you have to do something like this:</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code> &lt;a href="index.php?author_name=&lt;?php the_author_login(); ?&gt;"&gt;
- &lt;?php the_author(); ?&gt;&lt;/a&gt;
-</code></pre>
-</div>
-
-<p>if you do not wish to or can’t use rewrite rules.</p>
-
-<p>On this site, I use the following rewrite rule:</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code> RewriteRule ^about/? /index.php?author_name=jonathan [QSA]
-</code></pre>
-</div>
-
-<p>With a link to the ‘About’ page simply like this :</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code> &lt;a href="http://jfoucher.com/about/"&gt;About&lt;/a&gt;
-</code></pre>
-</div>
-
-<p>On a multiuser blog, you could do this:</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>RewriteRule ^author/?(.*)/? /index.php?author_name=$1 [QSA]
-</code></pre>
-</div>
-
-<p>and so the link to the page is like this:</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code> &lt;a href="http://jfoucher.com/author/&lt;?php the_author_login(); ?&gt;
- &lt;?php the_author(); ?&gt;&lt;/a&gt;
-</code></pre>
-</div>
-
-<p>Version 0.3+ use native Wordpress functions to display the author data, making it more compatible (I hope) with future versions of Wordpress.</p>
-
-<p><a href="http://jfoucher.com/2004/10/08/plugin-wordpress-page-auteur/" hreflang="fr">En Français</a></p>
+<p>Upload the resulting file to your wp-content/plugins folder and activate it from the admin interface. That’s all there is to it. You can then apply whichever style you want to that block.</p>
 
   </div>
 
   <h3 style="text-align: center; margin-top: 2em">Older posts</h3>
 
   <ul class="posts noList">
+
+    
+      <li>
+        <span class="date">October 03, 2004</span>
+        <h3><a class="post-link" href="/2004/10/author-page-wordpress-plugin.html">Author page wordpress plugin</a></h3>
+        <p class="meta">October 03, 2004 | <span class="time">2</span> Minutes Read</p>
+        <p class="description">This plugin shows a specific page for each author, showing the number of posts published and some of the data entered in the Wordpress admin section, i.e. URL, AIM ICQ number, etc… except email! But it can provide a contact form that will send an email to the author’s address.</p>
+      </li>
 
     
       <li>
@@ -206,14 +159,6 @@ You may want to change some of the text in the plugin file to your own language.
         <h3><a class="post-link" href="/2004/09/record-de-la-traversee-de-la-mediterranee.html">Record de la traversée de la Méditerranée.</a></h3>
         <p class="meta">September 26, 2004 | <span class="time">0</span> Minutes Read</p>
         <p class="description">17 heures 56 minutes 13 secondes ! Voila le temps qu’ Orange II a mis pour naviguer de Marseille à Carthage (Tunisie). Ils ont donc battu de 50 minutes le précédent record établi par Steve Fosset et Playstation, à une vitesse moyenne absolument extraordinaire de 25,53 noeuds sur la distance de 548 miles !</p>
-      </li>
-
-    
-      <li>
-        <span class="date">September 25, 2004</span>
-        <h3><a class="post-link" href="/2004/09/wordpress-and-stattraq.html">Wordpress and StatTraq</a></h3>
-        <p class="meta">September 25, 2004 | <span class="time">0</span> Minutes Read</p>
-        <p class="description">StatTraq seems to be getting more popular. Another Wordpress plugin using it has been published by Rich Boakes. It gives the number of times that a particular post has been viewed, and is quite attractive. I think I’ll be installing it. Also don’t forget to take a look at the latest version of StatTraq. A great many improvements.</p>
       </li>
 
     

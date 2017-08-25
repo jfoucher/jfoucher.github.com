@@ -96,92 +96,274 @@
 
   <div class="post">
     
-    <h1 class="postTitle">Import contacts from Google by entering your email and password</h1>
-    <p class="meta">April 15, 2012 | <span class="time">4</span> Minutes Read</p>
+    <h1 class="postTitle">Installing PHP, Apache2 and nginx for faster websites</h1>
+    <p class="meta">April 23, 2012 | <span class="time">8</span> Minutes Read</p>
 
-    <p>What I wanted to do was something similar to what Dropbox does for their referral program: Allow the user to input their email and password, show them a list of their contacts and allow them to select who to invite. The invited contacts’ emails would then be saved directly to database and an email sent to them.</p>
+    <p>My contract with my previous shared hosting contractor is coming to a close, and as they seem to have all but abandoned their business, I decided it was time to move away. I looked at using Amazon’s EC2, but ultimately decided to go with Bhost, with which I’m fairly happy so far. To get some decent performance out of it, I planned to use Nginx as my web server</p>
 
-<p>This is what google calls the <a href="https://developers.google.com/accounts/docs/AuthForInstalledApps#Using">ClientLogin</a> method of authentication. It allow your user to simply input their username and password and see a list of their contacts displayed, where they can select which ones to invite, in this case.</p>
+<h3 id="keep-using-apache-as-usual">Keep using Apache as usual</h3>
 
-<p>The way to do that is pretty easy, first we have to make a POST request to google to get an authentification token for the subsequent authenticated requests. I chose to use the <a href="https://github.com/kriswallsmith/Buzz">Buzz PHP library</a> as my HTTP client. It makes everything easy and removes the necessity of countless <code class="highlighter-rouge">curl_set_opts()</code>. Buzz requires PHP 5.3, but I’m using Symfony2 which also does, so that’s not a problem, actually more of a boon as I find PHP5.3 code generally cleaner.</p>
+<p>All my websites are configured to work with apache, sometimes using fairly advanced rewrite rules, and a fair proportion of wordpress sites. So to save myself a ton of work I decided to just use Nginx as a proxy to apache and not reconfigure each site to use Nginx’s rewrite rules.</p>
 
-<p>I created a class <code class="highlighter-rouge">Importer</code> with a protected variable <code class="highlighter-rouge">$browser</code> which is the Buzz\Browser instance we’ll be using to connect to google. Google returns the data in a line based format, so I used a little helper function to convert it to a PHP array:</p>
+<h3 id="install-required-software">Install required software</h3>
 
-<figure class="highlight"><pre><code class="language-php" data-lang="php">    <span class="cp">&lt;?php</span>
-        <span class="k">protected</span> <span class="k">function</span> <span class="nf">unserializeGoogleData</span><span class="p">(</span><span class="nv">$data</span><span class="p">){</span>
-            <span class="nv">$returns</span> <span class="o">=</span> <span class="k">array</span><span class="p">();</span>
-            <span class="k">foreach</span> <span class="p">(</span><span class="nb">explode</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span><span class="nv">$data</span><span class="p">)</span> <span class="k">as</span> <span class="nv">$line</span><span class="p">)</span>
-            <span class="p">{</span>
-                <span class="nv">$line</span> <span class="o">=</span> <span class="nb">trim</span><span class="p">(</span><span class="nv">$line</span><span class="p">);</span>
-                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nv">$line</span><span class="p">)</span> <span class="k">continue</span><span class="p">;</span>
-                <span class="k">list</span><span class="p">(</span><span class="nv">$k</span><span class="p">,</span><span class="nv">$v</span><span class="p">)</span> <span class="o">=</span> <span class="nb">explode</span><span class="p">(</span><span class="s2">"="</span><span class="p">,</span><span class="nv">$line</span><span class="p">,</span><span class="mi">2</span><span class="p">);</span>
-                <span class="nv">$returns</span><span class="p">[</span><span class="nv">$k</span><span class="p">]</span> <span class="o">=</span> <span class="nv">$v</span><span class="p">;</span>
-            <span class="p">}</span>
-            <span class="k">return</span> <span class="nv">$returns</span><span class="p">;</span>
+<p>I’m using Ubuntu, but the steps below should be fairly easy to adapt to your distribution of choice. To install everything from scratch, just run <code class="highlighter-rouge">sudo apt-get install php5 apache2 mysql-server php5-mysql nginx</code>. This installs mysql, Apache, PHP and Nginx</p>
+
+<h3 id="configure-apache-and-nginx">Configure Apache and Nginx</h3>
+
+<p>I created one bash script that creates the necessary virtual hosts files for Apache and Nginx, by taking a template a doing a search/replace with sed. Here is the apache virtual host template that goes into <code class="highlighter-rouge">/etc/apache2/sites-available</code>:</p>
+
+<figure class="highlight"><pre><code class="language-apache" data-lang="apache">    <span class="p">&lt;</span><span class="nl">VirtualHost</span><span class="sr"> *:8080</span><span class="p">&gt;
+</span>        <span class="nc">ServerAdmin</span> webmaster@localhost
+        <span class="nc">ServerName</span> template
+        <span class="nc">ServerAlias</span> template www.template cdn.template cdn2.template
+        <span class="nc">DocumentRoot</span> /var/www/template
+        <span class="p">&lt;</span><span class="nl">Directory</span><span class="sr"> /</span><span class="p">&gt;
+</span>                <span class="nc">Options</span> <span class="ss">FollowSymLinks</span>
+                <span class="nc">AllowOverride</span> <span class="ss">None</span>
+        <span class="p">&lt;/</span><span class="nl">Directory</span><span class="p">&gt;
+</span>        <span class="p">&lt;</span><span class="nl">Directory</span><span class="sr"> /var/www/template/</span><span class="p">&gt;
+</span>                <span class="nc">Options</span> <span class="ss">Indexes</span> <span class="ss">FollowSymLinks</span> <span class="ss">MultiViews</span>
+                <span class="nc">AllowOverride</span> <span class="ss">All</span>
+                <span class="nc">Order</span> allow,deny
+                <span class="nc">allow</span> <span class="ss">from</span> all
+        <span class="p">&lt;/</span><span class="nl">Directory</span><span class="p">&gt;
+</span>        <span class="nc">ScriptAlias</span> /cgi-bin/ /usr/lib/cgi-bin/
+        <span class="p">&lt;</span><span class="nl">Directory</span><span class="sr"> "/usr/lib/cgi-bin"</span><span class="p">&gt;
+</span>                <span class="nc">AllowOverride</span> <span class="ss">None</span>
+                <span class="nc">Options</span> +ExecCGI -MultiViews +SymLinksIfOwnerMatch
+                <span class="nc">Order</span> allow,deny
+                <span class="nc">Allow</span> <span class="ss">from</span> all
+        <span class="p">&lt;/</span><span class="nl">Directory</span><span class="p">&gt;
+</span>        <span class="nc">ErrorLog</span> ${APACHE_LOG_DIR}/error.log
+        <span class="c"># Possible values include: debug, info, notice, warn, error, crit,</span>
+        <span class="c"># alert, emerg.</span>
+        <span class="nc">LogLevel</span> warn
+        <span class="nc">CustomLog</span> ${APACHE_LOG_DIR}/access.log combined
+        <span class="nc">Alias</span> /doc/ "/usr/share/doc/"
+        <span class="p">&lt;</span><span class="nl">Directory</span><span class="sr"> "/usr/share/doc/"</span><span class="p">&gt;
+</span>            <span class="nc">Options</span> <span class="ss">Indexes</span> <span class="ss">MultiViews</span> <span class="ss">FollowSymLinks</span>
+            <span class="nc">AllowOverride</span> <span class="ss">None</span>
+            <span class="nc">Order</span> deny,allow
+            <span class="nc">Deny</span> <span class="ss">from</span> all
+            <span class="nc">Allow</span> <span class="ss">from</span> 127.0.0.0/255.0.0.0 ::1/128
+        <span class="p">&lt;/</span><span class="nl">Directory</span><span class="p">&gt;
+</span>    <span class="p">&lt;/</span><span class="nl">VirtualHost</span><span class="p">&gt;</span></code></pre></figure>
+
+<p>You’ll notice that Apache listens on port 8080. You need to change the port from 80 to 8080 in <code class="highlighter-rouge">/etc/apache2/ports.conf</code> as well, this is what mine looks like after the change :</p>
+
+<figure class="highlight"><pre><code class="language-apache" data-lang="apache">    <span class="nc">NameVirtualHost</span> *:8080
+    <span class="nc">Listen</span> 8080
+    <span class="p">&lt;</span><span class="nl">IfModule</span><span class="sr"> mod_ssl.c</span><span class="p">&gt;
+</span>        <span class="c"># If you add NameVirtualHost *:443 here, you will also have to change</span>
+        <span class="c"># the VirtualHost statement in /etc/apache2/sites-available/default-ssl</span>
+        <span class="c"># to &lt;VirtualHost *:443&gt;</span>
+        <span class="c"># Server Name Indication for SSL named virtual hosts is currently not</span>
+        <span class="c"># supported by MSIE on Windows XP.</span>
+        <span class="nc">Listen</span> 443
+    <span class="p">&lt;/</span><span class="nl">IfModule</span><span class="p">&gt;
+</span>    <span class="p">&lt;</span><span class="nl">IfModule</span><span class="sr"> mod_gnutls.c</span><span class="p">&gt;
+</span>        <span class="nc">Listen</span> 443
+    <span class="p">&lt;/</span><span class="nl">IfModule</span><span class="p">&gt;</span></code></pre></figure>
+
+<p>Next up is the template for the default nginx site, which is much simpler and goes in <code class="highlighter-rouge">/etc/nginx/sites-available</code>:</p>
+
+<figure class="highlight"><pre><code class="language-nginx" data-lang="nginx">    <span class="k">server</span> <span class="p">{</span>
+        <span class="kn">listen</span> <span class="mi">80</span><span class="p">;</span>
+        <span class="kn">access_log</span> <span class="n">/var/log/nginx.access.log</span><span class="p">;</span>
+        <span class="kn">error_log</span> <span class="n">/var/log/nginx.error.log</span><span class="p">;</span>
+        <span class="kn">root</span> <span class="n">/var/www/template</span><span class="p">;</span>
+        <span class="kn">index</span> <span class="s">index.php</span> <span class="s">index.html</span><span class="p">;</span>
+        <span class="kn">server_name</span> <span class="s">template</span> <span class="s">*.template</span><span class="p">;</span>
+        <span class="kn">location</span> <span class="n">/</span> <span class="p">{</span>
+                <span class="kn">proxy_set_header</span> <span class="s">X-Real-IP</span> <span class="nv">$remote_addr</span><span class="p">;</span>
+                <span class="kn">proxy_set_header</span> <span class="s">X-Forwarded-For</span> <span class="nv">$proxy_add_x_forwarded_for</span><span class="p">;</span>
+                <span class="kn">proxy_set_header</span> <span class="s">Host</span> <span class="nv">$host</span><span class="p">;</span>
+                <span class="kn">proxy_pass</span> <span class="s">http://127.0.0.1:8080</span><span class="p">;</span>
         <span class="p">}</span>
-    <span class="cp">?&gt;</span></code></pre></figure>
-
-<p>So first we need to get the auth token from google:</p>
-
-<figure class="highlight"><pre><code class="language-php" data-lang="php">    <span class="cp">&lt;?php</span>
-    <span class="nv">$params</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
-        <span class="s1">'accountType'</span> <span class="o">=&gt;</span> <span class="s1">'HOSTED_OR_GOOGLE'</span><span class="p">,</span>
-        <span class="s1">'Email'</span> <span class="o">=&gt;</span> <span class="nv">$data</span><span class="p">[</span><span class="s1">'email'</span><span class="p">],</span>
-        <span class="s1">'Passwd'</span> <span class="o">=&gt;</span> <span class="nv">$data</span><span class="p">[</span><span class="s1">'password'</span><span class="p">],</span>
-        <span class="s1">'service'</span><span class="o">=&gt;</span> <span class="s1">'cp'</span><span class="p">,</span>
-        <span class="s1">'source'</span><span class="o">=&gt;</span> <span class="s1">'mention-web-1.0'</span><span class="p">,</span>
-    <span class="p">);</span>
-    <span class="nv">$output</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">browser</span><span class="o">-&gt;</span><span class="na">post</span><span class="p">(</span><span class="s1">'https://www.google.com/accounts/ClientLogin'</span><span class="p">,</span>
-        <span class="k">array</span><span class="p">(),</span>
-        <span class="nb">http_build_query</span><span class="p">(</span><span class="nv">$params</span><span class="p">));</span>
-    <span class="nv">$returns</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">unserializeGoogleData</span><span class="p">(</span><span class="nv">$output</span><span class="o">-&gt;</span><span class="na">getContent</span><span class="p">());</span>
-    <span class="cp">?&gt;</span></code></pre></figure>
-
-<p>Where <code class="highlighter-rouge">$data['email']</code> and <code class="highlighter-rouge">$data['password']</code> are the user’s email and password, respectively.</p>
-
-<p>If everything went fine, the <code class="highlighter-rouge">$returns</code> variable now contains an associative array with a key <code class="highlighter-rouge">Auth</code>, so we can proceed with the next step, actually getting the contacts:</p>
-
-<figure class="highlight"><pre><code class="language-php" data-lang="php">    <span class="cp">&lt;?php</span>
-    <span class="k">if</span><span class="p">(</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$returns</span><span class="p">[</span><span class="s1">'Auth'</span><span class="p">]))</span> <span class="p">{</span>
-        <span class="nv">$feed_url</span> <span class="o">=</span> <span class="s2">"https://www.google.com/m8/feeds/contacts/"</span> <span class="o">.</span>
-            <span class="nb">urlencode</span><span class="p">(</span><span class="nv">$data</span><span class="p">[</span><span class="s1">'email'</span><span class="p">])</span> <span class="o">.</span>
-            <span class="s2">"/full?alt=json&amp;max-results=500"</span><span class="p">;</span>
-        <span class="nv">$header</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
-            <span class="s1">'Authorization: GoogleLogin auth='</span> <span class="o">.</span> <span class="nv">$returns</span><span class="p">[</span><span class="s1">'Auth'</span><span class="p">],</span>
-        <span class="p">);</span>
-        <span class="nv">$result</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">browser</span><span class="o">-&gt;</span><span class="na">get</span><span class="p">(</span><span class="nv">$feed_url</span><span class="p">,</span> <span class="nv">$header</span><span class="p">);</span>
-        <span class="nv">$r</span> <span class="o">=</span> <span class="nb">json_decode</span><span class="p">(</span><span class="nv">$result</span><span class="o">-&gt;</span><span class="na">getContent</span><span class="p">(),</span> <span class="kc">true</span><span class="p">);</span>
-        <span class="c1">//return $r;
-</span>        <span class="nv">$results</span> <span class="o">=</span> <span class="k">array</span><span class="p">();</span>
-        <span class="k">if</span><span class="p">(</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$r</span><span class="p">[</span><span class="s1">'feed'</span><span class="p">][</span><span class="s1">'entry'</span><span class="p">])</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="k">empty</span><span class="p">(</span><span class="nv">$r</span><span class="p">[</span><span class="s1">'feed'</span><span class="p">][</span><span class="s1">'entry'</span><span class="p">])){</span>
-            <span class="nv">$results</span> <span class="o">=</span> <span class="nb">array_map</span><span class="p">(</span><span class="k">function</span><span class="p">(</span><span class="nv">$el</span><span class="p">){</span>
-                <span class="nv">$r</span><span class="o">=</span><span class="k">array</span><span class="p">();</span>
-                <span class="k">if</span><span class="p">(</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$el</span><span class="p">[</span><span class="s1">'gd$email'</span><span class="p">])){</span>
-                    <span class="nv">$r</span><span class="p">[</span><span class="s1">'email'</span><span class="p">]</span> <span class="o">=</span> <span class="nv">$el</span><span class="p">[</span><span class="s1">'gd$email'</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">'address'</span><span class="p">];</span>
-                    <span class="k">if</span> <span class="p">(</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$el</span><span class="p">[</span><span class="s1">'title'</span><span class="p">][</span><span class="s1">'$t'</span><span class="p">])){</span>
-                        <span class="nv">$r</span><span class="p">[</span><span class="s1">'name'</span><span class="p">]</span> <span class="o">=</span> <span class="nv">$el</span><span class="p">[</span><span class="s1">'title'</span><span class="p">][</span><span class="s1">'$t'</span><span class="p">];</span>
-                    <span class="p">}</span>
-                <span class="p">}</span>
-                <span class="k">return</span> <span class="nv">$r</span><span class="p">;</span>
-            <span class="p">},</span> <span class="nv">$r</span><span class="p">[</span><span class="s1">'feed'</span><span class="p">][</span><span class="s1">'entry'</span><span class="p">]);</span>
+        <span class="kn">location</span> <span class="p">~</span> <span class="sr">/\.(ht|git)</span> <span class="p">{</span>
+                <span class="kn">deny</span> <span class="s">all</span><span class="p">;</span>
         <span class="p">}</span>
-        <span class="k">return</span> <span class="nv">$results</span>
-    <span class="p">}</span><span class="k">else</span><span class="p">{</span>
-        <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="cp">?&gt;</span></code></pre></figure>
+    <span class="p">}</span></code></pre></figure>
 
-<p>If the user and password were incorrect, the <code class="highlighter-rouge">Auth</code> key will not be present in the array, and so we simply return <code class="highlighter-rouge">false</code>. It is recommended to see if Google requires the user to solve a catcha, in which case it should be displayed. But as that was not necessary in this case, it will be left as an exercise for the reader.
-On the other hand, if everything was ok, the <code class="highlighter-rouge">$results</code> array is now populated with the user’s contacts, so the next step is to walk over the array extracting the data we need, in this case only the main email and the full name of the contact. We populate an array with the required data and simply return it for the caller to use.</p>
+<p>All that does is proxy everything to apache on localhost, port 8080</p>
 
-<p>I hope this will be useful to someone, but please note that Google <a href="https://developers.google.com/accounts/docs/AuthForInstalledApps">recommends</a> you use OAuth for that kind of things.</p>
+<p>So, our virtual host templates are ready, and if you only have one or two sites you could copy the contents to a new file by hand and change the word <code class="highlighter-rouge">template</code> for your actual domain name / folder, but as I had quite a few sites to convert, I created a small bash script that takes car of it for me, by just calling it with the hostname:</p>
 
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">    <span class="c">#!/bin/bash</span>
+    <span class="nv">CMDLN_ARGS</span><span class="o">=</span><span class="s2">"</span><span class="nv">$@</span><span class="s2">"</span> <span class="c"># Command line arguments for this script</span>
+    <span class="nb">export </span>CMDLN_ARGS
+    <span class="c"># Run this script as root if not already.</span>
+    chk_root <span class="o">()</span> <span class="o">{</span>
+     <span class="k">if</span> <span class="o">[</span> ! <span class="k">$(</span> id -u <span class="k">)</span> -eq 0 <span class="o">]</span>; <span class="k">then
+       </span><span class="nb">echo</span> <span class="s2">"Please enter your password."</span>
+       <span class="nb">exec </span>sudo su -c <span class="s2">"</span><span class="k">${</span><span class="nv">0</span><span class="k">}</span><span class="s2"> </span><span class="k">${</span><span class="nv">CMDLN_ARGS</span><span class="k">}</span><span class="s2">"</span> <span class="c"># Call this prog as root</span>
+       <span class="nb">exit</span> <span class="k">${</span><span class="p">?</span><span class="k">}</span>  <span class="c"># since we're 'execing' above, we wont reach this exit</span>
+                  <span class="c"># unless something goes wrong.</span>
+     <span class="k">fi</span>
+    <span class="o">}</span>
+    chk_root
+    cat /etc/apache2/sites-available/template | sed <span class="s2">"s/template/</span><span class="nv">$1</span><span class="s2">/g"</span> |cat &gt; /etc/apache2/sites-available/<span class="nv">$1</span>
+    ln -s /etc/apache2/sites-available/<span class="nv">$1</span> /etc/apache2/sites-enabled/<span class="nv">$1</span>
+    cat /etc/nginx/sites-available/template | sed <span class="s2">"s/template/</span><span class="nv">$1</span><span class="s2">/g"</span> |cat &gt; /etc/nginx/sites-available/<span class="nv">$1</span>
+    ln -s /etc/nginx/sites-available/<span class="nv">$1</span> /etc/nginx/sites-enabled/<span class="nv">$1</span>
+    <span class="k">if</span> <span class="o">[</span> -d /var/www/<span class="nv">$1</span> <span class="o">]</span>;
+    <span class="k">then
+      </span><span class="nb">echo</span> <span class="s2">"host directory exists"</span>;
+    <span class="k">else
+      </span><span class="nb">echo</span> <span class="s2">"creating directory"</span>
+      mkdir <span class="s2">"/var/www/</span><span class="nv">$1</span><span class="s2">"</span>
+    <span class="k">fi
+    </span>chown -R www-data:www-data /var/www/<span class="nv">$1</span>
+    /etc/init.d/apache2 restart
+    /etc/init.d/nginx restart</code></pre></figure>
+
+<p>Put this say in your home folder and give it executable permission with <code class="highlighter-rouge">chmod 755 new_host</code> or whatever you named the file.</p>
+
+<p>Then run it with <code class="highlighter-rouge">./new_host example.com</code></p>
+
+<p>This will create a folder in <code class="highlighter-rouge">/var/www/example.com</code>, copy the updated template virtual host configuration to the required location and restart apache and nginx.</p>
+
+<p>Now put some content in that folder and configure your mysql connection if neccesary</p>
+
+<p>You should now be able to browse to example.com and see your brand new site. Some quick benchmarking with ab gives roughly a tenfold increase in requests per second, depending on the configuration of the website itself</p>
+
+<p>These are some rough numbers for <a href="http://6px.eu">Six Pixels</a>, built with Kohana2 without any caching mechanism</p>
+
+<p><code class="highlighter-rouge">ab -c20 -n200 http://6px.eu:8080/</code> is hitting Apache on port 8080</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Server Hostname:        6px.eu
+Server Port:            8080
+
+Document Path:          /
+Document Length:        12101 bytes
+
+Concurrency Level:      20
+Time taken for tests:   282.679 seconds
+Complete requests:      200
+Failed requests:        0
+Write errors:           0
+Total transferred:      2486000 bytes
+HTML transferred:       2420200 bytes
+Requests per second:    0.71 [#/sec] (mean)
+Time per request:       28267.940 [ms] (mean)
+Time per request:       1413.397 [ms] (mean, across all concurrent requests)
+Transfer rate:          8.59 [Kbytes/sec] received
+</code></pre>
+</div>
+
+<p>Now with nginx <code class="highlighter-rouge">ab -c20 -n200 http://6px.eu/</code></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Server Hostname:        6px.eu
+Server Port:            80
+
+Document Path:          /
+Document Length:        12081 bytes
+
+Concurrency Level:      20
+Time taken for tests:   40.606 seconds
+Complete requests:      200
+Failed requests:        0
+Write errors:           0
+Total transferred:      2482000 bytes
+HTML transferred:       2416200 bytes
+Requests per second:    4.93 [#/sec] (mean)
+Time per request:       4060.612 [ms] (mean)
+Time per request:       203.031 [ms] (mean, across all concurrent requests)
+Transfer rate:          59.69 [Kbytes/sec] received
+</code></pre>
+</div>
+
+<h3 id="update">Update:</h3>
+
+<p>As rightly noted by <a href="https://twitter.com/#!/arnaud_lb/status/196610128261296129">@arnaud_lb</a> the benchmarks should give nearly the same results,
+as nginx is waiting for Apache to return it’s data before sending it along.
+What happened in those benchmarks is that <a href="http://cloudflare.com">cloudflare.com</a> (highly recommended by the way) was caching some results and not others.</p>
+
+<p>When I tried on localhost, the results were effectively the same.
+So the way to get better performance is to get nginx to cache the results from apache, by adding the following to your nginx virtual host definition :</p>
+
+<figure class="highlight"><pre><code class="language-nginx" data-lang="nginx">    <span class="k">proxy_cache</span> <span class="s">one</span><span class="p">;</span>
+    <span class="k">proxy_cache_use_stale</span> <span class="s">error</span> <span class="s">timeout</span> <span class="s">invalid_header</span> <span class="s">updating</span><span class="p">;</span>
+    <span class="k">proxy_cache_key</span> <span class="nv">$scheme$host$request_uri</span><span class="p">;</span>
+    <span class="k">proxy_cache_valid</span>       <span class="mi">200</span> <span class="mi">301</span> <span class="mi">302</span> <span class="mi">20m</span><span class="p">;</span>
+    <span class="k">proxy_cache_valid</span>       <span class="mi">404</span> <span class="mi">1m</span><span class="p">;</span>
+    <span class="k">proxy_cache_valid</span>       <span class="s">any</span> <span class="mi">15m</span><span class="p">;</span></code></pre></figure>
+
+<p>where the <code class="highlighter-rouge">proxy_cache</code> named <code class="highlighter-rouge">one</code> is defined in nginx.conf as such :</p>
+
+<figure class="highlight"><pre><code class="language-nginx" data-lang="nginx">    <span class="k">proxy_cache_path</span> <span class="n">/usr/local/nginx/proxy</span> <span class="s">levels=1:2</span> <span class="s">keys_zone=one:15m</span> <span class="s">inactive=7d</span> <span class="s">max_size=1000m</span><span class="p">;</span></code></pre></figure>
+
+<p>The <code class="highlighter-rouge">proxy_cache_valid</code> entries above define different cache times for various response codes</p>
+
+<p>And here are the real benchmarks :</p>
+
+<h4 id="apache">Apache:</h4>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Server Hostname:        direct.6px.eu
+Server Port:            8080
+
+Document Path:          /
+Document Length:        11487 bytes
+
+Concurrency Level:      10
+Time taken for tests:   15.082 seconds
+Complete requests:      200
+Failed requests:        0
+Write errors:           0
+Total transferred:      2338600 bytes
+HTML transferred:       2297400 bytes
+Requests per second:    13.26 [#/sec] (mean)
+Time per request:       754.075 [ms] (mean)
+Time per request:       75.408 [ms] (mean, across all concurrent requests)
+Transfer rate:          151.43 [Kbytes/sec] received
+</code></pre>
+</div>
+
+<h4 id="nginx">Nginx:</h4>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Server Hostname:        direct.6px.eu
+Server Port:            80
+
+Document Path:          /
+Document Length:        3031 bytes
+
+Concurrency Level:      10
+Time taken for tests:   0.027 seconds
+Complete requests:      200
+Failed requests:        0
+Write errors:           0
+Total transferred:      654600 bytes
+HTML transferred:       606200 bytes
+Requests per second:    7305.94 [#/sec] (mean)
+Time per request:       1.369 [ms] (mean)
+Time per request:       0.137 [ms] (mean, across all concurrent requests)
+Transfer rate:          23351.88 [Kbytes/sec] received
+</code></pre>
+</div>
+
+<p>Just, wow…</p>
+
+<p>Careful though as this will wreak havoc on your sessions, at the minimum you can disable caching for logged-in users with</p>
+
+<figure class="highlight"><pre><code class="language-nginx" data-lang="nginx">    <span class="k">proxy_cache_bypass</span> <span class="nv">$cookie_session</span><span class="p">;</span>
+    <span class="k">proxy_no_cache</span> <span class="nv">$cookie_session</span><span class="p">;</span></code></pre></figure>
+
+<p>where <code class="highlighter-rouge">session</code> is the name of your cookie</p>
 
   </div>
 
   <h3 style="text-align: center; margin-top: 2em">Older posts</h3>
 
   <ul class="posts noList">
+
+    
+      <li>
+        <span class="date">April 15, 2012</span>
+        <h3><a class="post-link" href="/2012/04/getting-your-users-gmail-contacts.html">Import contacts from Google by entering your email and password</a></h3>
+        <p class="meta">April 15, 2012 | <span class="time">4</span> Minutes Read</p>
+        <p class="description">In some sites like for example Dropbox, you invite people from your Gmail contacts by simply entering your email and password: this is how it's done.</p>
+      </li>
 
     
       <li>
@@ -213,14 +395,6 @@ On the other hand, if everything was ok, the <code class="highlighter-rouge">$re
         <h3><a class="post-link" href="/2011/09/a-10-minute-script-to-graph-your-server-load.html">A 10 minute script to graph your server load</a></h3>
         <p class="meta">September 17, 2011 | <span class="time">0</span> Minutes Read</p>
         <p class="description">I needed to monitor the load on my web server like, right now, so I wrote this script.</p>
-      </li>
-
-    
-      <li>
-        <span class="date">August 27, 2011</span>
-        <h3><a class="post-link" href="/2011/08/moving-to-jekyll-and-github.html">Moving from Wordpress to Jekyll and Github</a></h3>
-        <p class="meta">August 27, 2011 | <span class="time">0</span> Minutes Read</p>
-        <p class="description">I stopped using Wordpress for this blog a long time ago. This is how I did it.</p>
       </li>
 
     

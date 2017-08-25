@@ -8,8 +8,8 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <title>Geeky Nuggets</title>
+    <meta name="description" content="When you have some long running processes to trigger on request, best practice with Symfony is to have them run in the kernel.terminate event.">
+    <title>Processing custom events in kernel.terminate</title>
 
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="/assets/img/favicon.ico" />
@@ -19,7 +19,7 @@
     
     
     <!--[if IE 8]><link rel="stylesheet" href="/assets/css/ie.css"><![endif]-->
-    <link rel="canonical" href="https://jfoucher.com/blog/page10/">
+    <link rel="canonical" href="https://jfoucher.com/2017/08/symfony-process-custom-events-in-kernel-terminate.html">
 
     <!-- Modernizr -->
     <!--[if lt IE 9]>
@@ -50,8 +50,10 @@
 <!-- TWITTER CARD -->
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:site" content="@jfoucher" />
-<meta name="twitter:title" content="Geeky Nuggets" />
-<meta name="twitter:description" content='Read "Geeky Nuggets" on Geeky Nuggets' />
+<meta name="twitter:title" content="Processing custom events in kernel.terminate" />
+<meta name="twitter:description" content='Read "Processing custom events in kernel.terminate" on Geeky Nuggets' />
+
+<meta name="twitter:image" content="https://jfoucher.com/uploads/2017/08/symfony-kernel.terminate.png" />
 
 
 
@@ -92,141 +94,180 @@
 
    <div class="content">
       <div class="container">
-         <div class="home" id="home">
+         <div class="post">
+  
+    <div class="featuredImage">
+        <img src="/assets/img//uploads/2017/08/symfony-kernel.terminate.png" alt="" />
+      </div>
+  
+  <h1 class="postTitle">Processing custom events in kernel.terminate</h1>
+  <p class="meta">August 25, 2017 | <span class="time">5</span> Minute Read</p>
+  
+  <h3 id="what-is-the-kernelterminate-event">What is the kernel.terminate event?</h3>
 
-  <div class="post">
-    
-    <h1 class="postTitle">External Links Wordpress Plugin</h1>
-    <p class="meta">October 09, 2004 | <span class="time">1</span> Minutes Read</p>
+<p>It is the last event that is triggered in Symfony, just after the response has been sent to the client (only on php-fpm). This means that we can do some heavy lifting here because our response time is not affected. The client gets the response quickly and our processing will occur afterwards.</p>
 
-    <h3 id="external-links">External links:</h3>
+<p>The Symfony SwiftMailer bundle does this by default, so we should be ok with emails, but my latest project needs to connect to various APIs on some events, and this takes quite some time.</p>
 
-<p>The little images that appear after an external link on this site used to be created by pure CSS, using the following rules:</p>
+<p>In this post I will explain the method I use to make them run in the <code class="highlighter-rouge">kernel.terminate</code> event.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>.commentlist a[href*="http"], .storycontent a[href*="http"]
-{
-    padding-right: 12px;
-    background: url('/wp-images/ext-link.gif') right top no-repeat;
-}
-.commentlist a[href*="jfoucher.info"], .storycontent a[href*="jfoucher.info"]
-{
-    padding-right: 0;
-    background-image: none;
-}
+<p>For a primer about Symfony events, I recommend the <a href="https://symfony.com/doc/current/reference/events.html">official Symfony documentation</a></p>
+
+<h3 id="custom-events">Custom events</h3>
+
+<p>Custom events are trigerred from our own code, generally in the controller, and it goes something like this:</p>
+
+<div class="language-php highlighter-rouge"><pre class="highlight"><code><span class="sd">/** 
+* @var $dispatcher \Symfony\Component\EventDispatcher\EventDispatcherInterface 
+*/</span>
+<span class="c1">//Get the event dispatcher from the container
+</span><span class="nv">$dispatcher</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">get</span><span class="p">(</span><span class="s1">'event_dispatcher'</span><span class="p">);</span>
+<span class="c1">//Create our custom event
+</span><span class="nv">$event</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">NewUserEvent</span><span class="p">(</span><span class="nv">$user</span><span class="p">,</span> <span class="nv">$request</span><span class="p">);</span>
+<span class="c1">//Dispatch the event
+</span><span class="nv">$dispatcher</span><span class="o">-&gt;</span><span class="na">dispatch</span><span class="p">(</span><span class="nx">AppEvents</span><span class="o">::</span><span class="na">NEW_USER</span><span class="p">,</span> <span class="nv">$event</span><span class="p">);</span>
 </code></pre>
 </div>
 
-<p>But, as you may know, this does not work in Internet Explorer. So I decided to write a little plugin that would give a specific class attribute to all external links, so that they can be styled in a manner recognizable to IE.</p>
+<h3 id="the-event-subscriber">The event subscriber</h3>
 
-<h3 id="languages">Languages</h3>
+<p>Then we have an EventSubscriber that will listen to our custom events, in my case it’s called <code class="highlighter-rouge">ApiSubscriber</code> and is located in <code class="highlighter-rouge">src/EventSubscriber</code>. In this case it listens to two different events: 
+<code class="highlighter-rouge">AppEvents::NEW_USER</code> and <code class="highlighter-rouge">AppEvents::DELETE_USER</code>.</p>
 
-<p>Additionally, as this is a bilingual blog, I like to show an language text after each link, like <a href="http://daniel.glazman.free.fr/weblog/archived/2002_09_15_glazblogarc.html#81664011" hreflang="en">this</a>. I used to do it in pure CSS, like so:</p>
+<div class="language-php highlighter-rouge"><pre class="highlight"><code><span class="k">class</span> <span class="nc">ApiSubscriber</span> <span class="k">implements</span> <span class="nx">EventSubscriberInterface</span> <span class="p">{</span>
 
-<div class="highlighter-rouge"><pre class="highlight"><code> a[hreflang]:after {
-      content:"000a0[" attr(hreflang) "]";
-      color:#999;
-      background:transparent;
-      font-size:0.8em
- }
+    <span class="k">protected</span> <span class="nv">$container</span><span class="p">;</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">__construct</span><span class="p">(</span><span class="nx">\Symfony\Component\DependencyInjection\ContainerInterface</span> <span class="nv">$container</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">container</span> <span class="o">=</span> <span class="nv">$container</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">static</span> <span class="k">function</span> <span class="nf">getSubscribedEvents</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="k">array</span><span class="p">(</span>
+            <span class="nx">AppEvents</span><span class="o">::</span><span class="na">NEW_USER</span> <span class="o">=&gt;</span> <span class="s1">'newUser'</span><span class="p">,</span>
+            <span class="nx">AppEvents</span><span class="o">::</span><span class="na">DELETE_USER</span> <span class="o">=&gt;</span> <span class="s1">'deleteUser'</span><span class="p">,</span>
+        <span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="c1">//...
+</span><span class="p">}</span>
+
 </code></pre>
 </div>
 
-<p>but you guessed it, it doesn’t work in IE, so this little plugin takes care of that as well… All you need to do is add an hreflang=”whatever” attribute to your links.</p>
+<h3 id="configure-the-service">Configure the service</h3>
 
-<h3 id="installation">Installation:</h3>
+<p>You will notice that I inject the container as it makes it easy to get everything we need, such as parameters or other services.</p>
 
-<ul>
-  <li>Download the <a href="http://jfoucher.com/source/external_links.gz">gzip file</a></li>
-  <li>Extract it</li>
-  <li>Upload the resulting file to your wp-content/plugins directory</li>
-  <li>Activate through the admin interface</li>
-</ul>
+<p>Don’t forget to configure the event subscriber in <code class="highlighter-rouge">app/config/services.yml</code> like so:</p>
 
-<p>That’s it ! Now you can define styles:</p>
-
-<h3 id="for-example">For example:</h3>
-
-<div class="highlighter-rouge"><pre class="highlight"><code> /* External links style */
- a.external-link, a.external-link:visited
- {
-      padding-right:12px;
-      background:url(/wp-images/ext-link.png) right top no-repeat;
-      margin-right:0
- }
- /* Hovering external links */
- a.external-link:hover
- {
-      padding-right:12px;
-      background:url(/wp-images/ext-link-hover.png) right top no-repeat;
-      margin-right:0
- }
- /* Language attribute */
- .hreflang {
-      font-size:0.8em;
-      color:#bbb
- }
+<div class="language-yml highlighter-rouge"><pre class="highlight"><code><span class="s">services</span><span class="pi">:</span>
+    <span class="s">api.subscriber</span><span class="pi">:</span>
+        <span class="s">class</span><span class="pi">:</span> <span class="s">AppBundle\EventSubscriber\ApiSubscriber</span>
+        <span class="s">arguments</span><span class="pi">:</span> <span class="pi">[</span><span class="s2">"</span><span class="s">@service_container"</span><span class="pi">]</span>
+        <span class="s">tags</span><span class="pi">:</span>
+            <span class="pi">-</span> <span class="pi">{</span> <span class="nv">name</span><span class="pi">:</span> <span class="nv">kernel.event_subscriber</span> <span class="pi">}</span>
 </code></pre>
 </div>
 
-  </div>
+<p>Now our event subscriber is ready for action whenever we trigger the event from our controllers.</p>
 
-  <h3 style="text-align: center; margin-top: 2em">Older posts</h3>
+<h3 id="handle-your-custom-event">Handle your custom event</h3>
 
-  <ul class="posts noList">
+<p>The event handling function is where the magic happens. Say when a new user is created, the <code class="highlighter-rouge">AppEvents::NEW_USER</code> is triggered and the <code class="highlighter-rouge">ApiSubscriber::newUser</code> function is called.</p>
 
-    
-      <li>
-        <span class="date">October 08, 2004</span>
-        <h3><a class="post-link" href="/2004/10/plugin-wordpress-page-auteur.html">Plugin Wordpress : Page Auteur</a></h3>
-        <p class="meta">October 08, 2004 | <span class="time">2</span> Minutes Read</p>
-        <p class="description">Cette extension de Wordpress créé une page spécifique pour chaque auteur, qui montre le nombre d’articles publiés, et les données du compte wordpress de cet utilisateur, tels que biographie, addresse du site web, etc… et optionellement l’adresse email (si vous n’avez pas peur du spam…) Il est aussi possible d’afficher un formulaire qui enverra un message à l’auteur par email, mais sans que l’adresse soit visible.</p>
-      </li>
+<p>Here it is, I’ll explain later</p>
 
-    
-      <li>
-        <span class="date">October 06, 2004</span>
-        <h3><a class="post-link" href="/2004/10/referents-de-larticle.html">Rérents de l'article</a></h3>
-        <p class="meta">October 06, 2004 | <span class="time">1</span> Minutes Read</p>
-        <p class="description">C’est un plugin pour Wordpress Qui montre les derniers sites d’où sont venus vos visiteurs. Vous aurez besoin du plugin Stattraq.Installation :	Téléchargez et installez Stattraq.	Envoyer le fichier résultant à votre dossier /wp-content/plugins	Activez le plugin dans votre interface d'administrationL’utilisation est simple :Ajouter le code suivant dans votre fichier index.phppost_referrers(8, "&lt;li&gt;", "&lt;/li&gt;", "Pas encore...", "self");où 8 est le nombre pe pages référentes à affiche...</p>
-      </li>
+<div class="language-php highlighter-rouge"><pre class="highlight"><code><span class="k">public</span> <span class="k">function</span> <span class="nf">newUser</span><span class="p">(</span><span class="nx">NewUserEvent</span> <span class="nv">$newUserEvent</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="c1">// Get the request from our custom event
+</span>    <span class="nv">$request</span> <span class="o">=</span> <span class="nv">$newUserEvent</span><span class="o">-&gt;</span><span class="na">getRequest</span><span class="p">();</span>
+    <span class="c1">// Add custom attributes to the request, so we can retrieve them later in the kernel.terminate event
+</span>    <span class="nv">$request</span><span class="o">-&gt;</span><span class="na">attributes</span><span class="o">-&gt;</span><span class="na">add</span><span class="p">([</span>
+        <span class="s1">'user'</span> <span class="o">=&gt;</span> <span class="nv">$newUserEvent</span><span class="o">-&gt;</span><span class="na">getUser</span><span class="p">(),</span>
+        <span class="s1">'thing_api_key'</span> <span class="o">=&gt;</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">container</span><span class="o">-&gt;</span><span class="na">getParameter</span><span class="p">(</span><span class="s1">'thing_api_key'</span><span class="p">),</span>
+        <span class="s1">'thing_api_user'</span> <span class="o">=&gt;</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">container</span><span class="o">-&gt;</span><span class="na">getParameter</span><span class="p">(</span><span class="s1">'thing_api_user'</span><span class="p">),</span>
+    <span class="p">]);</span>
+    <span class="c1">// Add our custom listener to the kernel.terminate event
+</span>    <span class="c1">// We will see later what the createThingOnApi static function looks like
+</span>    <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">container</span><span class="o">-&gt;</span><span class="na">get</span><span class="p">(</span><span class="s1">'event_dispatcher'</span><span class="p">)</span><span class="o">-&gt;</span><span class="na">addListener</span><span class="p">(</span><span class="s1">'kernel.terminate'</span><span class="p">,</span> <span class="p">[</span><span class="nx">self</span><span class="o">::</span><span class="na">class</span><span class="p">,</span> <span class="s1">'createThingOnApi'</span><span class="p">]);</span>
 
-    
-      <li>
-        <span class="date">October 06, 2004</span>
-        <h3><a class="post-link" href="/2004/10/idec-en-route-vers-cadix.html">Idec en route vers Cadix.</a></h3>
-        <p class="meta">October 06, 2004 | <span class="time">0</span> Minutes Read</p>
-        <p class="description">Francis Joyon, sur Idec, va tenter d’établir un nouveau record Cadix - San salvador (Bahamas) sur un parcours que l’on appelle la ‘Route de la découverte’</p>
-      </li>
-
-    
-      <li>
-        <span class="date">October 06, 2004</span>
-        <h3><a class="post-link" href="/2004/10/censored-comment-wordpress-plugin.html">Censored Comment Wordpress plugin</a></h3>
-        <p class="meta">October 06, 2004 | <span class="time">0</span> Minutes Read</p>
-        <p class="description">Another wordpress plugin. This one shows a user definable text on comments that have been edited or censored. I got the idea from Michael Heilemann complaining about some useless comments on his site.</p>
-      </li>
-
-    
-      <li>
-        <span class="date">October 05, 2004</span>
-        <h3><a class="post-link" href="/2004/10/new-generation-acronym-replacer.html">New generation acronym replacer</a></h3>
-        <p class="meta">October 05, 2004 | <span class="time">0</span> Minutes Read</p>
-        <p class="description">This post describes a new kind of acronym replacer, where you don’t need to touch a line of PHP to define new acronyms, and can make them link directly to some place. For example, AOL could become AOL.</p>
-      </li>
-
-    
-  </ul>
-  <!-- Pagination links -->
-  <div class="pagination">
-    
-      <a href="/blog/page9/" class="previous button__outline">Newer Posts</a> 
-    
-    
-      <a href="/blog/page11/" class="next button__outline">Even older Posts</a>
-    
-  </div>
+    <span class="c1">// This would also work but is not as clean in my opinion
+</span>    <span class="c1">// $this-&gt;container-&gt;get('event_dispatcher')-&gt;addListener('kernel.terminate', function(PostResponseEvent $event) {
+</span>        <span class="c1">// Do things on the API
+</span>    <span class="c1">// });
+</span><span class="p">}</span>
+</code></pre>
 </div>
 
+<p>So, from this code it is clear what happens. We first get the request from our custom event, then we set custom attributes on the request (simply because we need to retrieve them later from our static function) and finally we add a new listener (our static function, could also be an anonymous function) to the kernel.terminate event.</p>
+
+<h3 id="do-the-job">Do the job</h3>
+
+<p>The final piece of the puzzle is our <code class="highlighter-rouge">createThingOnApi</code> static function that will do the real work.</p>
+
+<p>Here it is:</p>
+
+<div class="language-php highlighter-rouge"><pre class="highlight"><code><span class="k">public</span> <span class="k">static</span> <span class="k">function</span> <span class="nf">createThingOnApi</span><span class="p">(</span><span class="nx">PostResponseEvent</span> <span class="nv">$event</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="nv">$attrs</span> <span class="o">=</span> <span class="nv">$event</span><span class="o">-&gt;</span><span class="na">getRequest</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">attributes</span><span class="p">;</span>
+    <span class="nv">$user</span> <span class="o">=</span> <span class="nv">$attrs</span><span class="o">-&gt;</span><span class="na">get</span><span class="p">(</span><span class="s1">'user'</span><span class="p">);</span>
+
+    <span class="nv">$data</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s2">"type"</span> <span class="o">=&gt;</span> <span class="s2">"newUser"</span><span class="p">,</span> 
+        <span class="s2">"name"</span> <span class="o">=&gt;</span> <span class="nv">$user</span><span class="o">-&gt;</span><span class="na">getName</span><span class="p">(),</span>
+        <span class="c1">//...
+</span>    <span class="p">];</span>
+
+    <span class="nv">$ch</span> <span class="o">=</span> <span class="nb">curl_init</span><span class="p">(</span><span class="s2">"https://api.thing.com/users"</span><span class="p">);</span>
+    <span class="nb">curl_setopt</span><span class="p">(</span><span class="nv">$ch</span><span class="p">,</span> <span class="nx">CURLOPT_CUSTOMREQUEST</span><span class="p">,</span> <span class="s2">"POST"</span><span class="p">);</span>
+    <span class="nb">curl_setopt</span><span class="p">(</span><span class="nv">$ch</span><span class="p">,</span> <span class="nx">CURLOPT_POSTFIELDS</span><span class="p">,</span> <span class="nb">json_encode</span><span class="p">(</span><span class="nv">$data</span><span class="p">));</span>
+    <span class="nb">curl_setopt</span><span class="p">(</span><span class="nv">$ch</span><span class="p">,</span> <span class="nx">CURLOPT_RETURNTRANSFER</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
+    <span class="nb">curl_setopt</span><span class="p">(</span><span class="nv">$ch</span><span class="p">,</span> <span class="nx">CURLOPT_HTTPHEADER</span><span class="p">,</span> <span class="p">[</span>
+        <span class="s1">'Content-Type: application/json'</span><span class="p">,</span>
+        <span class="s1">'Content-Length: '</span> <span class="o">.</span> <span class="nb">strlen</span><span class="p">(</span><span class="nv">$data_string</span><span class="p">),</span>
+        <span class="s1">'X-Auth-Key: '</span> <span class="o">.</span> <span class="nv">$attrs</span><span class="o">-&gt;</span><span class="na">get</span><span class="p">(</span><span class="s1">'thing_api_key'</span><span class="p">),</span>
+        <span class="s1">'X-Auth-User: '</span> <span class="o">.</span> <span class="nv">$attrs</span><span class="o">-&gt;</span><span class="na">get</span><span class="p">(</span><span class="s1">'thing_api_user'</span><span class="p">)</span>
+    <span class="p">]);</span>
+
+    <span class="nb">curl_exec</span><span class="p">(</span><span class="nv">$ch</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<p>This basically retrives our data from the request attributes, and then make some sort of curl request to an external API.</p>
+
+<h3 id="all-done-">All done !</h3>
+
+<p>Do this and watch your response times go way down (<a href="https://symfony.com/doc/current/components/http_kernel.html#component-http-kernel-kernel-terminate">only on php-pfm</a>)</p>
+
+<p>I’m not saying the is the best or even the only method to achieve this, just the one I personally use. the alternative would be some sort of mesasge queue, but it still seems like premature optimisation for an app of this size. If you have other options to achieve this, let me know in the comments on HN.</p>
+
+<h3 id="profiler-results">Profiler results</h3>
+
+<p><img src="/uploads/2017/08/symfony-kernel.terminate.png" alt="Profiler results" /></p>
+
+
+</div>
+
+
+<h4 id="hnComments" style="margin-top:4em" data-hn-id="15044479">Comments from <a href="https://news.ycombinator.com/item?id=15044479">HN</a> <a href="https://news.ycombinator.com/item?id=15044479" style="font-weight:normal; font-size: 0.8em;margin-left:20px">Discuss</a></h4>
+
+<script src="/assets/js/hn.js"></script>
+
+
+<!-- POST NAVIGATION -->
+<div class="postNav clearfix">
+   
+    <a class="prev image" href="/2017/08/timeseries-charts-with-chart.js.html"><span>&laquo;&nbsp;Timeseries charts with Chart.js</span>
+     
+      <img src="/assets/img//uploads/2017/08/chart.png" alt="">
+    
+  </a>
+    
+   
+</div>
       </div>
    </div><!-- end .content -->
 

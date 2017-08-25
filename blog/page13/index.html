@@ -96,35 +96,53 @@
 
   <div class="post">
     
-    <h1 class="postTitle">Mise   l'eau</h1>
-    <p class="meta">August 11, 2004 | <span class="time">1</span> Minutes Read</p>
+    <h1 class="postTitle">Stylesheet Chooser Version 0.2</h1>
+    <p class="meta">September 02, 2004 | <span class="time">1</span> Minutes Read</p>
 
-    <p><a href="http://jfoucher.com/wp-images/misealeau.jpg" title="Mise à l'eau">
-    <img src="http://jfoucher.com/wp-images/thumb-misealeau.jpg" alt="Mise à l'eau" style="float:right" />
-</a>
-<a href="http://jfoucher.com/wp-images/misealeau2.jpg" title="Mise à l'eau">
-    <img src="http://jfoucher.com/wp-images/thumb-misealeau2.jpg" alt="Mise àl'eau" style="float:right;clear:right" />
-</a>
-<a href="http://jfoucher.com/wp-images/misealeau3.jpg" title="Mise à l'eau">
-    <img src="http://jfoucher.com/wp-images/thumb-misealeau3.jpg" alt="Mise à l'eau" style="float:right;clear:right" />
-</a></p>
+    <p>This plugin is deprecated.</p>
 
-<p>Ca y est, <a href="http://www.marinetechs.com/salamba.html" title="Page de description de Salamba"><strong>Salamba</strong></a> a touché son élément !
-Nous l’avons mis à l’eau a l’occasion du test de flottabilité requis pour l’homologation en cinquième catégorie en tant que voilier insubmersible.</p>
+<p>I had tried for a while to find a way to allow users to choose their favorite theme for this website. I decided to do it as a Wordpress plugin, which I offer today for other Wordpress users.</p>
 
-<p>Sur la première image, on peut voir le bateau tel qu’il flotte à vide, assez haut sur l’eau par rapport à la ligne de flottaison, ce qui est conforme   ce que l’on espérait. Sur la deuxième photo, on voit le bateau chargé avec trois personnes, et la coque principale qui s’enfonce jusqu’a la ligne de flottaison.</p>
+<p>Installing it is quite simple:<a href="http://jfoucher.com/stylesheet_chooser.txt"> Download</a>, rename to stylesheet_chooser.php, upload it to your wp-contents/plugins directory and activate it from the admin interface.</p>
 
-<p>On remarquera que le flotteur ne s’est pratiquement pas enfoncé, puisque tout le poids est concentré sur la coque principale. En réalité, le flotteur s’enfoncerait un peu plus et la coque principale un peu moins car le poids serait réparti entre les deux coques.</p>
+<p>To define which stylesheets to use (no, it’s not automatic…), you have to define an array called $styles, before you call any of the other functions.You can do it like this, for example :</p>
 
-<p>Enfin, sur la troisième photo, on voit <a href="http://www.marinetechs.com/salamba.html" title="Page de description de Salamba"><strong>Salamba</strong></a> lesté de parpaings d’un poids total de 105 kgs, ce qui correspond à quatres personnes (15 kg par  personne selon les <a href="http://www.mer.gouv.fr">Affaires Maritimes</a>) et 45 kg de matériel et également rempli d’eau jusqu’à ce que les niveaux intérieurs et extérieurs soit égaux (ce qui correspond a percer un trou dans le fond de la coque). Le flotteur a également été rempli de la même manière.</p>
+<figure class="highlight"><pre><code class="language-php" data-lang="php">$styles=array("styles/default","styles/no-style")</code></pre></figure>
 
-<p>L’assiette est tout à fait correcte, et l’enfoncement n’est que d’une quinzaine de centimètres, ce qui me semble tout à fait acceptable et permet de conserver une stabilité latérale suffisante pour continuer à naviguer en sécurité.</p>
+<p>if your stylesheets are in the styles directory. Omit the ‘.css’ part. The first one in the list will be used as your default style. The plugin will automatically select the last part of the path (in this case new, default and no-style) and use them as the text in the selection box.
+The optional parameter - for example style_link(false) - can be set to ‘true’ (default) if you want to @import the style sheets (<a href="http://www.thesitewizard.com/css/excludecss.shtml">ignored by NS4</a>), or to ‘false’ to get this kind of links: &lt;link rel=”stylesheet” title=”….&gt; for the current chosen style sheet and like this:&lt;link rel=”alternate stylesheet” title=”….&gt; for the other(s).</p>
+
+<p>style_chooser() will insert the form that is used to select the stylesheet. Place it wherever you want, in your sidebar for example.</p>
+
+<p>In version 0.23+, it is possible to have a short comment appear below the selection dropdown. For this, the only thing you have to do is insert it in your stylesheets like this:</p>
+
+<figure class="highlight"><pre><code class="language-php" data-lang="php">/*
+Comment: Write your comment here.
+*/</code></pre></figure>
+
+<p>And that’s it, now each stylesheet has it’s own “introduction text”.</p>
+
+<p>Now that you know all this, you can :</p>
+
+<ul>
+  <li>Download</li>
+  <li>write a comment,</li>
+  <li>or <a href="http://jfoucher.com/about.html">Contact me</a> in case you have problems</li>
+</ul>
 
   </div>
 
   <h3 style="text-align: center; margin-top: 2em">Older posts</h3>
 
   <ul class="posts noList">
+
+    
+      <li>
+        <span class="date">August 11, 2004</span>
+        <h3><a class="post-link" href="/2004/08/mise-leau.html">Mise   l'eau</a></h3>
+        <p class="meta">August 11, 2004 | <span class="time">1</span> Minutes Read</p>
+        <p class="description">            </p>
+      </li>
 
     
       <li>

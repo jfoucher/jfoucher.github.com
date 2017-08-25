@@ -96,25 +96,72 @@
 
   <div class="post">
     
-    <h1 class="postTitle">Amazon Wishlist plugin for wordpress 2.7</h1>
-    <p class="meta">May 19, 2009 | <span class="time">0</span> Minutes Read</p>
+    <h1 class="postTitle">Organize Series plugin database optimization</h1>
+    <p class="meta">May 19, 2009 | <span class="time">2</span> Minutes Read</p>
 
-    <p>After quite a few years out of the wordpress world, I’m back using this great CMS, and of course, I had to rewrite one of my old plugins to work with the widget interface.</p>
+    <p>While looking for posts in the series, this plugin makes two database queries for each post in the series : one to find out if the post is published, and another to get the part number in the series. So if you have 30 posts in the series, you will get 60 queries from this plugin alone on each post belonging to that series. I found this very wasteful, and rewrote one function so that it only uses one database query, no matter what the number of posts in the series. I think <a href="http://unfoldingneurons.com">the author</a> should be interested…</p>
 
-<p>Well, the Amazon wishlist plugin was the one I like best, and found really useful, although no-one ever bought me a book ;( (hint hint !)</p>
+<p>Basically, in the file series-utility.php, replace the function
+    function get_series_order($posts, $postid = 0, $skip = TRUE)
+by the following one :</p>
 
-<p>It does not work through the normal API, but just pulls the wishlist page with curl and parses it. I did that because the amazon API does not allow priority sorting, which I find more than useful. You will need curl for that, though…</p>
+<figure class="highlight"><pre><code class="language-php" data-lang="php">    <span class="cp">&lt;?php</span>
+      <span class="k">function</span> <span class="nf">get_series_order</span><span class="p">(</span><span class="nv">$posts</span><span class="p">,</span> <span class="nv">$postid</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nv">$skip</span> <span class="o">=</span> <span class="k">TRUE</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">global</span> <span class="nv">$wpdb</span><span class="p">;</span>
+      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$posts</span><span class="p">))</span> <span class="k">return</span> <span class="kc">false</span><span class="p">;</span> <span class="c1">//don't have the posts array so can't do anything
+</span>      <span class="k">if</span> <span class="p">(</span> <span class="o">!</span><span class="nb">is_array</span><span class="p">(</span> <span class="nv">$posts</span> <span class="p">)</span>
+      <span class="nv">$posts</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span><span class="nv">$posts</span><span class="p">);</span>
+      <span class="nv">$series_posts</span> <span class="o">=</span> <span class="k">array</span><span class="p">();</span>
+      <span class="nv">$key</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+      <span class="k">foreach</span> <span class="p">(</span><span class="nv">$posts</span> <span class="k">as</span> <span class="nv">$spost</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nb">array_key_exists</span><span class="p">(</span><span class="s1">'object_id'</span><span class="p">,</span> <span class="nv">$posts</span><span class="p">))</span> <span class="p">{</span>
+          <span class="k">if</span> <span class="p">(</span><span class="nv">$key</span><span class="o">!=</span><span class="mi">0</span><span class="p">){</span>
+            <span class="nv">$spost_id</span> <span class="o">.=</span> <span class="s2">","</span><span class="o">.</span><span class="nv">$spost</span><span class="p">[</span><span class="s1">'object_id'</span><span class="p">];</span>
+          <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+            <span class="nv">$spost_id</span> <span class="o">.=</span> <span class="nv">$spost</span><span class="p">[</span><span class="s1">'object_id'</span><span class="p">];</span>
+          <span class="p">}</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+          <span class="k">if</span> <span class="p">(</span><span class="nv">$key</span><span class="o">!=</span><span class="mi">0</span><span class="p">){</span>
+            <span class="nv">$spost_id</span> <span class="o">.=</span> <span class="s2">","</span><span class="o">.</span><span class="nv">$spost</span><span class="p">;</span>
+          <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+            <span class="nv">$spost_id</span> <span class="o">.=</span> <span class="nv">$spost</span><span class="p">;</span>
+          <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="nv">$key</span><span class="o">++</span><span class="p">;</span>
+      <span class="p">}</span>
+      <span class="c1">//Optimized : 1 SQL query instead of 2* number ofposts in series//
+</span>      <span class="nv">$results</span><span class="o">=</span><span class="nv">$wpdb</span><span class="o">-&gt;</span><span class="na">get_results</span><span class="p">(</span><span class="s2">"SELECT </span><span class="nv">$wpdb-&gt;posts</span><span class="s2">.ID, </span><span class="nv">$wpdb-&gt;postmeta</span><span class="s2">.meta_value
+      FROM </span><span class="nv">$wpdb-&gt;posts</span><span class="s2"> LEFT JOIN </span><span class="nv">$wpdb-&gt;postmeta</span><span class="s2">
+      ON(</span><span class="nv">$wpdb-&gt;posts</span><span class="s2">.ID = </span><span class="nv">$wpdb-&gt;postmeta</span><span class="s2">.post_id)
+      WHERE post_status = 'publish' AND </span><span class="nv">$wpdb-&gt;posts</span><span class="s2">.ID
+      IN ("</span><span class="o">.</span><span class="nv">$spost_id</span><span class="o">.</span><span class="s2">") AND ener_postmeta.meta_key='"</span><span class="o">.</span><span class="nx">SERIES_PART_KEY</span><span class="o">.</span><span class="s2">"'"</span><span class="p">);</span>
+      <span class="cm">/* 208 - fix by Matt Porter - to make sure unpublished posts are not made part of a series */</span>
+      <span class="k">foreach</span> <span class="p">(</span><span class="nv">$results</span> <span class="k">as</span> <span class="nv">$num</span><span class="o">=&gt;</span><span class="nv">$result</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">//echo "&lt;h1&gt;resultat".$result-&gt;ID.$result&gt;meta_value."&lt;/h1&gt;";
+</span>        <span class="nv">$series_posts</span><span class="p">[</span><span class="nv">$num</span><span class="p">][</span><span class="s1">'id'</span><span class="p">]</span> <span class="o">=</span><span class="nv">$result</span><span class="o">-&gt;</span><span class="na">ID</span><span class="p">;</span>
+        <span class="nv">$series_posts</span><span class="p">[</span><span class="nv">$num</span><span class="p">][</span><span class="s1">'part'</span><span class="p">]</span> <span class="o">=</span> <span class="nv">$result</span><span class="o">-&gt;</span><span class="na">meta_value</span><span class="p">;</span>
+      <span class="p">}</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nb">count</span><span class="p">(</span><span class="nv">$series_posts</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="nb">usort</span><span class="p">(</span> <span class="nv">$series_posts</span><span class="p">,</span> <span class="s1">'_usort_series_by_part'</span> <span class="p">);</span>
+      <span class="k">return</span> <span class="nv">$series_posts</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="cp">?&gt;</span></code></pre></figure>
 
-<p>The widget is configurable, as you can see from the image on the right.
-You can see it in action on this site about <a href="http://energies-vertes.org">renewable energy</a></p>
-
-<p><a title="Download the Sortable Amazon Wishlist widget" href="http://downloads.wordpress.org/plugin/sortable-amazon-wishlist.zip">Download it!</a></p>
+<p>And there you go, a faster blog…</p>
 
   </div>
 
   <h3 style="text-align: center; margin-top: 2em">Older posts</h3>
 
   <ul class="posts noList">
+
+    
+      <li>
+        <span class="date">May 19, 2009</span>
+        <h3><a class="post-link" href="/2009/05/amazon-wishlist-plugin-for-wordpress-27.html">Amazon Wishlist plugin for wordpress 2.7</a></h3>
+        <p class="meta">May 19, 2009 | <span class="time">0</span> Minutes Read</p>
+        <p class="description">Sortable wishlist plugin</p>
+      </li>
 
     
       <li>
@@ -146,14 +193,6 @@ You can see it in action on this site about <a href="http://energies-vertes.org"
         <h3><a class="post-link" href="/2006/03/back-online.html">Back online</a></h3>
         <p class="meta">March 07, 2006 | <span class="time">0</span> Minutes Read</p>
         <p class="description">Ok, my blog is back online after about a year in the meanders of my hard drive. Most of the stuff here is probably out of date, such as the Worpdress plugins, most of them written for pre-1.5 versions. As I don’t use WP anymore, I’m unlikely to come up with more stuff, unless I decide to come back to it at some stage.</p>
-      </li>
-
-    
-      <li>
-        <span class="date">April 11, 2005</span>
-        <h3><a class="post-link" href="/2005/04/wordpress-15.html">Wordpress 1.5</a></h3>
-        <p class="meta">April 11, 2005 | <span class="time">0</span> Minutes Read</p>
-        <p class="description">J’ai finalement mis a jour mon autre site, salamba.info, avec Wordpress 1.5, et pas doute, il est bien, très bien même. Un des meilleurs ajouts est selon moi la possibilité de configurer les plugins. Ca manquait vraiment dans les anciennes versions.</p>
       </li>
 
     

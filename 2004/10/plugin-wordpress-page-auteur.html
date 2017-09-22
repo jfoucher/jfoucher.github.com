@@ -113,19 +113,17 @@
 
 <p>Dans le fichier index.php par défaut, ça ressemble à ça :</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code> &lt;?php endforeach; else: ?&gt;
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> &lt;?php endforeach; else: ?&gt;
  &lt;p&gt;&lt;?php _e('Sorry, no posts matched your criteria.'); ?&gt;&lt;/p&gt;
  &lt;?php endif; ?&gt;
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Remplacez le par :</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code> &lt;?php endforeach; else:
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> &lt;?php endforeach; else:
  author(true, 5,false);
  endif; ?&gt;
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Le premier param?tre bool?en (optionel) vous permet de choisir si vous souhaitez afficher un formulaire de contact ou pas. ‘true’ est le param?tre par d?fault (affiche le formulaire).</p>
 
@@ -137,37 +135,32 @@
 
 <p>Pour faire un lien vers la page de l’auteur, vous devez faire quelque chose comme ?a :</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code> &lt;a href="index.php?author_name=&lt;?php the_author_login(); ?&gt;"&gt;
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> &lt;a href="index.php?author_name=&lt;?php the_author_login(); ?&gt;"&gt;
  &lt;?php the_author(); ?&gt;&lt;/a&gt;
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Si vous ne pouvez ou ne voulez pas utiliser les <a href="http://httpd.apache.org/docs/misc/rewriteguide.html">RewriteRules</a> (règles de réécriture d’url <a href="http://httpd.apache.org">Apache</a>).</p>
 
 <p>Sur ce site, j’utilise la règle de réécriture suivante :</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>RewriteRule ^author/?(.*)/? /index.php?author_name=$1 [QSA]
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>RewriteRule ^author/?(.*)/? /index.php?author_name=$1 [QSA]
+</code></pre></div></div>
 
 <p>Donc le lien vers la page auteur est comme ceci :</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code> &lt;a href="http://jfoucher.com/author/&lt;?php the_author_login(); ?&gt;"&gt;
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> &lt;a href="http://jfoucher.com/author/&lt;?php the_author_login(); ?&gt;"&gt;
  &lt;?php the_author(); ?&gt;&lt;/a&gt;
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Mais vous pourriez tout aussi bien utliser le règle suivante :</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>RewriteRule ^a-propos/? /index.php?author_name=login [QSA]
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>RewriteRule ^a-propos/? /index.php?author_name=login [QSA]
+</code></pre></div></div>
 
 <p>en remplacant ‘login’ par votre propre identifiant, et créér un lien vers cette page comme ceci :</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code> &lt;a href="http://jfoucher.com/a-propos/"&gt;A propos&lt;/a&gt;
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> &lt;a href="http://jfoucher.com/a-propos/"&gt;A propos&lt;/a&gt;
+</code></pre></div></div>
 
 
   </div>

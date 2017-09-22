@@ -20,15 +20,15 @@
 
 <p>Ajouter le code suivant dans votre fichier index.php</p>
 
-<figure class="highlight"><pre><code class="language-php" data-lang="php">post_referrers(8, "<span class="nt">&lt;li&gt;</span>", "<span class="nt">&lt;/li&gt;</span>", "Pas encore...", "self");</code></pre></figure>
+<figure class="highlight"><pre><code class="language-php" data-lang="php"><span class="nx">post_referrers</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="s2">"&lt;li&gt;"</span><span class="p">,</span> <span class="s2">"&lt;/li&gt;"</span><span class="p">,</span> <span class="s2">"Pas encore..."</span><span class="p">,</span> <span class="s2">"self"</span><span class="p">);</span></code></pre></figure>
 
 <p>où 8 est le nombre pe pages référentes à afficher, ‘&lt;li&gt;’ est le texte   afficher avant chaque lien, ‘&lt;/li&gt;’ est le texte   afficher après chaque lien, ‘Pas encore…’ est le texte   afficher s’il n’y a pas encore de page référente. La derniére option sert à exclure certains sites : En mettant ‘self’ (défault), les référents internes ne seront pas affichés. Sinon, vous pouvez ecrire une liste de sites à ignorer, comme ceci :</p>
 
-<figure class="highlight"><pre><code class="language-php" data-lang="php">post_referrers('', '', '', '', 'google.com yahoo.com exemple.com');</code></pre></figure>
+<figure class="highlight"><pre><code class="language-php" data-lang="php"><span class="nx">post_referrers</span><span class="p">(</span><span class="s1">''</span><span class="p">,</span> <span class="s1">''</span><span class="p">,</span> <span class="s1">''</span><span class="p">,</span> <span class="s1">''</span><span class="p">,</span> <span class="s1">'google.com yahoo.com exemple.com'</span><span class="p">);</span></code></pre></figure>
 
 <p>Pour ne pas afficher les référents sur une page où il y a plusieurs articles, utilisez une condition comme ceci:</p>
 
-<figure class="highlight"><pre><code class="language-php" data-lang="php">if ($single) post_referrers();</code></pre></figure>
+<figure class="highlight"><pre><code class="language-php" data-lang="php"><span class="k">if</span> <span class="p">(</span><span class="nv">$single</span><span class="p">)</span> <span class="nx">post_referrers</span><span class="p">();</span></code></pre></figure>
 
 <p>Vous pouvez voir une démonstration en bas des pages de ce blog, et n’hésitez pas   laisser un commentaire si vous avez des problèmes.</p>
 
@@ -138,15 +138,15 @@
 
 <p>Ajouter le code suivant dans votre fichier index.php</p>
 
-<figure class="highlight"><pre><code class="language-php" data-lang="php">post_referrers(8, "<span class="nt">&lt;li&gt;</span>", "<span class="nt">&lt;/li&gt;</span>", "Pas encore...", "self");</code></pre></figure>
+<figure class="highlight"><pre><code class="language-php" data-lang="php"><span class="nx">post_referrers</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="s2">"&lt;li&gt;"</span><span class="p">,</span> <span class="s2">"&lt;/li&gt;"</span><span class="p">,</span> <span class="s2">"Pas encore..."</span><span class="p">,</span> <span class="s2">"self"</span><span class="p">);</span></code></pre></figure>
 
 <p>où 8 est le nombre pe pages référentes à afficher, ‘&lt;li&gt;’ est le texte   afficher avant chaque lien, ‘&lt;/li&gt;’ est le texte   afficher après chaque lien, ‘Pas encore…’ est le texte   afficher s’il n’y a pas encore de page référente. La derniére option sert à exclure certains sites : En mettant ‘self’ (défault), les référents internes ne seront pas affichés. Sinon, vous pouvez ecrire une liste de sites à ignorer, comme ceci :</p>
 
-<figure class="highlight"><pre><code class="language-php" data-lang="php">post_referrers('', '', '', '', 'google.com yahoo.com exemple.com');</code></pre></figure>
+<figure class="highlight"><pre><code class="language-php" data-lang="php"><span class="nx">post_referrers</span><span class="p">(</span><span class="s1">''</span><span class="p">,</span> <span class="s1">''</span><span class="p">,</span> <span class="s1">''</span><span class="p">,</span> <span class="s1">''</span><span class="p">,</span> <span class="s1">'google.com yahoo.com exemple.com'</span><span class="p">);</span></code></pre></figure>
 
 <p>Pour ne pas afficher les référents sur une page où il y a plusieurs articles, utilisez une condition comme ceci:</p>
 
-<figure class="highlight"><pre><code class="language-php" data-lang="php">if ($single) post_referrers();</code></pre></figure>
+<figure class="highlight"><pre><code class="language-php" data-lang="php"><span class="k">if</span> <span class="p">(</span><span class="nv">$single</span><span class="p">)</span> <span class="nx">post_referrers</span><span class="p">();</span></code></pre></figure>
 
 <p>Vous pouvez voir une démonstration en bas des pages de ce blog, et n’hésitez pas   laisser un commentaire si vous avez des problèmes.</p>
 

@@ -127,22 +127,20 @@
 
 <p>Anyway, here’s how it works: I like to think of it as communication between say a frontend and an API, mostly because of the asynchronous nature of the communication. So basically, the parent page get ready to receive messages from the iframe by listening to the “message” event, like so:</p>
 
-<div class="language-js highlighter-rouge"><pre class="highlight"><code>    <span class="nb">window</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">'message'</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">handleFrameTasks</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="k">this</span><span class="p">))</span>
-</code></pre>
-</div>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nb">window</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">'message'</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">handleFrameTasks</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="k">this</span><span class="p">))</span>
+</code></pre></div></div>
 
 <p>I’m using react for the frontend, so this went in the <code class="highlighter-rouge">componentDidMount()</code> method, but you could place it anywhere, really, as long as it runs when you want to start editing on the iframe side.</p>
 
 <p>And then on the iframe side I have something like this:</p>
 
-<div class="language-js highlighter-rouge"><pre class="highlight"><code>    <span class="c1">// Send message to react</span>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="c1">// Send message to react</span>
     <span class="kd">var</span> <span class="nx">data</span> <span class="o">=</span> <span class="p">{</span>
         <span class="na">action</span><span class="p">:</span> <span class="s1">'deleteBlock'</span><span class="p">,</span>
         <span class="na">blockId</span><span class="p">:</span> <span class="nx">blockId</span><span class="p">,</span>
     <span class="p">};</span>
     <span class="nx">top</span><span class="p">.</span><span class="nx">postMessage</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="s1">'*'</span><span class="p">);</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>In fact at the start I was <code class="highlighter-rouge">JSON.stringify()</code>ing the data I sent, as I remember it being necessary a few years ago, but that’s not required anymore.</p>
 

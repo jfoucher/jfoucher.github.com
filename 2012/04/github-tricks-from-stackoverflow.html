@@ -106,11 +106,11 @@ Most of them are operations that should be pretty easy to do, and seem pointless
 
 <p><a href="http://stackoverflow.com/a/8485503/210824">Git: Never Commit Changed Files (But still keep original revisioned.)</a></p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash">    git update-index --assume-unchanged &lt;file&gt;</code></pre></figure>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">    git update-index <span class="nt">--assume-unchanged</span> &lt;file&gt;</code></pre></figure>
 
 <p>To make it commitable again run</p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash">    git update-index --no-assume-unchanged &lt;file&gt;</code></pre></figure>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">    git update-index <span class="nt">--no-assume-unchanged</span> &lt;file&gt;</code></pre></figure>
 
 <h3 id="commits-no-yet-pushed">Commits no yet pushed</h3>
 
@@ -118,11 +118,11 @@ Most of them are operations that should be pretty easy to do, and seem pointless
 
 <p>If you want to see all commits on all branches that aren’t pushed yet, you might be looking for something like this:</p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash">    git log --branches --not --remotes</code></pre></figure>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">    git log <span class="nt">--branches</span> <span class="nt">--not</span> <span class="nt">--remotes</span></code></pre></figure>
 
 <p>And if you only want to see the most recent commit on each branch, and the branch names, this:</p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash">    git log --branches --not --remotes --simplify-by-decoration --decorate --oneline</code></pre></figure>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">    git log <span class="nt">--branches</span> <span class="nt">--not</span> <span class="nt">--remotes</span> <span class="nt">--simplify-by-decoration</span> <span class="nt">--decorate</span> <span class="nt">--oneline</span></code></pre></figure>
 
 
   </div>

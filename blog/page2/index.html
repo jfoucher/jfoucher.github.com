@@ -197,26 +197,26 @@
     <span class="nb">export </span>CMDLN_ARGS
     <span class="c"># Run this script as root if not already.</span>
     chk_root <span class="o">()</span> <span class="o">{</span>
-     <span class="k">if</span> <span class="o">[</span> ! <span class="k">$(</span> id -u <span class="k">)</span> -eq 0 <span class="o">]</span>; <span class="k">then
+     <span class="k">if</span> <span class="o">[</span> <span class="o">!</span> <span class="k">$(</span> id <span class="nt">-u</span> <span class="k">)</span> <span class="nt">-eq</span> 0 <span class="o">]</span><span class="p">;</span> <span class="k">then
        </span><span class="nb">echo</span> <span class="s2">"Please enter your password."</span>
-       <span class="nb">exec </span>sudo su -c <span class="s2">"</span><span class="k">${</span><span class="nv">0</span><span class="k">}</span><span class="s2"> </span><span class="k">${</span><span class="nv">CMDLN_ARGS</span><span class="k">}</span><span class="s2">"</span> <span class="c"># Call this prog as root</span>
+       <span class="nb">exec sudo </span>su <span class="nt">-c</span> <span class="s2">"</span><span class="k">${</span><span class="nv">0</span><span class="k">}</span><span class="s2"> </span><span class="k">${</span><span class="nv">CMDLN_ARGS</span><span class="k">}</span><span class="s2">"</span> <span class="c"># Call this prog as root</span>
        <span class="nb">exit</span> <span class="k">${</span><span class="p">?</span><span class="k">}</span>  <span class="c"># since we're 'execing' above, we wont reach this exit</span>
                   <span class="c"># unless something goes wrong.</span>
      <span class="k">fi</span>
     <span class="o">}</span>
     chk_root
-    cat /etc/apache2/sites-available/template | sed <span class="s2">"s/template/</span><span class="nv">$1</span><span class="s2">/g"</span> |cat &gt; /etc/apache2/sites-available/<span class="nv">$1</span>
-    ln -s /etc/apache2/sites-available/<span class="nv">$1</span> /etc/apache2/sites-enabled/<span class="nv">$1</span>
-    cat /etc/nginx/sites-available/template | sed <span class="s2">"s/template/</span><span class="nv">$1</span><span class="s2">/g"</span> |cat &gt; /etc/nginx/sites-available/<span class="nv">$1</span>
-    ln -s /etc/nginx/sites-available/<span class="nv">$1</span> /etc/nginx/sites-enabled/<span class="nv">$1</span>
-    <span class="k">if</span> <span class="o">[</span> -d /var/www/<span class="nv">$1</span> <span class="o">]</span>;
+    <span class="nb">cat</span> /etc/apache2/sites-available/template | sed <span class="s2">"s/template/</span><span class="nv">$1</span><span class="s2">/g"</span> |cat <span class="o">&gt;</span> /etc/apache2/sites-available/<span class="nv">$1</span>
+    ln <span class="nt">-s</span> /etc/apache2/sites-available/<span class="nv">$1</span> /etc/apache2/sites-enabled/<span class="nv">$1</span>
+    <span class="nb">cat</span> /etc/nginx/sites-available/template | sed <span class="s2">"s/template/</span><span class="nv">$1</span><span class="s2">/g"</span> |cat <span class="o">&gt;</span> /etc/nginx/sites-available/<span class="nv">$1</span>
+    ln <span class="nt">-s</span> /etc/nginx/sites-available/<span class="nv">$1</span> /etc/nginx/sites-enabled/<span class="nv">$1</span>
+    <span class="k">if</span> <span class="o">[</span> <span class="nt">-d</span> /var/www/<span class="nv">$1</span> <span class="o">]</span><span class="p">;</span>
     <span class="k">then
-      </span><span class="nb">echo</span> <span class="s2">"host directory exists"</span>;
+      </span><span class="nb">echo</span> <span class="s2">"host directory exists"</span><span class="p">;</span>
     <span class="k">else
       </span><span class="nb">echo</span> <span class="s2">"creating directory"</span>
       mkdir <span class="s2">"/var/www/</span><span class="nv">$1</span><span class="s2">"</span>
     <span class="k">fi
-    </span>chown -R www-data:www-data /var/www/<span class="nv">$1</span>
+    </span>chown <span class="nt">-R</span> www-data:www-data /var/www/<span class="nv">$1</span>
     /etc/init.d/apache2 restart
     /etc/init.d/nginx restart</code></pre></figure>
 
@@ -234,7 +234,7 @@
 
 <p><code class="highlighter-rouge">ab -c20 -n200 http://6px.eu:8080/</code> is hitting Apache on port 8080</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>Server Hostname:        6px.eu
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Server Hostname:        6px.eu
 Server Port:            8080
 
 Document Path:          /
@@ -251,12 +251,11 @@ Requests per second:    0.71 [#/sec] (mean)
 Time per request:       28267.940 [ms] (mean)
 Time per request:       1413.397 [ms] (mean, across all concurrent requests)
 Transfer rate:          8.59 [Kbytes/sec] received
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Now with nginx <code class="highlighter-rouge">ab -c20 -n200 http://6px.eu/</code></p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>Server Hostname:        6px.eu
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Server Hostname:        6px.eu
 Server Port:            80
 
 Document Path:          /
@@ -273,8 +272,7 @@ Requests per second:    4.93 [#/sec] (mean)
 Time per request:       4060.612 [ms] (mean)
 Time per request:       203.031 [ms] (mean, across all concurrent requests)
 Transfer rate:          59.69 [Kbytes/sec] received
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h3 id="update">Update:</h3>
 
@@ -302,7 +300,7 @@ So the way to get better performance is to get nginx to cache the results from a
 
 <h4 id="apache">Apache:</h4>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>Server Hostname:        direct.6px.eu
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Server Hostname:        direct.6px.eu
 Server Port:            8080
 
 Document Path:          /
@@ -319,12 +317,11 @@ Requests per second:    13.26 [#/sec] (mean)
 Time per request:       754.075 [ms] (mean)
 Time per request:       75.408 [ms] (mean, across all concurrent requests)
 Transfer rate:          151.43 [Kbytes/sec] received
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h4 id="nginx">Nginx:</h4>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>Server Hostname:        direct.6px.eu
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Server Hostname:        direct.6px.eu
 Server Port:            80
 
 Document Path:          /
@@ -341,8 +338,7 @@ Requests per second:    7305.94 [#/sec] (mean)
 Time per request:       1.369 [ms] (mean)
 Time per request:       0.137 [ms] (mean, across all concurrent requests)
 Transfer rate:          23351.88 [Kbytes/sec] received
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Just, wow…</p>
 

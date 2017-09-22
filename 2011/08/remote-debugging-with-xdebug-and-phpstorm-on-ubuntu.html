@@ -103,7 +103,7 @@
 It took me… a few months to finally find the time figure out how to set up everything properly, so I hope this post can help someone, somewhere. But don’t worry: it retrospect, it’s not that difficult at all.</p>
 <h3>First things first : install xdebug</h3>
 <p>On Ubuntu and Debian, it couldn’t be easier: just open a terminal and type</p>
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash">sudo apt-get install
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">sudo </span>apt-get install
 php5-xdebug</code></pre></figure>
 <p>This will also install Apache and PHP if you don’t have them already.</p>
 <h3>Setup Xdebug on server</h3>
@@ -125,7 +125,7 @@ php5-xdebug</code></pre></figure>
 
 <p>Now we restart apache so that the new configuration is taken into account:</p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash">sudo /etc/init.d/apache2 restart</code></pre></figure>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">sudo</span> /etc/init.d/apache2 restart</code></pre></figure>
 
 <p>And we that we are <strong>done</strong> on the server side of things</p>
 <h3>Prepare PhpStorm</h3>

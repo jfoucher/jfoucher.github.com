@@ -126,13 +126,13 @@
 <h3 id="create-the-custom-phing-task">Create the custom phing task</h3>
 
 <p>Next up is creating the actual task PHP class. Create an empty file named TwitterUpdateTask.php</p>
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash">sudo touch /usr/share/php/phing/tasks/my/TwitterUpdateTask.php</code></pre></figure>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">sudo </span>touch /usr/share/php/phing/tasks/my/TwitterUpdateTask.php</code></pre></figure>
 <p>and open it for editing with your favorite editor. We’ll use gedit :</p>
 <figure class="highlight"><pre><code class="language-bash" data-lang="bash">gksu gedit /usr/share/php/phing/tasks/my/TwitterUpdateTask.php</code></pre></figure>
 
 <p>The code for this file is as shown below:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>&lt;?php
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;?php
 require_once ("phing/Task.php");
 require_once ("phing/tasks/my/twitteroauth/twitteroauth.php");
 /* get the lines below from http://twittertokens.6px.eu/ */
@@ -164,21 +164,20 @@ class TwitterUpdateTask extends Task {
         }
     }
 }
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h3 id="get-the-oauth-token-and-secret">Get the OAuth token and secret</h3>
 
 <p>Don’t close this file, we still need to add the authentication data to it. You can already place your consumer key and consumer secret in the apropriate</p>
-<figure class="highlight"><pre><code class="language-php" data-lang="php">define()</code></pre></figure>
+<figure class="highlight"><pre><code class="language-php" data-lang="php"><span class="nb">define</span><span class="p">()</span></code></pre></figure>
 <p>calls (the first two lines), but if not, we’ll do it now.</p>
 
 <p>Navigate to <a href="http://twittertokens.6px.eu">http://twittertokens.6px.eu</a>, put your consumer data and consumer secret in the apropriate fields and click on “Sign in with Twitter”. A twitter page will open asking for your confirmation. Click “Sign in” and you are redirected to http://twittertokens.6px.eu/. You should see 4 lines of code appear, that look like this:</p>
 
-<figure class="highlight"><pre><code class="language-php" data-lang="php">    define('CONSUMER_KEY', 'V1UsnZJrgfhgKJFoqsQ');
-    define('CONSUMER_SECRET', 'UUazcBfXrWW1jcpiSU564hg654t1EMki8gzptQU');
-    define('OAUTH_TOKEN', '325454656-EuCudghg8tTYwKf9yjt5nhqr14i5egHJPeVRGVxQv');
-    define('OAUTH_TOKEN_SECRET', 'gh6854hg6tyGEvGEiEi15XmUtOmDpaONM');</code></pre></figure>
+<figure class="highlight"><pre><code class="language-php" data-lang="php">    <span class="nb">define</span><span class="p">(</span><span class="s1">'CONSUMER_KEY'</span><span class="p">,</span> <span class="s1">'V1UsnZJrgfhgKJFoqsQ'</span><span class="p">);</span>
+    <span class="nb">define</span><span class="p">(</span><span class="s1">'CONSUMER_SECRET'</span><span class="p">,</span> <span class="s1">'UUazcBfXrWW1jcpiSU564hg654t1EMki8gzptQU'</span><span class="p">);</span>
+    <span class="nb">define</span><span class="p">(</span><span class="s1">'OAUTH_TOKEN'</span><span class="p">,</span> <span class="s1">'325454656-EuCudghg8tTYwKf9yjt5nhqr14i5egHJPeVRGVxQv'</span><span class="p">);</span>
+    <span class="nb">define</span><span class="p">(</span><span class="s1">'OAUTH_TOKEN_SECRET'</span><span class="p">,</span> <span class="s1">'gh6854hg6tyGEvGEiEi15XmUtOmDpaONM'</span><span class="p">);</span></code></pre></figure>
 
 <p>Copy this code to the corresponding spot in the TwitterUpdateTask.php file, overwriting what’s already there.</p>
 
@@ -206,7 +205,7 @@ class TwitterUpdateTask extends Task {
     <span class="nt">&lt;phingcall</span> <span class="na">target=</span><span class="s">"tweet"</span> <span class="nt">/&gt;</span></code></pre></figure>
 
 <p>This will post the message to twitter, replacing the</p>
-<figure class="highlight"><pre><code class="language-php" data-lang="php">${build.time}</code></pre></figure>
+<figure class="highlight"><pre><code class="language-php" data-lang="php"><span class="err">$</span><span class="p">{</span><span class="nx">build</span><span class="o">.</span><span class="nb">time</span><span class="p">}</span></code></pre></figure>
 <p>token by the actual build and time.</p>
 
 <p>Do you use Phing for your webapp build and deployment? If so, please share any custom tasks you might have created.</p>

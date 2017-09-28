@@ -108,7 +108,7 @@
 <p>First all files are read, in different manner depending on their type (static files, posts or pages), then they are rendered (again differently depending on their type) and finally they are written to disk at the correct path.</p>
 <h3>Plugins</h3>
 <p>At each point in this process, a plugin can come into play to add pages, have them written in different locations, etc...</p>
-<p>The first plugin, and the one that is use by most Jekyll sites I know of, is the paginator. In the case of Stati, it basically takes a list of all posts and generates a new html page for each page of posts. The core Writer then takes care of putting it in it's proper path.</p>
+<p>The first plugin, and the one that is used by most Jekyll sites I know of, is the paginator. In the case of Stati, it basically takes a list of all posts and generates a new html page for each page of posts. The core Writer then takes care of putting it in it's proper path.</p>
 <p>The second plugin is a related posts plugin. For each post it calculates the levenshtein distance of it's title to all the other posts titles and gets the 10 best matches. Lots of room for improvement here.</p>
 <h3>Try it now!</h3>
 <p>So basically that's it, a fun project that I will probably continue to use and improve. If you'd like to give it a try, you can <a href="https://github.com/jfoucher/stati/releases/latest">get the latest release from github</a> and, most importantly, <a href="https://github.com/jfoucher/stati/issues/new">open an issue</a> if you run into a snag!</p>

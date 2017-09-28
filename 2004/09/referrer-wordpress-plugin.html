@@ -8,9 +8,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="<p>Referrers is a plugin I coded to show the most recent referring urls to a particular post. I had seen the <a href="http://noprerequisite.com/wp-refer/" hreflang="en">wp-refer plugin</a> from <a href="http://noprerequisite.com" hreflang="en">NoPrerequisite</a> but couldn’t put it on my blog without hacking because it uses the meta fields to store its data, and as I display the metadata for other purposes in each post, it would get fairly cluttered.</p>
-
-">
+    <meta name="description" content="">
     
     
     <title>Referrer Wordpress Plugin</title>
@@ -76,15 +74,15 @@
                  </li> 
                  
                  <li class="element   ">
-                     <a href="/about">About</a>
+                     <a href="/about.html">About</a>
                  </li> 
                  
                  <li class="element   ">
-                     <a href="/contact">Contact</a>
+                     <a href="/contact.html">Contact</a>
                  </li> 
                  
                  <li class="element   last">
-                     <a href="/projects">Projects</a>
+                     <a href="/projects.html">Projects</a>
                  </li> 
                  
 
@@ -98,39 +96,27 @@
       <div class="container">
          <div class="post">
   
-  <h1 class="postTitle"><a href="">Referrer Wordpress Plugin</a></h1>
-  <p class="meta">September 24, 2004 | <span class="time">1</span> Minute Read</p>
+  <h1 class="postTitle"><a href="/2004/09/referrer-wordpress-plugin.html">Referrer Wordpress Plugin</a></h1>
+  <p class="meta">September 24, 2004 | <span class="time">2</span> Minute Read</p>
   
-  <p>Referrers is a plugin I coded to show the most recent referring urls to a particular post. I had seen the <a href="http://noprerequisite.com/wp-refer/" hreflang="en">wp-refer plugin</a> from <a href="http://noprerequisite.com" hreflang="en">NoPrerequisite</a> but couldn’t put it on my blog without hacking because it uses the meta fields to store its data, and as I display the metadata for other purposes in each post, it would get fairly cluttered.</p>
-
-<p>Also, I am using the very good <a href="http://randypeterman.com/StatTraq/index.php?p=14" hreflang="en">StatTraq plugin</a>, so I thought I could make use of the fact that it already records <a href="http://dictionary.reference.com/search?q=referer" hreflang="en">referrers</a>.</p>
-
+  <p>Referrers is a plugin I coded to show the most recent referring urls to a particular post. I had seen the <a href="http://noprerequisite.com/wp-refer/" hreflang="en">wp-refer plugin</a> from <a href="http://noprerequisite.com" hreflang="en">NoPrerequisite</a> but couldn't put it on my blog without hacking because it uses the meta fields to store its data, and as I display the metadata for other purposes in each post, it would get fairly cluttered. </p>
+<p>Also, I am using the very good <a href="http://randypeterman.com/StatTraq/index.php?p=14"  hreflang="en">StatTraq plugin</a>, so I thought I could make use of the fact that it already records <a href="http://dictionary.reference.com/search?q=referer"  hreflang="en">referrers</a>.</p>
 <p>To install :</p>
-
 <ul>
-  <li>Download and install <a href="http://randypeterman.com/StatTraq/index.php?p=14" hreflang="en">Stattraq</a>.</li>
-  <li>Download <a href="http://jfoucher.com/post_referrers.php.txt">post_referrers.php.txt</a></li>
-  <li>Rename to post_referrers.php</li>
-  <li><strong>Or</strong> get the <a href="http://jfoucher.com/source/post_referrers.gz">gzip file</a> and uncompress it.</li>
-  <li>Upload the resulting file to /wp-content/plugins</li>
-  <li>Activate it in your admin interface</li>
+<li>Download and install <a href="http://randypeterman.com/StatTraq/index.php?p=14" hreflang="en">Stattraq</a>.</li>
+<li>Download <a href="http://jfoucher.com/post_referrers.php.txt">post_referrers.php.txt</a></li>
+<li>Rename to post_referrers.php</li>
+<li><strong>Or</strong> get the <a href="http://jfoucher.com/source/post_referrers.gz">gzip file</a> and uncompress it.</li>
+<li>Upload the resulting file to /wp-content/plugins</li>
+<li>Activate it in your admin interface</li>
 </ul>
-
 <p>Using it is simple:</p>
-
 <p>Add the following code to your index.php file, within the loop</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> post_referrers(8, "&amp;lt;li&amp;gt;", "&amp;lt;/li&amp;gt;", "No referrers", "self");
-</code></pre></div></div>
-
-<p>Where ‘8’ is the number of referrers to show, ‘&lt;li&gt;’ is the text to show before each link,  ‘&lt;/li&gt;’ is the text to showafter each link, ‘No referrers’ is… you guessed it! the text to show when there are no referrers yet and the last option marks the excluded hosts. If you use ‘self’, internal referrers only will be hidden. Otherwise, you can write a list of hosts (domain names) to ignore like this: “google.com yahoo.com example. org” and so on…</p>
-
+<pre><code> post_referrers(8, "&amp;lt;li&amp;gt;", "&amp;lt;/li&amp;gt;", "No referrers", "self");</code></pre>
+<p>Where '8' is the number of referrers to show, '&lt;li&gt;' is the text to show before each link,  '&lt;/li&gt;' is the text to showafter each link, 'No referrers' is... you guessed it! the text to show when there are no referrers yet and the last option marks the excluded hosts. If you use 'self', internal referrers only will be hidden. Otherwise, you can write a list of hosts (domain names) to ignore like this: &quot;google.com yahoo.com example. org&quot; and so on...</p>
 <p>See it work at the bottom of this page, and leave a comment in case of problems.</p>
-
 <p>Version 0.21 and up use Google redirection to help prevent <a href="http://jfoucher.info/2004/10/14/referrer-spam-spam-dans-les-referents/">referrer spam</a>.</p>
-
 <p><a href="http://jfoucher.info/2004/09/24/referrer-wordpress-plugin/">En Fran?ais</a></p>
-
 
   </div>
 
@@ -140,18 +126,17 @@
 
    <!-- POST NAVIGATION -->
    <div class="postNav clearfix">
-     
+    
       <a class="prev" href="/2004/09/radio-buttons-dilemma.html"><span>&laquo;&nbsp;Radio buttons dilemma</span>
       
     </a>
-      
-      
+    
+    
       <a class="next" href="/2004/09/firefox-et-gmail.html"><span>Firefox et GMail&nbsp;&raquo;</span>
-       
+      
       </a>
-     
+    
 </div>
-
       </div>
    </div><!-- end .content -->
 

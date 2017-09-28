@@ -74,15 +74,15 @@
                  </li> 
                  
                  <li class="element   ">
-                     <a href="/about">About</a>
+                     <a href="/about.html">About</a>
                  </li> 
                  
                  <li class="element   ">
-                     <a href="/contact">Contact</a>
+                     <a href="/contact.html">Contact</a>
                  </li> 
                  
                  <li class="element   last">
-                     <a href="/projects">Projects</a>
+                     <a href="/projects.html">Projects</a>
                  </li> 
                  
 
@@ -98,49 +98,42 @@
 
   <div class="post">
     
-    <h1 class="postTitle"><a href="/2011/01/wordpress-email-404-notification.html">Wordpress 404 notification by email</a></h1>
-    <p class="meta">January 22, 2011 | <span class="time">1</span> Minutes Read</p>
-
-    <p>I couldn’t find something that did just what I wanted and no more: send me an email when someone gets a 404 error on my blog. It seems pretty simple, and it really is. More than that actually. It’s problably the simplest plugin I’ve ever written.</p>
-
-<p>Check it out:</p>
-
-<figure class="highlight"><pre><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
-<span class="k">function</span> <span class="nf">email_error</span><span class="p">(){</span>
-    <span class="k">global</span> <span class="nv">$wp_query</span><span class="p">;</span>
-    <span class="nv">$location</span><span class="o">=</span><span class="nv">$_SERVER</span><span class="p">[</span><span class="s1">'REQUEST_URI'</span><span class="p">];</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nv">$wp_query</span><span class="o">-&amp;</span><span class="nx">gt</span><span class="p">;</span><span class="nx">is_404</span><span class="p">){</span>
-        <span class="nx">email_admin</span><span class="p">(</span><span class="nv">$location</span><span class="p">);</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-<span class="nx">add_action</span><span class="p">(</span><span class="s1">'get_header'</span><span class="p">,</span> <span class="s1">'email_error'</span><span class="p">);</span>
-<span class="cp">?&gt;</span></code></pre></figure>
-
-<p>This is the main part of the code, the one gets executed everytime the <code class="highlighter-rouge">get_header</code> hook is called. It basically just checks the $wp_query object to see if the current url gives a 404 error and then passes that url to the email_admin function</p>
-
-<figure class="highlight"><pre><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
-<span class="k">function</span> <span class="nf">email_admin</span><span class="p">(</span><span class="nv">$location</span><span class="p">){</span>
-    <span class="nv">$name</span><span class="o">=</span><span class="nx">get_option</span><span class="p">(</span><span class="s1">'blogname'</span><span class="p">);</span>
-    <span class="nv">$email</span> <span class="o">=</span> <span class="nx">get_option</span><span class="p">(</span><span class="s1">'admin_email'</span><span class="p">);</span>
-    <span class="nv">$headers</span>  <span class="o">=</span> <span class="s2">"MIME-Version: 1.0</span><span class="se">\r\n</span><span class="s2">"</span><span class="p">;</span>
-    <span class="nv">$headers</span> <span class="o">.=</span> <span class="s2">"Content-type: text/plain; charset=UTF-8</span><span class="se">\r\n</span><span class="s2">"</span><span class="p">;</span>
-    <span class="nv">$headers</span> <span class="o">.=</span> <span class="s1">'From: "'</span> <span class="o">.</span> <span class="nv">$name</span> <span class="o">.</span> <span class="s1">'" &amp;lt;'</span> <span class="o">.</span><span class="nv">$email</span><span class="o">.</span> <span class="s2">"&amp;gt;</span><span class="se">\r\n</span><span class="s2">"</span><span class="p">;</span>
-    <span class="nv">$subject</span><span class="o">=</span><span class="s1">'404 error in '</span><span class="o">.</span><span class="nv">$name</span><span class="p">;</span>
-    <span class="nv">$body</span><span class="o">=</span><span class="s1">'A 404 error occured at the following url: '</span><span class="o">.</span><span class="nv">$_SERVER</span><span class="p">[</span><span class="s1">'SERVER_NAME'</span><span class="p">]</span><span class="o">.</span><span class="nv">$location</span><span class="p">;</span>
-    <span class="o">@</span><span class="nb">mail</span><span class="p">(</span><span class="nv">$email</span><span class="p">,</span><span class="nv">$subject</span><span class="p">,</span><span class="nv">$body</span><span class="p">,</span><span class="nv">$headers</span><span class="p">);</span>
-<span class="p">}</span>
-<span class="cp">?&gt;</span></code></pre></figure>
-
-<p>This function sets some headers for the email, such as the sender’s name and email, and the subject of the message, and then sends the message. No error is shown if the message can’t be sent, as this would be displayed on the page.</p>
-
-<p><em>UPDATE</em>: Finally available on the <a href="http://wordpress.org/extend/plugins/email-404/">wordpress plugin repository</a></p>
-
-
+    <h1 class="postTitle"><a href="/2011/02/installing-running-apc-cache-codeigniter.html">Installing and running APC cache with CodeIgniter</a></h1>
+    <p class="meta">February 13, 2011 | <span class="time">3</span> Minutes Read</p>
+    <p>Codeigniter 2 now includes an excellent cache driver, which makes it dead easy to use any one of the great available cache librairies such as <a href="http://php.net/apc">APC</a> o <a href="http://www.memcached.org/">memcached</a>. In this post I will focus on APC, it's installation on an <a href="/?p=193">Ubuntu 10.04 server</a>, and a few benchmarks to compare the various cache systems.  For my testing, I will use an Ubuntu Server installation, on a VirtualBox virtual machine with 256 Mb of RAM and a single processor. This enables me to test things until everything breaks, than just scrap that VM and start with a clean one. However, a description of this setup is a story for another day...</p>
+<h3>Installation</h3>
+<p>On Ubuntu, and on other debian based linuxes, you can install APC by typing <div class="highlight"><pre>sudo apt-get install php-apc
+</pre></div>
+on the command line. Of course, you will have to install Apache and php before that, but that is really easy: <div class="highlight"><pre>sudo apt-get install php5
+</pre></div>
+will install <a href="http://php.net">PHP</a> and all needed dependencies, including <a href="http://apache.org">apache</a> So now that APC is installed, just restart apache <div class="highlight"><pre>sudo /etc/init.d/apache2 restart
+</pre></div>
+and you're ready to go.  In codeigniter, you don't need to do anything special. Just turn the cache on by putting the following line somewhere in your controller:  <div class="highlight"><pre><span class="x">$this-&gt;output-&gt;cache(n);</span>
+</pre></div>
+Where 'n' is the number of minutes to cache that particular content.  The cache library is clever enough to pick the best cache driver from the four available ones (memcached, APC, file and dummy). Forget about the dummy driver: it doesn't do anything</p>
+<h3>Benchmarks</h3>
+<p>These are the results for 50 concurrent connections : For APC we get about 43 requests/s, with the file caching mecanism around 25, requests/s, and with no cache at all we are below 18 requests/s</p>
+<p style="text-align: center;"><a href="http://jfoucher.com/uploads/2011/02/chart22.png"><img class="aligncenter size-full wp-image-387" title="Codeigniter APC cache benchmark" src="http://jfoucher.com/uploads/2011/02/chart22.png" alt="APC: 43, File: 25, None: 18 " width="560" height="260"></a></p>
+<p style="text-align: left;">For low concurency (2) the improvement when using APC is similar: in this case the number of requests per second nearly doubled, from 19 to 47 between the case without any caching system and the APC case</p>
+<p style="text-align: left;"><a href="http://jfoucher.com/uploads/2011/02/chart2.png"><img class="aligncenter size-full wp-image-383" title="Codeigniter cache benchmark: low concurency" src="http://jfoucher.com/uploads/2011/02/chart2.png" alt="APC: 46.37 rps, File: 27.23 rps, None: 18.99 rps" width="560" height="260"></a></p>
+<p style="text-align: left;">So just turning the default codeigniter cache on gives us a significant speed improvement, going all the way and installing APC can nearly double the speed of your application. Not too shabby I should think.</p>
+<p style="text-align: left;">It is <strong>so</strong> easy to take advantage of this caching mechasism on Codeigniter 2 that it would really be a pity not to do so!</p>
+<p style="text-align: left;">The only caching library missing here is memcached. Have you tried any of these caching libraries with codeigniter 2?</p>
+<p style="text-align: left;"></p>
+<p></p>
   </div>
 
   <h3 style="text-align: center; margin-top: 2em">Older posts</h3>
 
   <ul class="posts noList">
+
+    
+      <li>
+        <span class="date">January 22, 2011</span>
+        <h3><a class="post-link" href="/2011/01/wordpress-email-404-notification.html">Wordpress 404 notification by email</a></h3>
+        <p class="meta">January 22, 2011 | <span class="time">2</span> Minutes Read</p>
+        <p class="description">A Wordpress plugin that sends an email to the site admin when a user gets a 404 error.</p>
+      </li>
 
     
       <li>
@@ -162,7 +155,7 @@
       <li>
         <span class="date">January 12, 2011</span>
         <h3><a class="post-link" href="/2011/01/compile-custom-kernel-on-ubuntu-10-10.html">Compile custom kernel on Ubuntu 10.10</a></h3>
-        <p class="meta">January 12, 2011 | <span class="time">3</span> Minutes Read</p>
+        <p class="meta">January 12, 2011 | <span class="time">5</span> Minutes Read</p>
         <p class="description">My experience compiling a custom kernel from source, using Ubuntu 10.10 Maverick Meerkat, on a Sony Vaio F111 series.</p>
       </li>
 
@@ -172,14 +165,6 @@
         <h3><a class="post-link" href="/2010/05/version-autotag-plugin-released.html">New version of the auto-tag plugin released!</a></h3>
         <p class="meta">May 19, 2010 | <span class="time">0</span> Minutes Read</p>
         <p class="description">I finally release a new version for the auto-tag plugin. Hopefully this one sucks a bit less!!</p>
-      </li>
-
-    
-      <li>
-        <span class="date">January 02, 2010</span>
-        <h3><a class="post-link" href="/2010/01/one-app-a-month-challenge.html">One app a month challenge</a></h3>
-        <p class="meta">January 02, 2010 | <span class="time">1</span> Minutes Read</p>
-        <p class="description">To keep learning and progressing in my line of work, you have to be learning new things everyday. The evolution is so fast that if you don’t go forward, you are effectively going backwards.I need ideas of useful apps or libraries to include in this challenge.So, my challenge for 2010 will be to build one web app every month, and publish it here on the last day of each month. My schedule is pretty tight right now, so the apps will have to be rather quick to develop, but hopefuly it will help m...</p>
       </li>
 
     
@@ -194,7 +179,6 @@
     
   </div>
 </div>
-
       </div>
    </div><!-- end .content -->
 

@@ -8,10 +8,10 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
+    <meta name="description" content="Why and how I built a Jekyll clone in PHP">
     
     
-    <title>Les commentaires sont ouverts</title>
+    <title>Stati, a PHP static site generator that works on any existing Jekyll site</title>
 
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="/assets/img/favicon.ico" />
@@ -21,7 +21,7 @@
     
     
     <!--[if IE 8]><link rel="stylesheet" href="/assets/css/ie.css"><![endif]-->
-    <link rel="canonical" href="https://jfoucher.com/2005/03/les-commentaires-sont-ouverts.html">
+    <link rel="canonical" href="https://jfoucher.com/2017/09/stati-static-site-generator.html">
 
     <!-- Modernizr -->
     <!--[if lt IE 9]>
@@ -52,8 +52,8 @@
 <!-- TWITTER CARD -->
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:site" content="@jfoucher" />
-<meta name="twitter:title" content="Les commentaires sont ouverts" />
-<meta name="twitter:description" content='Read "Les commentaires sont ouverts" on Geeky Nuggets' />
+<meta name="twitter:title" content="Stati, a PHP static site generator that works on any existing Jekyll site" />
+<meta name="twitter:description" content='Read "Stati, a PHP static site generator that works on any existing Jekyll site" on Geeky Nuggets' />
 
 
 
@@ -96,11 +96,22 @@
       <div class="container">
          <div class="post">
   
-  <h1 class="postTitle"><a href="/2005/03/les-commentaires-sont-ouverts.html">Les commentaires sont ouverts</a></h1>
-  <p class="meta">March 01, 2005 | <span class="time">0</span> Minute Read</p>
+  <h1 class="postTitle"><a href="/2017/09/stati-static-site-generator.html">Stati, a PHP static site generator that works on any existing Jekyll site</a></h1>
+  <p class="meta">September 28, 2017 | <span class="time">3</span> Minute Read</p>
   
-  <p>Grâce à <a href="http://www.unknowngenius.com">DrDave</a> et son plugin <a href="http://www.unknowngenius.com/blog/wordpress/spam-karma">spamkarma</a>, les commentaires sont de nouveau ouverts sur ce blog.</p>
-<p>Je verrai assez rapidement je pense l'efficacité de ce plugin. Si votre commentaire passe quand même à la trappe, n'hésitez   <a href="http://jfoucher.com/about/">m'envoyer un petit message</a></p>
+  <h3>Success !</h3>
+<p>Well it's been quite a week. Having had an unexpected lull in my contract work, I decided to work on something fun. I use jekyll for most of my static sites, and I quite like it. It's still a mistery to me why I decided to build a clone of it. But anyway, one week later, here we are. <a href="https://github.com/jfoucher/stati">Stati</a> can now build all my ex-Jekyll sites properly. Actually this blog is now generated with Stati!</p>
+<h3>Architecture</h3>
+<p>I read this <a href="https://www.bytesandwich.com/jekyll/software/blogging/2016/09/14/how-does-jekyll-work.html">How does Jekyll work</a> blog post that gives a nice high level overview of the jekyll architecture, and I decided to mostly use the same kind of process.</p>
+<p>A main Site class holds most of the state while the generation is in progress, with <a href="http://symfony.com/doc/current/components/event_dispatcher.html">events</a> being dispatched at several steps along the process so that plugins can hook into them and modify the input, the output, or simply monitor the progress of the generation process.</p>
+<p>First all files are read, in different manner depending on their type (static files, posts or pages), then they are rendered (again differently depending on their type) and finally they are written to disk at the correct path.</p>
+<h3>Plugins</h3>
+<p>At each point in this process, a plugin can come into play to add pages, have them written in different locations, etc...</p>
+<p>The first plugin, and the one that is use by most Jekyll sites I know of, is the paginator. In the case of Stati, it basically takes a list of all posts and generates a new html page for each page of posts. The core Writer then takes care of putting it in it's proper path.</p>
+<p>The second plugin is a related posts plugin. For each post it calculates the levenshtein distance of it's title to all the other posts titles and gets the 10 best matches. Lots of room for improvement here.</p>
+<h3>Try it now!</h3>
+<p>So basically that's it, a fun project that I will probably continue to use and improve. If you'd like to give it a try, you can <a href="https://github.com/jfoucher/stati/releases/latest">get the latest release from github</a> and, most importantly, <a href="https://github.com/jfoucher/stati/issues/new">open an issue</a> if you run into a snag!</p>
+<p>PS. I just remembered I have a <a href="/2005/03/changes-coming-soon.html">history</a> of <a href="/2005/03/new-blog.html">doing this kind of thing</a></p>
 
   </div>
 
@@ -111,14 +122,12 @@
    <!-- POST NAVIGATION -->
    <div class="postNav clearfix">
     
-      <a class="prev" href="/2004/11/hacker.html"><span>&laquo;&nbsp;Hacker</span>
+      <a class="prev image" href="/2017/08/symfony-process-custom-events-in-kernel-terminate.html"><span>&laquo;&nbsp;Processing custom events in kernel.terminate</span>
+      
+        <img src="/uploads/2017/08/symfony-kernel.terminate.png" alt="">
       
     </a>
     
-    
-      <a class="next" href="/2005/03/abc-whatever.html"><span>ABC... Whatever&nbsp;&raquo;</span>
-      
-      </a>
     
 </div>
       </div>

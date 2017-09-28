@@ -74,15 +74,15 @@
                  </li> 
                  
                  <li class="element   ">
-                     <a href="/about">About</a>
+                     <a href="/about.html">About</a>
                  </li> 
                  
                  <li class="element   ">
-                     <a href="/contact">Contact</a>
+                     <a href="/contact.html">Contact</a>
                  </li> 
                  
                  <li class="element   last">
-                     <a href="/projects">Projects</a>
+                     <a href="/projects.html">Projects</a>
                  </li> 
                  
 
@@ -98,257 +98,33 @@
 
   <div class="post">
     
-    <h1 class="postTitle"><a href="/2012/04/installing-apache-php-and-nginx-for-faster-websites.html">Installing PHP, Apache2 and nginx for faster websites</a></h1>
-    <p class="meta">April 23, 2012 | <span class="time">8</span> Minutes Read</p>
-
-    <p>My contract with my previous shared hosting contractor is coming to a close, and as they seem to have all but abandoned their business, I decided it was time to move away. I looked at using Amazon’s EC2, but ultimately decided to go with Bhost, with which I’m fairly happy so far. To get some decent performance out of it, I planned to use Nginx as my web server</p>
-
-<h3 id="keep-using-apache-as-usual">Keep using Apache as usual</h3>
-
-<p>All my websites are configured to work with apache, sometimes using fairly advanced rewrite rules, and a fair proportion of wordpress sites. So to save myself a ton of work I decided to just use Nginx as a proxy to apache and not reconfigure each site to use Nginx’s rewrite rules.</p>
-
-<h3 id="install-required-software">Install required software</h3>
-
-<p>I’m using Ubuntu, but the steps below should be fairly easy to adapt to your distribution of choice. To install everything from scratch, just run <code class="highlighter-rouge">sudo apt-get install php5 apache2 mysql-server php5-mysql nginx</code>. This installs mysql, Apache, PHP and Nginx</p>
-
-<h3 id="configure-apache-and-nginx">Configure Apache and Nginx</h3>
-
-<p>I created one bash script that creates the necessary virtual hosts files for Apache and Nginx, by taking a template a doing a search/replace with sed. Here is the apache virtual host template that goes into <code class="highlighter-rouge">/etc/apache2/sites-available</code>:</p>
-
-<figure class="highlight"><pre><code class="language-apache" data-lang="apache">    <span class="p">&lt;</span><span class="nl">VirtualHost</span><span class="sr"> *:8080</span><span class="p">&gt;
-</span>        <span class="nc">ServerAdmin</span> webmaster@localhost
-        <span class="nc">ServerName</span> template
-        <span class="nc">ServerAlias</span> template www.template cdn.template cdn2.template
-        <span class="nc">DocumentRoot</span> /var/www/template
-        <span class="p">&lt;</span><span class="nl">Directory</span><span class="sr"> /</span><span class="p">&gt;
-</span>                <span class="nc">Options</span> <span class="ss">FollowSymLinks</span>
-                <span class="nc">AllowOverride</span> <span class="ss">None</span>
-        <span class="p">&lt;/</span><span class="nl">Directory</span><span class="p">&gt;
-</span>        <span class="p">&lt;</span><span class="nl">Directory</span><span class="sr"> /var/www/template/</span><span class="p">&gt;
-</span>                <span class="nc">Options</span> <span class="ss">Indexes</span> <span class="ss">FollowSymLinks</span> <span class="ss">MultiViews</span>
-                <span class="nc">AllowOverride</span> <span class="ss">All</span>
-                <span class="nc">Order</span> allow,deny
-                <span class="nc">allow</span> <span class="ss">from</span> all
-        <span class="p">&lt;/</span><span class="nl">Directory</span><span class="p">&gt;
-</span>        <span class="nc">ScriptAlias</span> /cgi-bin/ /usr/lib/cgi-bin/
-        <span class="p">&lt;</span><span class="nl">Directory</span><span class="sr"> "/usr/lib/cgi-bin"</span><span class="p">&gt;
-</span>                <span class="nc">AllowOverride</span> <span class="ss">None</span>
-                <span class="nc">Options</span> +ExecCGI -MultiViews +SymLinksIfOwnerMatch
-                <span class="nc">Order</span> allow,deny
-                <span class="nc">Allow</span> <span class="ss">from</span> all
-        <span class="p">&lt;/</span><span class="nl">Directory</span><span class="p">&gt;
-</span>        <span class="nc">ErrorLog</span> ${APACHE_LOG_DIR}/error.log
-        <span class="c"># Possible values include: debug, info, notice, warn, error, crit,</span>
-        <span class="c"># alert, emerg.</span>
-        <span class="nc">LogLevel</span> warn
-        <span class="nc">CustomLog</span> ${APACHE_LOG_DIR}/access.log combined
-        <span class="nc">Alias</span> /doc/ "/usr/share/doc/"
-        <span class="p">&lt;</span><span class="nl">Directory</span><span class="sr"> "/usr/share/doc/"</span><span class="p">&gt;
-</span>            <span class="nc">Options</span> <span class="ss">Indexes</span> <span class="ss">MultiViews</span> <span class="ss">FollowSymLinks</span>
-            <span class="nc">AllowOverride</span> <span class="ss">None</span>
-            <span class="nc">Order</span> deny,allow
-            <span class="nc">Deny</span> <span class="ss">from</span> all
-            <span class="nc">Allow</span> <span class="ss">from</span> 127.0.0.0/255.0.0.0 ::1/128
-        <span class="p">&lt;/</span><span class="nl">Directory</span><span class="p">&gt;
-</span>    <span class="p">&lt;/</span><span class="nl">VirtualHost</span><span class="p">&gt;</span></code></pre></figure>
-
-<p>You’ll notice that Apache listens on port 8080. You need to change the port from 80 to 8080 in <code class="highlighter-rouge">/etc/apache2/ports.conf</code> as well, this is what mine looks like after the change :</p>
-
-<figure class="highlight"><pre><code class="language-apache" data-lang="apache">    <span class="nc">NameVirtualHost</span> *:8080
-    <span class="nc">Listen</span> 8080
-    <span class="p">&lt;</span><span class="nl">IfModule</span><span class="sr"> mod_ssl.c</span><span class="p">&gt;
-</span>        <span class="c"># If you add NameVirtualHost *:443 here, you will also have to change</span>
-        <span class="c"># the VirtualHost statement in /etc/apache2/sites-available/default-ssl</span>
-        <span class="c"># to &lt;VirtualHost *:443&gt;</span>
-        <span class="c"># Server Name Indication for SSL named virtual hosts is currently not</span>
-        <span class="c"># supported by MSIE on Windows XP.</span>
-        <span class="nc">Listen</span> 443
-    <span class="p">&lt;/</span><span class="nl">IfModule</span><span class="p">&gt;
-</span>    <span class="p">&lt;</span><span class="nl">IfModule</span><span class="sr"> mod_gnutls.c</span><span class="p">&gt;
-</span>        <span class="nc">Listen</span> 443
-    <span class="p">&lt;/</span><span class="nl">IfModule</span><span class="p">&gt;</span></code></pre></figure>
-
-<p>Next up is the template for the default nginx site, which is much simpler and goes in <code class="highlighter-rouge">/etc/nginx/sites-available</code>:</p>
-
-<figure class="highlight"><pre><code class="language-nginx" data-lang="nginx">    <span class="k">server</span> <span class="p">{</span>
-        <span class="kn">listen</span> <span class="mi">80</span><span class="p">;</span>
-        <span class="kn">access_log</span> <span class="n">/var/log/nginx.access.log</span><span class="p">;</span>
-        <span class="kn">error_log</span> <span class="n">/var/log/nginx.error.log</span><span class="p">;</span>
-        <span class="kn">root</span> <span class="n">/var/www/template</span><span class="p">;</span>
-        <span class="kn">index</span> <span class="s">index.php</span> <span class="s">index.html</span><span class="p">;</span>
-        <span class="kn">server_name</span> <span class="s">template</span> <span class="s">*.template</span><span class="p">;</span>
-        <span class="kn">location</span> <span class="n">/</span> <span class="p">{</span>
-                <span class="kn">proxy_set_header</span> <span class="s">X-Real-IP</span> <span class="nv">$remote_addr</span><span class="p">;</span>
-                <span class="kn">proxy_set_header</span> <span class="s">X-Forwarded-For</span> <span class="nv">$proxy_add_x_forwarded_for</span><span class="p">;</span>
-                <span class="kn">proxy_set_header</span> <span class="s">Host</span> <span class="nv">$host</span><span class="p">;</span>
-                <span class="kn">proxy_pass</span> <span class="s">http://127.0.0.1:8080</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="kn">location</span> <span class="p">~</span> <span class="sr">/\.(ht|git)</span> <span class="p">{</span>
-                <span class="kn">deny</span> <span class="s">all</span><span class="p">;</span>
-        <span class="p">}</span>
-    <span class="p">}</span></code></pre></figure>
-
-<p>All that does is proxy everything to apache on localhost, port 8080</p>
-
-<p>So, our virtual host templates are ready, and if you only have one or two sites you could copy the contents to a new file by hand and change the word <code class="highlighter-rouge">template</code> for your actual domain name / folder, but as I had quite a few sites to convert, I created a small bash script that takes car of it for me, by just calling it with the hostname:</p>
-
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash">    <span class="c">#!/bin/bash</span>
-    <span class="nv">CMDLN_ARGS</span><span class="o">=</span><span class="s2">"</span><span class="nv">$@</span><span class="s2">"</span> <span class="c"># Command line arguments for this script</span>
-    <span class="nb">export </span>CMDLN_ARGS
-    <span class="c"># Run this script as root if not already.</span>
-    chk_root <span class="o">()</span> <span class="o">{</span>
-     <span class="k">if</span> <span class="o">[</span> <span class="o">!</span> <span class="k">$(</span> id <span class="nt">-u</span> <span class="k">)</span> <span class="nt">-eq</span> 0 <span class="o">]</span><span class="p">;</span> <span class="k">then
-       </span><span class="nb">echo</span> <span class="s2">"Please enter your password."</span>
-       <span class="nb">exec sudo </span>su <span class="nt">-c</span> <span class="s2">"</span><span class="k">${</span><span class="nv">0</span><span class="k">}</span><span class="s2"> </span><span class="k">${</span><span class="nv">CMDLN_ARGS</span><span class="k">}</span><span class="s2">"</span> <span class="c"># Call this prog as root</span>
-       <span class="nb">exit</span> <span class="k">${</span><span class="p">?</span><span class="k">}</span>  <span class="c"># since we're 'execing' above, we wont reach this exit</span>
-                  <span class="c"># unless something goes wrong.</span>
-     <span class="k">fi</span>
-    <span class="o">}</span>
-    chk_root
-    <span class="nb">cat</span> /etc/apache2/sites-available/template | sed <span class="s2">"s/template/</span><span class="nv">$1</span><span class="s2">/g"</span> |cat <span class="o">&gt;</span> /etc/apache2/sites-available/<span class="nv">$1</span>
-    ln <span class="nt">-s</span> /etc/apache2/sites-available/<span class="nv">$1</span> /etc/apache2/sites-enabled/<span class="nv">$1</span>
-    <span class="nb">cat</span> /etc/nginx/sites-available/template | sed <span class="s2">"s/template/</span><span class="nv">$1</span><span class="s2">/g"</span> |cat <span class="o">&gt;</span> /etc/nginx/sites-available/<span class="nv">$1</span>
-    ln <span class="nt">-s</span> /etc/nginx/sites-available/<span class="nv">$1</span> /etc/nginx/sites-enabled/<span class="nv">$1</span>
-    <span class="k">if</span> <span class="o">[</span> <span class="nt">-d</span> /var/www/<span class="nv">$1</span> <span class="o">]</span><span class="p">;</span>
-    <span class="k">then
-      </span><span class="nb">echo</span> <span class="s2">"host directory exists"</span><span class="p">;</span>
-    <span class="k">else
-      </span><span class="nb">echo</span> <span class="s2">"creating directory"</span>
-      mkdir <span class="s2">"/var/www/</span><span class="nv">$1</span><span class="s2">"</span>
-    <span class="k">fi
-    </span>chown <span class="nt">-R</span> www-data:www-data /var/www/<span class="nv">$1</span>
-    /etc/init.d/apache2 restart
-    /etc/init.d/nginx restart</code></pre></figure>
-
-<p>Put this say in your home folder and give it executable permission with <code class="highlighter-rouge">chmod 755 new_host</code> or whatever you named the file.</p>
-
-<p>Then run it with <code class="highlighter-rouge">./new_host example.com</code></p>
-
-<p>This will create a folder in <code class="highlighter-rouge">/var/www/example.com</code>, copy the updated template virtual host configuration to the required location and restart apache and nginx.</p>
-
-<p>Now put some content in that folder and configure your mysql connection if neccesary</p>
-
-<p>You should now be able to browse to example.com and see your brand new site. Some quick benchmarking with ab gives roughly a tenfold increase in requests per second, depending on the configuration of the website itself</p>
-
-<p>These are some rough numbers for <a href="http://6px.eu">Six Pixels</a>, built with Kohana2 without any caching mechanism</p>
-
-<p><code class="highlighter-rouge">ab -c20 -n200 http://6px.eu:8080/</code> is hitting Apache on port 8080</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Server Hostname:        6px.eu
-Server Port:            8080
-
-Document Path:          /
-Document Length:        12101 bytes
-
-Concurrency Level:      20
-Time taken for tests:   282.679 seconds
-Complete requests:      200
-Failed requests:        0
-Write errors:           0
-Total transferred:      2486000 bytes
-HTML transferred:       2420200 bytes
-Requests per second:    0.71 [#/sec] (mean)
-Time per request:       28267.940 [ms] (mean)
-Time per request:       1413.397 [ms] (mean, across all concurrent requests)
-Transfer rate:          8.59 [Kbytes/sec] received
-</code></pre></div></div>
-
-<p>Now with nginx <code class="highlighter-rouge">ab -c20 -n200 http://6px.eu/</code></p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Server Hostname:        6px.eu
-Server Port:            80
-
-Document Path:          /
-Document Length:        12081 bytes
-
-Concurrency Level:      20
-Time taken for tests:   40.606 seconds
-Complete requests:      200
-Failed requests:        0
-Write errors:           0
-Total transferred:      2482000 bytes
-HTML transferred:       2416200 bytes
-Requests per second:    4.93 [#/sec] (mean)
-Time per request:       4060.612 [ms] (mean)
-Time per request:       203.031 [ms] (mean, across all concurrent requests)
-Transfer rate:          59.69 [Kbytes/sec] received
-</code></pre></div></div>
-
-<h3 id="update">Update:</h3>
-
-<p>As rightly noted by <a href="https://twitter.com/#!/arnaud_lb/status/196610128261296129">@arnaud_lb</a> the benchmarks should give nearly the same results,
-as nginx is waiting for Apache to return it’s data before sending it along.
-What happened in those benchmarks is that <a href="http://cloudflare.com">cloudflare.com</a> (highly recommended by the way) was caching some results and not others.</p>
-
-<p>When I tried on localhost, the results were effectively the same.
-So the way to get better performance is to get nginx to cache the results from apache, by adding the following to your nginx virtual host definition :</p>
-
-<figure class="highlight"><pre><code class="language-nginx" data-lang="nginx">    <span class="k">proxy_cache</span> <span class="s">one</span><span class="p">;</span>
-    <span class="k">proxy_cache_use_stale</span> <span class="s">error</span> <span class="s">timeout</span> <span class="s">invalid_header</span> <span class="s">updating</span><span class="p">;</span>
-    <span class="k">proxy_cache_key</span> <span class="nv">$scheme$host$request_uri</span><span class="p">;</span>
-    <span class="k">proxy_cache_valid</span>       <span class="mi">200</span> <span class="mi">301</span> <span class="mi">302</span> <span class="mi">20m</span><span class="p">;</span>
-    <span class="k">proxy_cache_valid</span>       <span class="mi">404</span> <span class="mi">1m</span><span class="p">;</span>
-    <span class="k">proxy_cache_valid</span>       <span class="s">any</span> <span class="mi">15m</span><span class="p">;</span></code></pre></figure>
-
-<p>where the <code class="highlighter-rouge">proxy_cache</code> named <code class="highlighter-rouge">one</code> is defined in nginx.conf as such :</p>
-
-<figure class="highlight"><pre><code class="language-nginx" data-lang="nginx">    <span class="k">proxy_cache_path</span> <span class="n">/usr/local/nginx/proxy</span> <span class="s">levels=1:2</span> <span class="s">keys_zone=one:15m</span> <span class="s">inactive=7d</span> <span class="s">max_size=1000m</span><span class="p">;</span></code></pre></figure>
-
-<p>The <code class="highlighter-rouge">proxy_cache_valid</code> entries above define different cache times for various response codes</p>
-
-<p>And here are the real benchmarks :</p>
-
-<h4 id="apache">Apache:</h4>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Server Hostname:        direct.6px.eu
-Server Port:            8080
-
-Document Path:          /
-Document Length:        11487 bytes
-
-Concurrency Level:      10
-Time taken for tests:   15.082 seconds
-Complete requests:      200
-Failed requests:        0
-Write errors:           0
-Total transferred:      2338600 bytes
-HTML transferred:       2297400 bytes
-Requests per second:    13.26 [#/sec] (mean)
-Time per request:       754.075 [ms] (mean)
-Time per request:       75.408 [ms] (mean, across all concurrent requests)
-Transfer rate:          151.43 [Kbytes/sec] received
-</code></pre></div></div>
-
-<h4 id="nginx">Nginx:</h4>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Server Hostname:        direct.6px.eu
-Server Port:            80
-
-Document Path:          /
-Document Length:        3031 bytes
-
-Concurrency Level:      10
-Time taken for tests:   0.027 seconds
-Complete requests:      200
-Failed requests:        0
-Write errors:           0
-Total transferred:      654600 bytes
-HTML transferred:       606200 bytes
-Requests per second:    7305.94 [#/sec] (mean)
-Time per request:       1.369 [ms] (mean)
-Time per request:       0.137 [ms] (mean, across all concurrent requests)
-Transfer rate:          23351.88 [Kbytes/sec] received
-</code></pre></div></div>
-
-<p>Just, wow…</p>
-
-<p>Careful though as this will wreak havoc on your sessions, at the minimum you can disable caching for logged-in users with</p>
-
-<figure class="highlight"><pre><code class="language-nginx" data-lang="nginx">    <span class="k">proxy_cache_bypass</span> <span class="nv">$cookie_session</span><span class="p">;</span>
-    <span class="k">proxy_no_cache</span> <span class="nv">$cookie_session</span><span class="p">;</span></code></pre></figure>
-
-<p>where <code class="highlighter-rouge">session</code> is the name of your cookie</p>
-
+    <h1 class="postTitle"><a href="/2013/05/building-and-using-minimalist-running-shoes.html">How I built running shoes for my whole family in one sunday afternoon (Huarache sandals)</a></h1>
+    <p class="meta">May 26, 2013 | <span class="time">6</span> Minutes Read</p>
+    <p>Some time ago, <a href="http://diegosantamarta.com">Diego Santamarta</a> casually mentioned that the shoes he was wearing were not regular flip flops, but rather some kind of sandal which I had never heard about. &quot;Oh ok&quot; was my less than enthusiastic answer. In the meantime, and even before, I had been reading about barefoot running, even though I had never run more than a few hundred meters without panting uncontrollably. Yes, 15 years smoking does take it's toll. After two years tobacco free, I feel I'm only now starting to recover.</p>
+<p>Anyway, I had dismissed barefoot running as something that I would love to do&nbsp;&mdash;&nbsp;and probably the only way that I would ever run for pleasure&nbsp;&mdash;&nbsp;but that seemed very uncomfortable bordering on dangerous. Two days ago, that same Diego Santamarta posts to facebook a link about those sandals as used by barefoot runners to protect their feet on difficult terrain.</p>
+<h3>Documentation and materials</h3>
+<p>I almost immediately started <a href="http://bit.ly/10znWIx">reading about them</a>, watching <a href="http://bit.ly/10WcB48">youtube videos</a> or <a href="http://bit.ly/10zo22R">instructables</a> explaining how to build them. I had an old tire in the growing &quot;to throw away&quot; pile which I never get around to bringing to the recycling center, so that was the main part of the material sorted. I also have some polypropylene cord (the blue one used to tie straw bales and some black one) which could be used as laces. As will be seen later this is not comfortable nor durable so I used some more elaborate string for the laces.</p>
+<p>Trace your foot on paper and locate the holes as indicated in one of these guides.</p>
+<h3>Cutting the sole</h3>
+<p>Now the real work begins. We will need to hack at that tire, and it truly is tiresome work. I had some tin snips on hand which I thought would be perfect for  the job. They are in fact totally useless. I did the job with a hacksaw to cut through the metal ring where the tire meets the wheel, and then one of my trusty <a href="https://en.wikipedia.org/wiki/Opinel">Opinels</a> to cut through the reinforced rubber outwall. If the knife is kept sharp, this is actually fairly easy work.</p>
+<p><img src="http://jfoucher.com/uploads/2013/05/cutting-tire.jpg" alt=""Cutting the tire"" /></p>
+<p>I cut some rough pieces from the outerwall, one from each side of the tire to match the curvature of the outerwall to the natural curve of each foot.</p>
+<p>You then trace the outline of your paper pattern on the pieces you just cut, enabling you to have perfect tire soles for your huarache sandals.</p>
+<p><img src="http://jfoucher.com/uploads/2013/05/cutting-soles.jpg" alt=""Matching sole to template"" /></p>
+<p>I then used a small drill bit, around 5mm to drill the holes.</p>
+<h3>Putting the laces in places</h3>
+<p>The are many lacing systems that can be used, the one I used seemed simple enough, and can be slipped on and off easily.</p>
+<p>To pull the string through the holes, I used a piece of bent wire as a threader, and pliers to pull on it if need be. A <a href="http://en.wikipedia.org/wiki/Figure-eight_knot">figure of 8 knot</a> locks the string in the toe hole. the string then goes throught the outer hole, around the heel, through the inner whole, and ties around the front part of the lace</p>
+<p><img src="http://jfoucher.com/uploads/2013/05/threading-cord.jpg" alt=""Threading the cord"" /></p>
+<p>Here is the result: my son's sandals. He complained that they were not very comfortable though, so I changed the cord (which was too thin) and used a thicker braided one I had around, which is much more comfortable.</p>
+<p><img src="http://jfoucher.com/uploads/2013/05/huarache-running-sandal-kid.jpg" alt=""Huarache running sandal complete"" /></p>
+<p>Once everyone had their sandals ready, I decided to go for a short run to try them out</p>
+<h3>Running</h3>
+<p>Please keep in mind that I was a heavy smoker for many years, have <em>never</em> run unless obligated to, and never more than a few hundred meters.</p>
+<p>The first segment was downhill, and I had to readjust the shoes almost immediately, for the only time in the entire run.</p>
+<p>When I arrived at the first uphill segment I got out of breath quickly and decide to alternate running and fast walking for the rest of the outing. That worked out pretty good, and the running actually felt easier and easier. The shoes are superb. They are pretty comfortable, provide just the right amount of protection to avoid having to look out for every little piece of gravel and can be used to cross streams without fear of them becoming slippery.</p>
+<p>My calves started hurting at around the ten minute mark, I think from landing on the front portion of the feet. It only got worse from then on, and now I can barely walk, it feels like I have a continuous cramp in these muscles. The feet are in perfect condition though, I just feel that they have had a good workout.</p>
+<p>Can't wait to go out tomorrow for more!</p>
   </div>
 
   <h3 style="text-align: center; margin-top: 2em">Older posts</h3>
@@ -357,9 +133,17 @@ Transfer rate:          23351.88 [Kbytes/sec] received
 
     
       <li>
-        <span class="date">April 15, 2012</span>
+        <span class="date">April 23, 2012</span>
+        <h3><a class="post-link" href="/2012/04/installing-apache-php-and-nginx-for-faster-websites.html">Installing PHP, Apache2 and nginx for faster websites</a></h3>
+        <p class="meta">April 23, 2012 | <span class="time">11</span> Minutes Read</p>
+        <p class="description">I recently decided to go with a small VPS for some of my sites, and to get decent performance without too much work I used Nginx as a proxy to Apache2.</p>
+      </li>
+
+    
+      <li>
+        <span class="date">April 16, 2012</span>
         <h3><a class="post-link" href="/2012/04/getting-your-users-gmail-contacts.html">Import contacts from Google by entering your email and password</a></h3>
-        <p class="meta">April 15, 2012 | <span class="time">4</span> Minutes Read</p>
+        <p class="meta">April 16, 2012 | <span class="time">5</span> Minutes Read</p>
         <p class="description">In some sites like for example Dropbox, you invite people from your Gmail contacts by simply entering your email and password: this is how it's done.</p>
       </li>
 
@@ -367,7 +151,7 @@ Transfer rate:          23351.88 [Kbytes/sec] received
       <li>
         <span class="date">April 09, 2012</span>
         <h3><a class="post-link" href="/2012/04/github-tricks-from-stackoverflow.html">Git tips from stackoverflow</a></h3>
-        <p class="meta">April 09, 2012 | <span class="time">0</span> Minutes Read</p>
+        <p class="meta">April 09, 2012 | <span class="time">1</span> Minutes Read</p>
         <p class="description">Sometimes git is confusing, and things that should be simple quickly look like magic incantations. Here are two such cases.</p>
       </li>
 
@@ -375,24 +159,16 @@ Transfer rate:          23351.88 [Kbytes/sec] received
       <li>
         <span class="date">February 13, 2012</span>
         <h3><a class="post-link" href="/2012/02/from-titanium-to-air-building-desktop-apps-with-javascript.html">From Titanium to Adobe Air, or, Building Desktop Apps with Javascript</a></h3>
-        <p class="meta">February 13, 2012 | <span class="time">4</span> Minutes Read</p>
+        <p class="meta">February 13, 2012 | <span class="time">7</span> Minutes Read</p>
         <p class="description">My experience using Titanium to build a desktop app.</p>
       </li>
 
     
       <li>
-        <span class="date">December 25, 2011</span>
+        <span class="date">December 29, 2011</span>
         <h3><a class="post-link" href="/2011/12/implementing-browserid-identification.html">Implementing BrowserID identification on your website</a></h3>
-        <p class="meta">December 25, 2011 | <span class="time">4</span> Minutes Read</p>
+        <p class="meta">December 29, 2011 | <span class="time">6</span> Minutes Read</p>
         <p class="description">BrowserID is an identification service from Mozilla that aims to remove the need for accounts at each website we visit. I explain how to implement it on your site.</p>
-      </li>
-
-    
-      <li>
-        <span class="date">September 17, 2011</span>
-        <h3><a class="post-link" href="/2011/09/a-10-minute-script-to-graph-your-server-load.html">A 10 minute script to graph your server load</a></h3>
-        <p class="meta">September 17, 2011 | <span class="time">0</span> Minutes Read</p>
-        <p class="description">I needed to monitor the load on my web server like, right now, so I wrote this script.</p>
       </li>
 
     
@@ -400,14 +176,13 @@ Transfer rate:          23351.88 [Kbytes/sec] received
   <!-- Pagination links -->
   <div class="pagination">
     
-      <a href="/" class="previous button__outline">Newer Posts</a> 
+      <a href="/blog/page1/" class="previous button__outline">Newer Posts</a> 
     
     
       <a href="/blog/page3/" class="next button__outline">Even older Posts</a>
     
   </div>
 </div>
-
       </div>
    </div><!-- end .content -->
 

@@ -74,15 +74,15 @@
                  </li> 
                  
                  <li class="element   ">
-                     <a href="/about">About</a>
+                     <a href="/about.html">About</a>
                  </li> 
                  
                  <li class="element   ">
-                     <a href="/contact">Contact</a>
+                     <a href="/contact.html">Contact</a>
                  </li> 
                  
                  <li class="element   last">
-                     <a href="/projects">Projects</a>
+                     <a href="/projects.html">Projects</a>
                  </li> 
                  
 
@@ -96,86 +96,77 @@
       <div class="container">
          <div class="post">
   
-  <h1 class="postTitle"><a href="">Installing PHP, Apache2 and nginx for faster websites</a></h1>
-  <p class="meta">April 23, 2012 | <span class="time">8</span> Minute Read</p>
+  <h1 class="postTitle"><a href="/2012/04/installing-apache-php-and-nginx-for-faster-websites.html">Installing PHP, Apache2 and nginx for faster websites</a></h1>
+  <p class="meta">April 23, 2012 | <span class="time">11</span> Minute Read</p>
   
-  <p>My contract with my previous shared hosting contractor is coming to a close, and as they seem to have all but abandoned their business, I decided it was time to move away. I looked at using Amazon’s EC2, but ultimately decided to go with Bhost, with which I’m fairly happy so far. To get some decent performance out of it, I planned to use Nginx as my web server</p>
-
-<h3 id="keep-using-apache-as-usual">Keep using Apache as usual</h3>
-
-<p>All my websites are configured to work with apache, sometimes using fairly advanced rewrite rules, and a fair proportion of wordpress sites. So to save myself a ton of work I decided to just use Nginx as a proxy to apache and not reconfigure each site to use Nginx’s rewrite rules.</p>
-
-<h3 id="install-required-software">Install required software</h3>
-
-<p>I’m using Ubuntu, but the steps below should be fairly easy to adapt to your distribution of choice. To install everything from scratch, just run <code class="highlighter-rouge">sudo apt-get install php5 apache2 mysql-server php5-mysql nginx</code>. This installs mysql, Apache, PHP and Nginx</p>
-
-<h3 id="configure-apache-and-nginx">Configure Apache and Nginx</h3>
-
-<p>I created one bash script that creates the necessary virtual hosts files for Apache and Nginx, by taking a template a doing a search/replace with sed. Here is the apache virtual host template that goes into <code class="highlighter-rouge">/etc/apache2/sites-available</code>:</p>
-
-<figure class="highlight"><pre><code class="language-apache" data-lang="apache">    <span class="p">&lt;</span><span class="nl">VirtualHost</span><span class="sr"> *:8080</span><span class="p">&gt;
-</span>        <span class="nc">ServerAdmin</span> webmaster@localhost
-        <span class="nc">ServerName</span> template
-        <span class="nc">ServerAlias</span> template www.template cdn.template cdn2.template
-        <span class="nc">DocumentRoot</span> /var/www/template
-        <span class="p">&lt;</span><span class="nl">Directory</span><span class="sr"> /</span><span class="p">&gt;
-</span>                <span class="nc">Options</span> <span class="ss">FollowSymLinks</span>
-                <span class="nc">AllowOverride</span> <span class="ss">None</span>
-        <span class="p">&lt;/</span><span class="nl">Directory</span><span class="p">&gt;
-</span>        <span class="p">&lt;</span><span class="nl">Directory</span><span class="sr"> /var/www/template/</span><span class="p">&gt;
-</span>                <span class="nc">Options</span> <span class="ss">Indexes</span> <span class="ss">FollowSymLinks</span> <span class="ss">MultiViews</span>
-                <span class="nc">AllowOverride</span> <span class="ss">All</span>
-                <span class="nc">Order</span> allow,deny
-                <span class="nc">allow</span> <span class="ss">from</span> all
-        <span class="p">&lt;/</span><span class="nl">Directory</span><span class="p">&gt;
-</span>        <span class="nc">ScriptAlias</span> /cgi-bin/ /usr/lib/cgi-bin/
-        <span class="p">&lt;</span><span class="nl">Directory</span><span class="sr"> "/usr/lib/cgi-bin"</span><span class="p">&gt;
-</span>                <span class="nc">AllowOverride</span> <span class="ss">None</span>
-                <span class="nc">Options</span> +ExecCGI -MultiViews +SymLinksIfOwnerMatch
-                <span class="nc">Order</span> allow,deny
-                <span class="nc">Allow</span> <span class="ss">from</span> all
-        <span class="p">&lt;/</span><span class="nl">Directory</span><span class="p">&gt;
-</span>        <span class="nc">ErrorLog</span> ${APACHE_LOG_DIR}/error.log
+  <p>My contract with my previous shared hosting contractor is coming to a close, and as they seem to have all but abandoned their business, I decided it was time to move away. I looked at using Amazon's EC2, but ultimately decided to go with Bhost, with which I'm fairly happy so far. To get some decent performance out of it, I planned to use Nginx as my web server</p>
+<h3>Keep using Apache as usual</h3>
+<p>All my websites are configured to work with apache, sometimes using fairly advanced rewrite rules, and a fair proportion of wordpress sites. So to save myself a ton of work I decided to just use Nginx as a proxy to apache and not reconfigure each site to use Nginx's rewrite rules.</p>
+<h3>Install required software</h3>
+<p>I'm using Ubuntu, but the steps below should be fairly easy to adapt to your distribution of choice. To install everything from scratch, just run <code>sudo apt-get install php5 apache2 mysql-server php5-mysql nginx</code>. This installs mysql, Apache, PHP and Nginx</p>
+<h3>Configure Apache and Nginx</h3>
+<p>I created one bash script that creates the necessary virtual hosts files for Apache and Nginx, by taking a template a doing a search/replace with sed. Here is the apache virtual host template that goes into <code>/etc/apache2/sites-available</code>:</p>
+<div class="highlight"><pre>    <span class="nt">&lt;VirtualHost</span> <span class="s">*:8080</span><span class="nt">&gt;</span>
+        <span class="nb">ServerAdmin</span> webmaster@localhost
+        <span class="nb">ServerName</span> template
+        <span class="nb">ServerAlias</span> template www.template cdn.template cdn2.template
+        <span class="nb">DocumentRoot</span> <span class="sx">/var/www/template</span>
+        <span class="nt">&lt;Directory</span> <span class="s">/</span><span class="nt">&gt;</span>
+                <span class="nb">Options</span> FollowSymLinks
+                <span class="nb">AllowOverride</span> <span class="k">None</span>
+        <span class="nt">&lt;/Directory&gt;</span>
+        <span class="nt">&lt;Directory</span> <span class="s">/var/www/template/</span><span class="nt">&gt;</span>
+                <span class="nb">Options</span> Indexes FollowSymLinks MultiViews
+                <span class="nb">AllowOverride</span> <span class="k">All</span>
+                <span class="nb">Order</span> allow,deny
+                <span class="nb">allow</span> from <span class="k">all</span>
+        <span class="nt">&lt;/Directory&gt;</span>
+        <span class="nb">ScriptAlias</span> <span class="sx">/cgi-bin/</span> <span class="sx">/usr/lib/cgi-bin/</span>
+        <span class="nt">&lt;Directory</span> <span class="s">"/usr/lib/cgi-bin"</span><span class="nt">&gt;</span>
+                <span class="nb">AllowOverride</span> <span class="k">None</span>
+                <span class="nb">Options</span> +ExecCGI -MultiViews +SymLinksIfOwnerMatch
+                <span class="nb">Order</span> allow,deny
+                <span class="nb">Allow</span> from <span class="k">all</span>
+        <span class="nt">&lt;/Directory&gt;</span>
+        <span class="nb">ErrorLog</span> ${APACHE_LOG_DIR}/error.log
         <span class="c"># Possible values include: debug, info, notice, warn, error, crit,</span>
         <span class="c"># alert, emerg.</span>
-        <span class="nc">LogLevel</span> warn
-        <span class="nc">CustomLog</span> ${APACHE_LOG_DIR}/access.log combined
-        <span class="nc">Alias</span> /doc/ "/usr/share/doc/"
-        <span class="p">&lt;</span><span class="nl">Directory</span><span class="sr"> "/usr/share/doc/"</span><span class="p">&gt;
-</span>            <span class="nc">Options</span> <span class="ss">Indexes</span> <span class="ss">MultiViews</span> <span class="ss">FollowSymLinks</span>
-            <span class="nc">AllowOverride</span> <span class="ss">None</span>
-            <span class="nc">Order</span> deny,allow
-            <span class="nc">Deny</span> <span class="ss">from</span> all
-            <span class="nc">Allow</span> <span class="ss">from</span> 127.0.0.0/255.0.0.0 ::1/128
-        <span class="p">&lt;/</span><span class="nl">Directory</span><span class="p">&gt;
-</span>    <span class="p">&lt;/</span><span class="nl">VirtualHost</span><span class="p">&gt;</span></code></pre></figure>
-
-<p>You’ll notice that Apache listens on port 8080. You need to change the port from 80 to 8080 in <code class="highlighter-rouge">/etc/apache2/ports.conf</code> as well, this is what mine looks like after the change :</p>
-
-<figure class="highlight"><pre><code class="language-apache" data-lang="apache">    <span class="nc">NameVirtualHost</span> *:8080
-    <span class="nc">Listen</span> 8080
-    <span class="p">&lt;</span><span class="nl">IfModule</span><span class="sr"> mod_ssl.c</span><span class="p">&gt;
-</span>        <span class="c"># If you add NameVirtualHost *:443 here, you will also have to change</span>
+        <span class="nb">LogLevel</span> <span class="k">warn</span>
+        <span class="nb">CustomLog</span> ${APACHE_LOG_DIR}/access.log combined
+        <span class="nb">Alias</span> <span class="sx">/doc/</span> <span class="s2">"/usr/share/doc/"</span>
+        <span class="nt">&lt;Directory</span> <span class="s">"/usr/share/doc/"</span><span class="nt">&gt;</span>
+            <span class="nb">Options</span> Indexes MultiViews FollowSymLinks
+            <span class="nb">AllowOverride</span> <span class="k">None</span>
+            <span class="nb">Order</span> deny,allow
+            <span class="nb">Deny</span> from <span class="k">all</span>
+            <span class="nb">Allow</span> from <span class="m">127.0.0.0/255</span>.0.0.0 ::1/128
+        <span class="nt">&lt;/Directory&gt;</span>
+    <span class="nt">&lt;/VirtualHost&gt;</span>
+</pre></div>
+<p>You'll notice that Apache listens on port 8080. You need to change the port from 80 to 8080 in <code>/etc/apache2/ports.conf</code> as well, this is what mine looks like after the change :</p>
+<div class="highlight"><pre>    <span class="nb">NameVirtualHost</span> *:8080
+    <span class="nb">Listen</span> <span class="m">8080</span>
+    <span class="nt">&lt;IfModule</span> <span class="s">mod_ssl.c</span><span class="nt">&gt;</span>
+        <span class="c"># If you add NameVirtualHost *:443 here, you will also have to change</span>
         <span class="c"># the VirtualHost statement in /etc/apache2/sites-available/default-ssl</span>
         <span class="c"># to &lt;VirtualHost *:443&gt;</span>
         <span class="c"># Server Name Indication for SSL named virtual hosts is currently not</span>
         <span class="c"># supported by MSIE on Windows XP.</span>
-        <span class="nc">Listen</span> 443
-    <span class="p">&lt;/</span><span class="nl">IfModule</span><span class="p">&gt;
-</span>    <span class="p">&lt;</span><span class="nl">IfModule</span><span class="sr"> mod_gnutls.c</span><span class="p">&gt;
-</span>        <span class="nc">Listen</span> 443
-    <span class="p">&lt;/</span><span class="nl">IfModule</span><span class="p">&gt;</span></code></pre></figure>
-
-<p>Next up is the template for the default nginx site, which is much simpler and goes in <code class="highlighter-rouge">/etc/nginx/sites-available</code>:</p>
-
-<figure class="highlight"><pre><code class="language-nginx" data-lang="nginx">    <span class="k">server</span> <span class="p">{</span>
+        <span class="nb">Listen</span> <span class="m">443</span>
+    <span class="nt">&lt;/IfModule&gt;</span>
+    <span class="nt">&lt;IfModule</span> <span class="s">mod_gnutls.c</span><span class="nt">&gt;</span>
+        <span class="nb">Listen</span> <span class="m">443</span>
+    <span class="nt">&lt;/IfModule&gt;</span>
+</pre></div>
+<p>Next up is the template for the default nginx site, which is much simpler and goes in <code>/etc/nginx/sites-available</code>:</p>
+<div class="highlight"><pre>    <span class="k">server</span> <span class="p">{</span>
         <span class="kn">listen</span> <span class="mi">80</span><span class="p">;</span>
-        <span class="kn">access_log</span> <span class="n">/var/log/nginx.access.log</span><span class="p">;</span>
-        <span class="kn">error_log</span> <span class="n">/var/log/nginx.error.log</span><span class="p">;</span>
-        <span class="kn">root</span> <span class="n">/var/www/template</span><span class="p">;</span>
+        <span class="kn">access_log</span> <span class="s">/var/log/nginx.access.log</span><span class="p">;</span>
+        <span class="kn">error_log</span> <span class="s">/var/log/nginx.error.log</span><span class="p">;</span>
+        <span class="kn">root</span> <span class="s">/var/www/template</span><span class="p">;</span>
         <span class="kn">index</span> <span class="s">index.php</span> <span class="s">index.html</span><span class="p">;</span>
         <span class="kn">server_name</span> <span class="s">template</span> <span class="s">*.template</span><span class="p">;</span>
-        <span class="kn">location</span> <span class="n">/</span> <span class="p">{</span>
+        <span class="kn">location</span> <span class="s">/</span> <span class="p">{</span>
                 <span class="kn">proxy_set_header</span> <span class="s">X-Real-IP</span> <span class="nv">$remote_addr</span><span class="p">;</span>
                 <span class="kn">proxy_set_header</span> <span class="s">X-Forwarded-For</span> <span class="nv">$proxy_add_x_forwarded_for</span><span class="p">;</span>
                 <span class="kn">proxy_set_header</span> <span class="s">Host</span> <span class="nv">$host</span><span class="p">;</span>
@@ -184,55 +175,46 @@
         <span class="kn">location</span> <span class="p">~</span> <span class="sr">/\.(ht|git)</span> <span class="p">{</span>
                 <span class="kn">deny</span> <span class="s">all</span><span class="p">;</span>
         <span class="p">}</span>
-    <span class="p">}</span></code></pre></figure>
-
+    <span class="p">}</span>
+</pre></div>
 <p>All that does is proxy everything to apache on localhost, port 8080</p>
-
-<p>So, our virtual host templates are ready, and if you only have one or two sites you could copy the contents to a new file by hand and change the word <code class="highlighter-rouge">template</code> for your actual domain name / folder, but as I had quite a few sites to convert, I created a small bash script that takes car of it for me, by just calling it with the hostname:</p>
-
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash">    <span class="c">#!/bin/bash</span>
+<p>So, our virtual host templates are ready, and if you only have one or two sites you could copy the contents to a new file by hand and change the word <code>template</code> for your actual domain name / folder, but as I had quite a few sites to convert, I created a small bash script that takes car of it for me, by just calling it with the hostname:</p>
+<div class="highlight"><pre>    <span class="c">#!/bin/bash</span>
     <span class="nv">CMDLN_ARGS</span><span class="o">=</span><span class="s2">"</span><span class="nv">$@</span><span class="s2">"</span> <span class="c"># Command line arguments for this script</span>
     <span class="nb">export </span>CMDLN_ARGS
     <span class="c"># Run this script as root if not already.</span>
     chk_root <span class="o">()</span> <span class="o">{</span>
-     <span class="k">if</span> <span class="o">[</span> <span class="o">!</span> <span class="k">$(</span> id <span class="nt">-u</span> <span class="k">)</span> <span class="nt">-eq</span> 0 <span class="o">]</span><span class="p">;</span> <span class="k">then
-       </span><span class="nb">echo</span> <span class="s2">"Please enter your password."</span>
-       <span class="nb">exec sudo </span>su <span class="nt">-c</span> <span class="s2">"</span><span class="k">${</span><span class="nv">0</span><span class="k">}</span><span class="s2"> </span><span class="k">${</span><span class="nv">CMDLN_ARGS</span><span class="k">}</span><span class="s2">"</span> <span class="c"># Call this prog as root</span>
-       <span class="nb">exit</span> <span class="k">${</span><span class="p">?</span><span class="k">}</span>  <span class="c"># since we're 'execing' above, we wont reach this exit</span>
+     <span class="k">if</span> <span class="o">[</span> ! <span class="k">$(</span> id -u <span class="k">)</span> -eq <span class="m">0</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+       <span class="nb">echo</span> <span class="s2">"Please enter your password."</span>
+       <span class="nb">exec </span>sudo su -c <span class="s2">"</span><span class="si">${</span><span class="nv">0</span><span class="si">}</span><span class="s2"> </span><span class="si">${</span><span class="nv">CMDLN_ARGS</span><span class="si">}</span><span class="s2">"</span> <span class="c"># Call this prog as root</span>
+       <span class="nb">exit</span> <span class="si">${</span><span class="p">?</span><span class="si">}</span>  <span class="c"># since we're 'execing' above, we wont reach this exit</span>
                   <span class="c"># unless something goes wrong.</span>
      <span class="k">fi</span>
     <span class="o">}</span>
     chk_root
-    <span class="nb">cat</span> /etc/apache2/sites-available/template | sed <span class="s2">"s/template/</span><span class="nv">$1</span><span class="s2">/g"</span> |cat <span class="o">&gt;</span> /etc/apache2/sites-available/<span class="nv">$1</span>
-    ln <span class="nt">-s</span> /etc/apache2/sites-available/<span class="nv">$1</span> /etc/apache2/sites-enabled/<span class="nv">$1</span>
-    <span class="nb">cat</span> /etc/nginx/sites-available/template | sed <span class="s2">"s/template/</span><span class="nv">$1</span><span class="s2">/g"</span> |cat <span class="o">&gt;</span> /etc/nginx/sites-available/<span class="nv">$1</span>
-    ln <span class="nt">-s</span> /etc/nginx/sites-available/<span class="nv">$1</span> /etc/nginx/sites-enabled/<span class="nv">$1</span>
-    <span class="k">if</span> <span class="o">[</span> <span class="nt">-d</span> /var/www/<span class="nv">$1</span> <span class="o">]</span><span class="p">;</span>
-    <span class="k">then
-      </span><span class="nb">echo</span> <span class="s2">"host directory exists"</span><span class="p">;</span>
-    <span class="k">else
-      </span><span class="nb">echo</span> <span class="s2">"creating directory"</span>
+    cat /etc/apache2/sites-available/template <span class="p">|</span> sed <span class="s2">"s/template/</span><span class="nv">$1</span><span class="s2">/g"</span> <span class="p">|</span>cat &gt; /etc/apache2/sites-available/<span class="nv">$1</span>
+    ln -s /etc/apache2/sites-available/<span class="nv">$1</span> /etc/apache2/sites-enabled/<span class="nv">$1</span>
+    cat /etc/nginx/sites-available/template <span class="p">|</span> sed <span class="s2">"s/template/</span><span class="nv">$1</span><span class="s2">/g"</span> <span class="p">|</span>cat &gt; /etc/nginx/sites-available/<span class="nv">$1</span>
+    ln -s /etc/nginx/sites-available/<span class="nv">$1</span> /etc/nginx/sites-enabled/<span class="nv">$1</span>
+    <span class="k">if</span> <span class="o">[</span> -d /var/www/<span class="nv">$1</span> <span class="o">]</span><span class="p">;</span>
+    <span class="k">then</span>
+      <span class="nb">echo</span> <span class="s2">"host directory exists"</span><span class="p">;</span>
+    <span class="k">else</span>
+      <span class="nb">echo</span> <span class="s2">"creating directory"</span>
       mkdir <span class="s2">"/var/www/</span><span class="nv">$1</span><span class="s2">"</span>
-    <span class="k">fi
-    </span>chown <span class="nt">-R</span> www-data:www-data /var/www/<span class="nv">$1</span>
+    <span class="k">fi</span>
+    chown -R www-data:www-data /var/www/<span class="nv">$1</span>
     /etc/init.d/apache2 restart
-    /etc/init.d/nginx restart</code></pre></figure>
-
-<p>Put this say in your home folder and give it executable permission with <code class="highlighter-rouge">chmod 755 new_host</code> or whatever you named the file.</p>
-
-<p>Then run it with <code class="highlighter-rouge">./new_host example.com</code></p>
-
-<p>This will create a folder in <code class="highlighter-rouge">/var/www/example.com</code>, copy the updated template virtual host configuration to the required location and restart apache and nginx.</p>
-
+    /etc/init.d/nginx restart
+</pre></div>
+<p>Put this say in your home folder and give it executable permission with <code>chmod 755 new_host</code> or whatever you named the file.</p>
+<p>Then run it with <code>./new_host example.com</code></p>
+<p>This will create a folder in <code>/var/www/example.com</code>, copy the updated template virtual host configuration to the required location and restart apache and nginx.</p>
 <p>Now put some content in that folder and configure your mysql connection if neccesary</p>
-
 <p>You should now be able to browse to example.com and see your brand new site. Some quick benchmarking with ab gives roughly a tenfold increase in requests per second, depending on the configuration of the website itself</p>
-
 <p>These are some rough numbers for <a href="http://6px.eu">Six Pixels</a>, built with Kohana2 without any caching mechanism</p>
-
-<p><code class="highlighter-rouge">ab -c20 -n200 http://6px.eu:8080/</code> is hitting Apache on port 8080</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Server Hostname:        6px.eu
+<p><code>ab -c20 -n200 http://6px.eu:8080/</code> is hitting Apache on port 8080</p>
+<pre><code>Server Hostname:        6px.eu
 Server Port:            8080
 
 Document Path:          /
@@ -248,12 +230,9 @@ HTML transferred:       2420200 bytes
 Requests per second:    0.71 [#/sec] (mean)
 Time per request:       28267.940 [ms] (mean)
 Time per request:       1413.397 [ms] (mean, across all concurrent requests)
-Transfer rate:          8.59 [Kbytes/sec] received
-</code></pre></div></div>
-
-<p>Now with nginx <code class="highlighter-rouge">ab -c20 -n200 http://6px.eu/</code></p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Server Hostname:        6px.eu
+Transfer rate:          8.59 [Kbytes/sec] received</code></pre>
+<p>Now with nginx <code>ab -c20 -n200 http://6px.eu/</code></p>
+<pre><code>Server Hostname:        6px.eu
 Server Port:            80
 
 Document Path:          /
@@ -269,36 +248,27 @@ HTML transferred:       2416200 bytes
 Requests per second:    4.93 [#/sec] (mean)
 Time per request:       4060.612 [ms] (mean)
 Time per request:       203.031 [ms] (mean, across all concurrent requests)
-Transfer rate:          59.69 [Kbytes/sec] received
-</code></pre></div></div>
-
-<h3 id="update">Update:</h3>
-
+Transfer rate:          59.69 [Kbytes/sec] received</code></pre>
+<h3>Update:</h3>
 <p>As rightly noted by <a href="https://twitter.com/#!/arnaud_lb/status/196610128261296129">@arnaud_lb</a> the benchmarks should give nearly the same results,
-as nginx is waiting for Apache to return it’s data before sending it along.
+as nginx is waiting for Apache to return it's data before sending it along.
 What happened in those benchmarks is that <a href="http://cloudflare.com">cloudflare.com</a> (highly recommended by the way) was caching some results and not others.</p>
-
 <p>When I tried on localhost, the results were effectively the same.
 So the way to get better performance is to get nginx to cache the results from apache, by adding the following to your nginx virtual host definition :</p>
-
-<figure class="highlight"><pre><code class="language-nginx" data-lang="nginx">    <span class="k">proxy_cache</span> <span class="s">one</span><span class="p">;</span>
+<div class="highlight"><pre>    <span class="k">proxy_cache</span> <span class="no">on</span><span class="s">e</span><span class="p">;</span>
     <span class="k">proxy_cache_use_stale</span> <span class="s">error</span> <span class="s">timeout</span> <span class="s">invalid_header</span> <span class="s">updating</span><span class="p">;</span>
     <span class="k">proxy_cache_key</span> <span class="nv">$scheme$host$request_uri</span><span class="p">;</span>
     <span class="k">proxy_cache_valid</span>       <span class="mi">200</span> <span class="mi">301</span> <span class="mi">302</span> <span class="mi">20m</span><span class="p">;</span>
     <span class="k">proxy_cache_valid</span>       <span class="mi">404</span> <span class="mi">1m</span><span class="p">;</span>
-    <span class="k">proxy_cache_valid</span>       <span class="s">any</span> <span class="mi">15m</span><span class="p">;</span></code></pre></figure>
-
-<p>where the <code class="highlighter-rouge">proxy_cache</code> named <code class="highlighter-rouge">one</code> is defined in nginx.conf as such :</p>
-
-<figure class="highlight"><pre><code class="language-nginx" data-lang="nginx">    <span class="k">proxy_cache_path</span> <span class="n">/usr/local/nginx/proxy</span> <span class="s">levels=1:2</span> <span class="s">keys_zone=one:15m</span> <span class="s">inactive=7d</span> <span class="s">max_size=1000m</span><span class="p">;</span></code></pre></figure>
-
-<p>The <code class="highlighter-rouge">proxy_cache_valid</code> entries above define different cache times for various response codes</p>
-
+    <span class="k">proxy_cache_valid</span>       <span class="s">any</span> <span class="mi">15m</span><span class="p">;</span>
+</pre></div>
+<p>where the <code>proxy_cache</code> named <code>one</code> is defined in nginx.conf as such :</p>
+<div class="highlight"><pre>    <span class="k">proxy_cache_path</span> <span class="s">/usr/local/nginx/proxy</span> <span class="s">levels=1:2</span> <span class="s">keys_zone=one:15m</span> <span class="s">inactive=7d</span> <span class="s">max_size=1000m</span><span class="p">;</span>
+</pre></div>
+<p>The <code>proxy_cache_valid</code> entries above define different cache times for various response codes</p>
 <p>And here are the real benchmarks :</p>
-
-<h4 id="apache">Apache:</h4>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Server Hostname:        direct.6px.eu
+<h4>Apache:</h4>
+<pre><code>Server Hostname:        direct.6px.eu
 Server Port:            8080
 
 Document Path:          /
@@ -314,12 +284,9 @@ HTML transferred:       2297400 bytes
 Requests per second:    13.26 [#/sec] (mean)
 Time per request:       754.075 [ms] (mean)
 Time per request:       75.408 [ms] (mean, across all concurrent requests)
-Transfer rate:          151.43 [Kbytes/sec] received
-</code></pre></div></div>
-
-<h4 id="nginx">Nginx:</h4>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Server Hostname:        direct.6px.eu
+Transfer rate:          151.43 [Kbytes/sec] received</code></pre>
+<h4>Nginx:</h4>
+<pre><code>Server Hostname:        direct.6px.eu
 Server Port:            80
 
 Document Path:          /
@@ -335,18 +302,13 @@ HTML transferred:       606200 bytes
 Requests per second:    7305.94 [#/sec] (mean)
 Time per request:       1.369 [ms] (mean)
 Time per request:       0.137 [ms] (mean, across all concurrent requests)
-Transfer rate:          23351.88 [Kbytes/sec] received
-</code></pre></div></div>
-
-<p>Just, wow…</p>
-
+Transfer rate:          23351.88 [Kbytes/sec] received</code></pre>
+<p>Just, wow...</p>
 <p>Careful though as this will wreak havoc on your sessions, at the minimum you can disable caching for logged-in users with</p>
-
-<figure class="highlight"><pre><code class="language-nginx" data-lang="nginx">    <span class="k">proxy_cache_bypass</span> <span class="nv">$cookie_session</span><span class="p">;</span>
-    <span class="k">proxy_no_cache</span> <span class="nv">$cookie_session</span><span class="p">;</span></code></pre></figure>
-
-<p>where <code class="highlighter-rouge">session</code> is the name of your cookie</p>
-
+<div class="highlight"><pre>    <span class="k">proxy_cache_bypass</span> <span class="nv">$cookie_session</span><span class="p">;</span>
+    <span class="k">proxy_no_cache</span> <span class="nv">$cookie_session</span><span class="p">;</span>
+</pre></div>
+<p>where <code>session</code> is the name of your cookie</p>
 
   </div>
 
@@ -356,18 +318,17 @@ Transfer rate:          23351.88 [Kbytes/sec] received
 
    <!-- POST NAVIGATION -->
    <div class="postNav clearfix">
-     
+    
       <a class="prev" href="/2012/04/getting-your-users-gmail-contacts.html"><span>&laquo;&nbsp;Import contacts from Google by entering your email and password</span>
       
     </a>
-      
-      
+    
+    
       <a class="next" href="/2013/05/building-and-using-minimalist-running-shoes.html"><span>How I built running shoes for my whole family in one sunday afternoon (Huarache sandals)&nbsp;&raquo;</span>
-       
+      
       </a>
-     
+    
 </div>
-
       </div>
    </div><!-- end .content -->
 

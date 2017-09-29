@@ -5,9 +5,9 @@
     <description>Jonathan Foucher's blog &amp; web development notebook</description>
     <link>https://jfoucher.com/</link>
     <atom:link href="https://jfoucher.com/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>2017-09-29T12:41:16+00:00</pubDate>
-    <lastBuildDate>2017-09-29T12:41:16+00:00</lastBuildDate>
-    <generator>Jekyll v</generator>
+    <pubDate>2017-09-29T12:43:46+00:00</pubDate>
+    <lastBuildDate>2017-09-29T12:43:46+00:00</lastBuildDate>
+    <generator>Stati (https://stati.jfoucher.com)</generator>
     
       <item>
         <title>Stati, a PHP static site generator that works on any existing Jekyll site</title>

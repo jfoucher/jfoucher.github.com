@@ -5,8 +5,8 @@
     <description>Jonathan Foucher's blog &amp; web development notebook</description>
     <link>https://jfoucher.com/</link>
     <atom:link href="https://jfoucher.com/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>2017-09-29T12:43:46+00:00</pubDate>
-    <lastBuildDate>2017-09-29T12:43:46+00:00</lastBuildDate>
+    <pubDate>2017-09-29T17:52:39+00:00</pubDate>
+    <lastBuildDate>2017-09-29T17:52:39+00:00</lastBuildDate>
     <generator>Stati (https://stati.jfoucher.com)</generator>
     
       <item>
@@ -23,7 +23,8 @@
 &lt;p&gt;The second plugin is a related posts plugin. For each post it calculates the levenshtein distance of it's title to all the other posts titles and gets the 10 best matches. Lots of room for improvement here.&lt;/p&gt;
 &lt;h3&gt;Try it now!&lt;/h3&gt;
 &lt;p&gt;So basically that's it, a fun project that I will probably continue to use and improve. If you'd like to give it a try, you can &lt;a href=&quot;https://github.com/jfoucher/stati/releases/latest&quot;&gt;get the latest release from github&lt;/a&gt; and, most importantly, &lt;a href=&quot;https://github.com/jfoucher/stati/issues/new&quot;&gt;open an issue&lt;/a&gt; if you run into a snag!&lt;/p&gt;
-&lt;p&gt;PS. I just remembered I have a &lt;a href=&quot;/2005/03/changes-coming-soon.html&quot;&gt;history&lt;/a&gt; of &lt;a href=&quot;/2005/03/new-blog.html&quot;&gt;doing this kind of thing&lt;/a&gt;&lt;/p&gt;</description>
+&lt;p&gt;PS. I just remembered I have a &lt;a href=&quot;/2005/03/changes-coming-soon.html&quot;&gt;history&lt;/a&gt; of &lt;a href=&quot;/2005/03/new-blog.html&quot;&gt;doing this kind of thing&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;UPDATE : Just got some &lt;a href=&quot;https://stati.jfoucher.com&quot;&gt;documentation&lt;/a&gt; online&lt;/p&gt;</description>
         
           <description>Why and how I built a Jekyll clone in PHP</description>
         

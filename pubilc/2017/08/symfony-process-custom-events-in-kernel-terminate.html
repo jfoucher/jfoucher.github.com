@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7"><![endif]-->
+<!--[if IE 7]><html class="no-js lt-ie9 lt-ie8" <![endif]-->
+<!--[if IE 8]><html class="no-js lt-ie9" <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="When you have some long running processes to trigger on request, best practice with Symfony is to have them run in the kernel.terminate event.">
+    <meta name="generator" content="Stati (https://stati.jfoucher.com)" />
+    
+    
+    <title>Processing custom events in kernel.terminate</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/assets/img/favicon.ico" />
+
+    <!-- Come and get me RSS readers -->
+    <link rel="alternate" type="application/rss+xml" title="Geeky Nuggets" href="https://jfoucher.com/feed.xml" />
+    
+    
+    <!--[if IE 8]><link rel="stylesheet" href="/assets/css/ie.css"><![endif]-->
+    <link rel="canonical" href="https://jfoucher.com/2017/08/symfony-process-custom-events-in-kernel-terminate.html">
+
+    <!-- Modernizr -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <script src="/assets/js/modernizr.custom.15390.min.js" type="text/javascript"></script>
+    <![endif]-->
+    
+    <style>
+.container:after,.header .container:after{content:" ";display:block;clear:both}.header h1 a,.nav-collapse ul li a{text-decoration:none;color:#fff}h1{margin:.5rem 0 1.5rem;font-family:"Open Sans",Helvetica,Arial,sans-serif;font-size:1.6em;line-height:1.25}html{box-sizing:border-box}*,:after,:before{box-sizing:inherit}body{font-family:"PT Serif",Georgia,Times,serif;line-height:1.75;font-size:112.5%;color:#111;overflow-x:hidden;margin:0}.header h1,.nav-collapse ul li a,.post .meta{font-family:"Open Sans",Helvetica,Arial,sans-serif}body p,body ul{margin:0 0 2rem}.container{max-width:610px;margin-left:auto;margin-right:auto;padding:0 20px}a{color:#fe941c}.nav-collapse{z-index:1}.nav-collapse ul{margin:0;padding:0;width:100%;display:block;list-style:none}.nav-collapse ul li{width:100%;display:block;background:#fe941c;border-bottom:2px solid #fea035}.nav-collapse ul li a{display:block;padding:5px 2rem}.noList{list-style:none;padding-left:0;margin-left:0}.content{padding-top:1em}.header{background-color:#fe941c;background-image:url(/assets/img/touring.jpg);background-size:cover;background-position:center bottom;color:#fff;padding:0;height:3em}.header .container{padding:0;max-width:100%;margin-left:auto;margin-right:auto}.header h1{margin:0;float:left;padding-left:2rem;font-size:1em;line-height:3em;font-weight:800;text-transform:uppercase}.post .postTitle{text-align:center;margin-top:2rem;margin-bottom:1rem}.post .meta{text-align:center;color:gray;font-weight:300}@media only screen and (min-width:800px){.container,.header .container{max-width:800px;margin-left:auto;margin-right:auto}.content{padding-top:0;position:relative;z-index:1}.content:after{z-index:-1;background:#fff;content:"";display:block;width:100%;height:5em;position:absolute;top:-2em;left:0;-webkit-transform:skewY(-2deg);-ms-transform:skewY(-2deg);transform:skewY(-2deg);-webkit-transform-origin:bottom left;-ms-transform-origin:bottom left;transform-origin:bottom left}.container:after,.header .container:after{content:" ";display:block;clear:both}.container{padding:0}.header{height:15em;position:relative;padding-bottom:2em}.header .container{position:relative;top:50%;-webkit-transform:translateY(-50%);-ms-transform:translateY(-50%);transform:translateY(-50%)}.header h1{font-size:2em;line-height:1;letter-spacing:-3px;padding-left:0}.header nav{float:left;clear:left;margin-left:-10px;margin-left:calc(-5px - .25em)}.header nav ul{margin:0}.header nav ul li{display:inline-block;line-height:1em;background:0 0;padding:0 5px;border:none;width:auto}.header nav ul li a{color:#fff;font-size:.9em;text-decoration:none;padding:0 .25em}.header nav ul li.current{padding-bottom:.25em;border-bottom:4px solid rgba(255,255,255,.4)}.post h1,.post p{width:74.46809%;float:none;margin:0 auto 2rem}.post h1{margin:1rem auto}}
+        </style>
+
+     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
+<script>
+    if(navigator.userAgent.indexOf("Speed Insights") == -1) {
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-8465441-2', 'auto');
+        ga('send', 'pageview');
+    }
+
+</script>
+ 
+
+<!-- TWITTER CARD -->
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:site" content="@jfoucher" />
+<meta name="twitter:title" content="Processing custom events in kernel.terminate" />
+<meta name="twitter:description" content='Read "Processing custom events in kernel.terminate" on Geeky Nuggets' />
+
+<meta name="twitter:image" content="https://jfoucher.com/uploads/2017/08/symfony-kernel.terminate.png" />
+
+
+
+
+</head>
+
+
+<body>
+
+    <div class="header">
+     <div class="container">
+         <h1 class="logo"><a href="/">Geeky Nuggets</a></h1>
+         <nav class="nav-collapse">
+             <ul class="noList">
+                 
+                 <li class="element first  ">
+                     <a href="/">Home</a>
+                 </li> 
+                 
+                 <li class="element   ">
+                     <a href="/about.html">About</a>
+                 </li> 
+                 
+                 <li class="element   ">
+                     <a href="/contact.html">Contact</a>
+                 </li> 
+                 
+                 <li class="element   last">
+                     <a href="/projects.html">Projects</a>
+                 </li> 
+                 
+
+             </ul>
+         </nav>
+     </div>
+ </div><!-- end .header -->
+
+
+   <div class="content">
+      <div class="container">
+         <div class="post">
+  
+  <h1 class="postTitle"><a href="">Processing custom events in kernel.terminate</a></h1>
+  <p class="meta">August 25, 2017 | <span class="time">8</span> Minute Read</p>
+  
+  <!-- <div class="featuredImage">
+      <img src="/uploads/2017/08/symfony-kernel.terminate.png" alt="" />
+    </div> -->
+
+  <h3 id="what-is-the-kernelterminate-event">What is the kernel.terminate event?</h3>
+
+<p>It is the last event that is triggered in Symfony, just after the response has been sent to the client (only on php-fpm). This means that we can do some heavy lifting here because our response time is not affected. The client gets the response quickly and our processing will occur afterwards.</p>
+
+<p>The Symfony SwiftMailer bundle does this by default, so we should be ok with emails, but my latest project needs to connect to various APIs on some events, and this takes quite some time.</p>
+
+<p>In this post I will explain the method I use to make them run in the <code class="highlighter-rouge">kernel.terminate</code> event.</p>
+
+<p>For a primer about Symfony events, I recommend the <a href="https://symfony.com/doc/current/reference/events.html">official Symfony documentation</a></p>
+
+<h3 id="custom-events">Custom events</h3>
+
+<p>Custom events are trigerred from our own code, generally in the controller, and it goes something like this:</p>
+
+<figure class="highlight"><pre><code class="language-php" data-lang="php"><span class="sd">/** 
+* @var $dispatcher \Symfony\Component\EventDispatcher\EventDispatcherInterface 
+*/</span>
+<span class="c1">//Get the event dispatcher from the container
+</span><span class="nv">$dispatcher</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">get</span><span class="p">(</span><span class="s1">'event_dispatcher'</span><span class="p">);</span>
+<span class="c1">//Create our custom event
+</span><span class="nv">$event</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">NewUserEvent</span><span class="p">(</span><span class="nv">$user</span><span class="p">,</span> <span class="nv">$request</span><span class="p">);</span>
+<span class="c1">//Dispatch the event
+</span><span class="nv">$dispatcher</span><span class="o">-&gt;</span><span class="na">dispatch</span><span class="p">(</span><span class="nx">AppEvents</span><span class="o">::</span><span class="na">NEW_USER</span><span class="p">,</span> <span class="nv">$event</span><span class="p">);</span></code></pre></figure>
+
+<h3 id="the-event-subscriber">The event subscriber</h3>
+
+<p>Then we have an EventSubscriber that will listen to our custom events, in my case it’s called <code class="highlighter-rouge">ApiSubscriber</code> and is located in <code class="highlighter-rouge">src/EventSubscriber</code>. In this case it listens to two different events: 
+<code class="highlighter-rouge">AppEvents::NEW_USER</code> and <code class="highlighter-rouge">AppEvents::DELETE_USER</code>.</p>
+
+<figure class="highlight"><pre><code class="language-php" data-lang="php"><span class="k">class</span> <span class="nc">ApiSubscriber</span> <span class="k">implements</span> <span class="nx">EventSubscriberInterface</span> <span class="p">{</span>
+
+    <span class="k">protected</span> <span class="nv">$container</span><span class="p">;</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">__construct</span><span class="p">(</span><span class="nx">\Symfony\Component\DependencyInjection\ContainerInterface</span> <span class="nv">$container</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">container</span> <span class="o">=</span> <span class="nv">$container</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">static</span> <span class="k">function</span> <span class="nf">getSubscribedEvents</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="k">array</span><span class="p">(</span>
+            <span class="nx">AppEvents</span><span class="o">::</span><span class="na">NEW_USER</span> <span class="o">=&gt;</span> <span class="s1">'newUser'</span><span class="p">,</span>
+            <span class="nx">AppEvents</span><span class="o">::</span><span class="na">DELETE_USER</span> <span class="o">=&gt;</span> <span class="s1">'deleteUser'</span><span class="p">,</span>
+        <span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="c1">//...
+</span><span class="p">}</span></code></pre></figure>
+
+<h3 id="configure-the-service">Configure the service</h3>
+
+<p>You will notice that I inject the container as it makes it easy to get everything we need, such as parameters or other services.</p>
+
+<p>Don’t forget to configure the event subscriber in <code class="highlighter-rouge">app/config/services.yml</code> like so:</p>
+
+<figure class="highlight"><pre><code class="language-yaml" data-lang="yaml"><span class="na">services</span><span class="pi">:</span>
+    <span class="s">api.subscriber</span><span class="pi">:</span>
+        <span class="na">class</span><span class="pi">:</span> <span class="s">AppBundle\EventSubscriber\ApiSubscriber</span>
+        <span class="na">arguments</span><span class="pi">:</span> <span class="pi">[</span><span class="s2">"</span><span class="s">@service_container"</span><span class="pi">]</span>
+        <span class="na">tags</span><span class="pi">:</span>
+            <span class="pi">-</span> <span class="pi">{</span> <span class="nv">name</span><span class="pi">:</span> <span class="nv">kernel.event_subscriber</span> <span class="pi">}</span></code></pre></figure>
+
+<p>Now our event subscriber is ready for action whenever we trigger the event from our controllers.</p>
+
+<h3 id="handle-your-custom-event">Handle your custom event</h3>
+
+<p>The event handling function is where the magic happens. Say when a new user is created, the <code class="highlighter-rouge">AppEvents::NEW_USER</code> is triggered and the <code class="highlighter-rouge">ApiSubscriber::newUser</code> function is called.</p>
+
+<p>Here it is, I’ll explain later</p>
+
+<figure class="highlight"><pre><code class="language-php" data-lang="php"><span class="k">public</span> <span class="k">function</span> <span class="nf">newUser</span><span class="p">(</span><span class="nx">NewUserEvent</span> <span class="nv">$newUserEvent</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="c1">// Get the request from our custom event
+</span>    <span class="nv">$request</span> <span class="o">=</span> <span class="nv">$newUserEvent</span><span class="o">-&gt;</span><span class="na">getRequest</span><span class="p">();</span>
+    <span class="c1">// Add custom attributes to the request, so we can retrieve them later in the kernel.terminate event
+</span>    <span class="nv">$request</span><span class="o">-&gt;</span><span class="na">attributes</span><span class="o">-&gt;</span><span class="na">add</span><span class="p">([</span>
+        <span class="s1">'user'</span> <span class="o">=&gt;</span> <span class="nv">$newUserEvent</span><span class="o">-&gt;</span><span class="na">getUser</span><span class="p">(),</span>
+        <span class="s1">'thing_api_key'</span> <span class="o">=&gt;</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">container</span><span class="o">-&gt;</span><span class="na">getParameter</span><span class="p">(</span><span class="s1">'thing_api_key'</span><span class="p">),</span>
+        <span class="s1">'thing_api_user'</span> <span class="o">=&gt;</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">container</span><span class="o">-&gt;</span><span class="na">getParameter</span><span class="p">(</span><span class="s1">'thing_api_user'</span><span class="p">),</span>
+    <span class="p">]);</span>
+    <span class="c1">// Add our custom listener to the kernel.terminate event
+</span>    <span class="c1">// We will see later what the createThingOnApi static function looks like
+</span>    <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">container</span><span class="o">-&gt;</span><span class="na">get</span><span class="p">(</span><span class="s1">'event_dispatcher'</span><span class="p">)</span><span class="o">-&gt;</span><span class="na">addListener</span><span class="p">(</span><span class="s1">'kernel.terminate'</span><span class="p">,</span> <span class="p">[</span><span class="nx">self</span><span class="o">::</span><span class="na">class</span><span class="p">,</span> <span class="s1">'createThingOnApi'</span><span class="p">]);</span>
+
+    <span class="c1">// This would also work but is not as clean in my opinion
+</span>    <span class="c1">// $this-&gt;container-&gt;get('event_dispatcher')-&gt;addListener('kernel.terminate', function(PostResponseEvent $event) {
+</span>        <span class="c1">// Do things on the API
+</span>    <span class="c1">// });
+</span><span class="p">}</span></code></pre></figure>
+
+<p>So, from this code it is clear what happens. We first get the request from our custom event, then we set custom attributes on the request (simply because we need to retrieve them later from our static function) and finally we add a new listener (our static function, could also be an anonymous function) to the kernel.terminate event.</p>
+
+<h3 id="do-the-job">Do the job</h3>
+
+<p>The final piece of the puzzle is our <code class="highlighter-rouge">createThingOnApi</code> static function that will do the real work.</p>
+
+<p>Here it is:</p>
+
+<figure class="highlight"><pre><code class="language-php" data-lang="php"><span class="k">public</span> <span class="k">static</span> <span class="k">function</span> <span class="nf">createThingOnApi</span><span class="p">(</span><span class="nx">PostResponseEvent</span> <span class="nv">$event</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="nv">$attrs</span> <span class="o">=</span> <span class="nv">$event</span><span class="o">-&gt;</span><span class="na">getRequest</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">attributes</span><span class="p">;</span>
+    <span class="nv">$user</span> <span class="o">=</span> <span class="nv">$attrs</span><span class="o">-&gt;</span><span class="na">get</span><span class="p">(</span><span class="s1">'user'</span><span class="p">);</span>
+
+    <span class="nv">$data</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s2">"type"</span> <span class="o">=&gt;</span> <span class="s2">"newUser"</span><span class="p">,</span> 
+        <span class="s2">"name"</span> <span class="o">=&gt;</span> <span class="nv">$user</span><span class="o">-&gt;</span><span class="na">getName</span><span class="p">(),</span>
+        <span class="c1">//...
+</span>    <span class="p">];</span>
+
+    <span class="nv">$ch</span> <span class="o">=</span> <span class="nb">curl_init</span><span class="p">(</span><span class="s2">"https://api.thing.com/users"</span><span class="p">);</span>
+    <span class="nb">curl_setopt</span><span class="p">(</span><span class="nv">$ch</span><span class="p">,</span> <span class="nx">CURLOPT_CUSTOMREQUEST</span><span class="p">,</span> <span class="s2">"POST"</span><span class="p">);</span>
+    <span class="nb">curl_setopt</span><span class="p">(</span><span class="nv">$ch</span><span class="p">,</span> <span class="nx">CURLOPT_POSTFIELDS</span><span class="p">,</span> <span class="nb">json_encode</span><span class="p">(</span><span class="nv">$data</span><span class="p">));</span>
+    <span class="nb">curl_setopt</span><span class="p">(</span><span class="nv">$ch</span><span class="p">,</span> <span class="nx">CURLOPT_RETURNTRANSFER</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
+    <span class="nb">curl_setopt</span><span class="p">(</span><span class="nv">$ch</span><span class="p">,</span> <span class="nx">CURLOPT_HTTPHEADER</span><span class="p">,</span> <span class="p">[</span>
+        <span class="s1">'Content-Type: application/json'</span><span class="p">,</span>
+        <span class="s1">'Content-Length: '</span> <span class="o">.</span> <span class="nb">strlen</span><span class="p">(</span><span class="nv">$data_string</span><span class="p">),</span>
+        <span class="s1">'X-Auth-Key: '</span> <span class="o">.</span> <span class="nv">$attrs</span><span class="o">-&gt;</span><span class="na">get</span><span class="p">(</span><span class="s1">'thing_api_key'</span><span class="p">),</span>
+        <span class="s1">'X-Auth-User: '</span> <span class="o">.</span> <span class="nv">$attrs</span><span class="o">-&gt;</span><span class="na">get</span><span class="p">(</span><span class="s1">'thing_api_user'</span><span class="p">)</span>
+    <span class="p">]);</span>
+
+    <span class="nb">curl_exec</span><span class="p">(</span><span class="nv">$ch</span><span class="p">);</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>This basically retrives our data from the request attributes, and then make some sort of curl request to an external API.</p>
+
+<h3 id="all-done-">All done !</h3>
+
+<p>Do this and watch your response times go way down (<a href="https://symfony.com/doc/current/components/http_kernel.html#component-http-kernel-kernel-terminate">only on php-pfm</a>)</p>
+
+<p>I’m not saying the is the best or even the only method to achieve this, just the one I personally use. the alternative would be some sort of mesasge queue, but it still seems like premature optimisation for an app of this size. If you have other options to achieve this, let me know in the comments on HN.</p>
+
+<h3 id="profiler-results">Profiler results</h3>
+
+<p class="image"><img src="/uploads/2017/08/symfony-kernel.terminate.png" alt="Profiler results" /></p>
+
+
+  </div>
+
+
+  
+  <h4 id="hnComments" style="margin-top:4em" data-hn-id="15100410">Comments from <a href="https://news.ycombinator.com/item?id=15100410">HN</a> <a href="https://news.ycombinator.com/item?id=15100410" style="font-weight:normal; font-size: 0.8em;margin-left:20px">Discuss</a></h4>
+  
+  <script src="/assets/js/hn.js"></script>
+  
+
+
+   <!-- POST NAVIGATION -->
+   <div class="postNav clearfix">
+    
+      <a class="prev image" href="/2017/08/timeseries-charts-with-chart.js.html"><span>&laquo;&nbsp;Timeseries charts with Chart.js</span>
+      
+        <img src="/uploads/2017/08/chart.png" alt="">
+      
+    </a>
+    
+    
+      <a class="next" href="/2017/09/stati-static-site-generator.html"><span>Stati, a PHP static site generator that works on any existing Jekyll site&nbsp;&raquo;</span>
+      
+      </a>
+    
+</div>
+
+      </div>
+   </div><!-- end .content -->
+
+   
+   
+   <div class="footer">
+   <div class="container">
+      <p class="copy">&copy; 2017 <a href="http://jfoucher.com">Jonathan Foucher.</a></p>
+
+      <div class="footer-links"> 
+         <ul class="noList"> 
+            
+            <li><a href="https://www.facebook.com/jfoucher">
+                  <svg id="facebook-square" class="custom-icon" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 100 100" style="height: 30px; width: 30px;"><circle class="outer-shape" cx="50" cy="50" r="48" style="opacity: 1;"></circle>
+                  <path class="inner-shape" style="opacity: 1;" transform="translate(25,25) scale(0.5)" d="M82.667,1H17.335C8.351,1,1,8.351,1,17.336v65.329c0,8.99,7.351,16.335,16.334,16.335h65.332 C91.652,99.001,99,91.655,99,82.665V17.337C99,8.353,91.652,1.001,82.667,1L82.667,1z M84.318,50H68.375v42.875H50V50h-8.855V35.973 H50v-9.11c0-12.378,5.339-19.739,19.894-19.739h16.772V22.3H72.967c-4.066-0.007-4.57,2.12-4.57,6.078l-0.023,7.594H86.75 l-2.431,14.027V50z"></path>
+                  </svg>
+            </a></li>
+            
+            
+            <li><a href="https://twitter.com/jfoucher">
+                  <svg id="twitter" class="custom-icon" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 100 100" style="height: 30px; width: 30px;"><circle class="outer-shape" cx="50" cy="50" r="48" style="opacity: 1;"></circle>
+                  <path class="inner-shape" style="opacity: 1;" transform="translate(25,25) scale(0.5)" d="M99.001,19.428c-3.606,1.608-7.48,2.695-11.547,3.184c4.15-2.503,7.338-6.466,8.841-11.189 c-3.885,2.318-8.187,4-12.768,4.908c-3.667-3.931-8.893-6.387-14.676-6.387c-11.104,0-20.107,9.054-20.107,20.223 c0,1.585,0.177,3.128,0.52,4.609c-16.71-0.845-31.525-8.895-41.442-21.131C6.092,16.633,5.1,20.107,5.1,23.813 c0,7.017,3.55,13.208,8.945,16.834c-3.296-0.104-6.397-1.014-9.106-2.529c-0.002,0.085-0.002,0.17-0.002,0.255 c0,9.799,6.931,17.972,16.129,19.831c-1.688,0.463-3.463,0.71-5.297,0.71c-1.296,0-2.555-0.127-3.783-0.363 c2.559,8.034,9.984,13.882,18.782,14.045c-6.881,5.424-15.551,8.657-24.971,8.657c-1.623,0-3.223-0.096-4.796-0.282 c8.898,5.738,19.467,9.087,30.82,9.087c36.982,0,57.206-30.817,57.206-57.543c0-0.877-0.02-1.748-0.059-2.617 C92.896,27.045,96.305,23.482,99.001,19.428z"></path>
+                  </svg>
+            </a></li>
+            
+            
+            <li><a href="https://github.com/jfoucher">
+                  <svg id="github" class="custom-icon" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 100 100" style="height: 30px; width: 30px;"><circle class="outer-shape" cx="50" cy="50" r="48" style="opacity: 1;"></circle>
+                  <path class="inner-shape" style="opacity: 1;" transform="translate(25,25) scale(0.5)" d="M50,1C22.938,1,1,22.938,1,50s21.938,49,49,49s49-21.938,49-49S77.062,1,50,1z M79.099,79.099 c-3.782,3.782-8.184,6.75-13.083,8.823c-1.245,0.526-2.509,0.989-3.79,1.387v-7.344c0-3.86-1.324-6.699-3.972-8.517 c1.659-0.16,3.182-0.383,4.57-0.67c1.388-0.287,2.855-0.702,4.402-1.245c1.547-0.543,2.935-1.189,4.163-1.938 c1.228-0.75,2.409-1.723,3.541-2.919s2.082-2.552,2.847-4.067s1.372-3.334,1.818-5.455c0.446-2.121,0.67-4.458,0.67-7.01 c0-4.945-1.611-9.155-4.833-12.633c1.467-3.828,1.308-7.991-0.478-12.489l-1.197-0.143c-0.829-0.096-2.321,0.255-4.474,1.053 c-2.153,0.798-4.57,2.105-7.249,3.924c-3.797-1.053-7.736-1.579-11.82-1.579c-4.115,0-8.039,0.526-11.772,1.579 c-1.69-1.149-3.294-2.097-4.809-2.847c-1.515-0.75-2.727-1.26-3.637-1.532c-0.909-0.271-1.754-0.439-2.536-0.503 c-0.782-0.064-1.284-0.079-1.507-0.048c-0.223,0.031-0.383,0.064-0.478,0.096c-1.787,4.53-1.946,8.694-0.478,12.489 c-3.222,3.477-4.833,7.688-4.833,12.633c0,2.552,0.223,4.889,0.67,7.01c0.447,2.121,1.053,3.94,1.818,5.455 c0.765,1.515,1.715,2.871,2.847,4.067s2.313,2.169,3.541,2.919c1.228,0.751,2.616,1.396,4.163,1.938 c1.547,0.543,3.014,0.957,4.402,1.245c1.388,0.287,2.911,0.511,4.57,0.67c-2.616,1.787-3.924,4.626-3.924,8.517v7.487 c-1.445-0.43-2.869-0.938-4.268-1.53c-4.899-2.073-9.301-5.041-13.083-8.823c-3.782-3.782-6.75-8.184-8.823-13.083 C9.934,60.948,8.847,55.56,8.847,50s1.087-10.948,3.231-16.016c2.073-4.899,5.041-9.301,8.823-13.083s8.184-6.75,13.083-8.823 C39.052,9.934,44.44,8.847,50,8.847s10.948,1.087,16.016,3.231c4.9,2.073,9.301,5.041,13.083,8.823 c3.782,3.782,6.75,8.184,8.823,13.083c2.143,5.069,3.23,10.457,3.23,16.016s-1.087,10.948-3.231,16.016 C85.848,70.915,82.88,75.317,79.099,79.099L79.099,79.099z"></path>
+                  </svg>
+            </a></li>
+             
+            
+            <li><a href="mailto:jfoucher@gmail.com">
+                  <svg id="mail" class="custom-icon" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 100 100" style="height: 30px; width: 30px;"><circle class="outer-shape" cx="50" cy="50" r="48" style="opacity: 1;"></circle>
+                  <path class="inner-shape" style="opacity: 1;" transform="translate(25,25) scale(0.5)" d="M50,1C22.938,1,1,22.938,1,50s21.938,49,49,49s49-21.938,49-49S77.062,1,50,1z M25.5,25.5h49 c0.874,0,1.723,0.188,2.502,0.542L50,57.544L22.998,26.041C23.777,25.687,24.626,25.499,25.5,25.5L25.5,25.5z M19.375,68.375v-36.75 c0-0.128,0.005-0.256,0.014-0.383l17.96,20.953L19.587,69.958C19.448,69.447,19.376,68.916,19.375,68.375L19.375,68.375z M74.5,74.5 h-49c-0.541,0-1.072-0.073-1.583-0.212l17.429-17.429L50,66.956l8.653-10.096l17.429,17.429C75.572,74.427,75.041,74.5,74.5,74.5 L74.5,74.5z M80.625,68.375c0,0.541-0.073,1.072-0.211,1.583L62.652,52.195l17.96-20.953c0.008,0.127,0.014,0.255,0.014,0.383 L80.625,68.375L80.625,68.375z"></path>
+                  </svg>
+            </a></li>
+            
+
+            <li>
+                  <a href="/feed.xml" title="Follow me with RSS">
+                              
+                        <svg
+                              xmlns:dc="http://purl.org/dc/elements/1.1/"
+                              xmlns:cc="http://creativecommons.org/ns#"
+                              xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+                              xmlns:svg="http://www.w3.org/2000/svg"
+                              xmlns="http://www.w3.org/2000/svg"
+                              xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+                              xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+                              id="rss-icon"
+                              class="custom-icon"
+                              version="1.1"
+                              viewBox="0 0 100 100"
+                              style="height: 30px; width: 30px;">
+                              <circle class="outer-shape" cx="50" cy="50" r="48" style="opacity: 1;"></circle>
+                              <path
+                              d="m 32.749844,60.270471 c -3.813566,0 -6.917886,3.079731 -6.917886,6.875174 0,3.790022 3.10432,6.875173 6.917886,6.875173 3.813566,0 6.917887,-3.085151 6.917887,-6.875173 0,-3.795443 -3.104321,-6.875174 -6.917887,-6.875174 z"
+                              id="path3"
+                              inkscape:connector-curvature="0"
+                              style="fill:#ffffff;fill-opacity:1" />
+                              <path
+                              d="m 26.98312,40.680561 c -0.300066,-0.0055 -0.583764,0.0976 -0.796538,0.303635 -0.212774,0.206038 -0.3328,0.487985 -0.3328,0.780777 l 0,8.821695 c 0,0.58016 0.458282,1.057303 1.047502,1.084412 11.680753,0.531362 20.890052,9.683802 21.41926,21.287016 0.02727,0.580159 0.507385,1.035613 1.09115,1.035613 l 8.876499,0 c 0.294609,0 0.583763,-0.119286 0.785626,-0.330745 0.207318,-0.211462 0.316434,-0.49883 0.305521,-0.791624 C 59.095643,64.412926 55.60942,56.442496 49.558999,50.429428 43.514032,44.427206 35.494086,40.962508 26.98312,40.680561 Z"
+                              id="path5"
+                              inkscape:connector-curvature="0"
+                              style="fill:#ffffff;fill-opacity:1" />
+                              <path
+                              d="M 63.634824,36.456774 C 53.81448,26.697063 40.79707,21.171983 26.966752,20.884613 c -0.294609,-0.01627 -0.578308,0.103019 -0.785626,0.309058 -0.212774,0.206038 -0.327344,0.482563 -0.327344,0.775355 l 0,8.816271 c 0,0.591005 0.474649,1.07357 1.069325,1.089835 22.221254,0.558472 40.754424,18.982639 41.31091,41.066697 0.01637,0.591005 0.501929,1.057302 1.096605,1.057302 l 8.871043,0 c 0.29461,0 0.578308,-0.119286 0.780171,-0.325324 0.207318,-0.211461 0.316435,-0.493408 0.310978,-0.786198 C 79.014571,59.148103 73.449709,46.211064 63.634824,36.456774 Z"
+                              id="path7"
+                              inkscape:connector-curvature="0"
+                              style="fill:#ffffff;fill-opacity:1" />
+                        </svg>
+                              
+                              
+                  </a>
+            </li>
+         </ul>
+      </div>
+   </div>
+</div><!-- end .footer -->
+
+
+   
+
+
+
+<!-- Stylesheet -->
+<noscript>
+    <!-- Import fonts from Google -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,800|PT+Serif:400,700,400italic,700italic" type="text/css" rel="stylesheet" />
+    <link rel="stylesheet" href="/assets/css/style.css">
+</noscript>
+
+
+
+<script>
+        function css(href){
+          var l = window.document.createElement('link'),
+              h = window.document.getElementsByTagName('head')[0];
+          l.rel = 'stylesheet';
+          l.href = href;
+          l.media = 'only x';
+          h.parentNode.insertBefore(l, h);
+          setTimeout( function(){
+            l.media = 'all';
+          },0);
+        }
+        css("/assets/css/style.css");
+        css("https://fonts.googleapis.com/css?family=Open+Sans:300,400,800|PT+Serif:400,700,400italic,700italic");
+      </script>
+
+
+<!-- Add jQuery and other scripts -->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src=""><\/script>')</script>
+<script src="/assets/js/script.min.js"></script>
+
+
+</body>
+
+</html>

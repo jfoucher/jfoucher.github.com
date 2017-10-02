@@ -101,27 +101,38 @@
     
     <h1 class="postTitle"><a href="/2004/09/jumble-up-wordpress-plugin.html">Jumble Up! Wordpress Plugin</a></h1>
     <p class="meta">September 12, 2004 | <span class="time">2</span> Minutes Read</p>
-    <p>You've pbarloby raed taht txet smerwheoe alaerdy :</p>
+    <p>You’ve pbarloby raed taht txet smerwheoe alaerdy :</p>
+
 <p>Aoicncdrg to an Enligsh utsinvriey stduy the oedrr of lettres in a wrod desnot mttaer the only tnhig ttahs iatomnrpt is that the fisrt and lsat leettr of evrey wrod is in the crrcoet piotoisn the rest can be jbmeuld and one is siltl albe to read the txet whuoitt dflfciituy.</p>
 <p>You've pbarloby raed taht txet smerwheoe alaerdy :</p>
 <p>Aoicncdrg to an Enligsh utsinvriey stduy the oedrr of lettres in a wrod desnot mttaer the only tnhig ttahs iatomnrpt is that the fisrt and lsat leettr of evrey wrod is in the crrcoet piotoisn the rest can be jbmeuld and one is siltl albe to read the txet whuoitt dflfciituy.</p>
 <!--more-->
-<p>This is what the 'Jumble Up!' plugin will do to the commenters which you consider as spammers or trolls, based on their IP address. I took some inspiration from the <a title="View this plugin" hreflang="en" href="http://wiki.wordpress.org/Disemvoweler">Disemvoweler plugin</a> for the spam targeting.</p>
+
+<p>This is what the ‘Jumble Up!’ plugin will do to the commenters which you consider as spammers or trolls, based on their IP address. I took some inspiration from the <a title="View this plugin" hreflang="en" href="http://wiki.wordpress.org/Disemvoweler">Disemvoweler plugin</a> for the spam targeting.</p>
+
 <p>Install is not difficult : <a href="/jumble.php.txt">Download</a>, rename to jumble.php, upload it to your wp-contents/plugins directory and activate it from the admin interface.</p>
+
 <p>Now, to target specific IPs for jumble-isation, open jumble.php and edit the line where it says :</p>
-<div class="highlight"><pre><span class="x">$jumbleIPs = array("0.0.0.0");</span>
-</pre></div>
+
+<figure class="highlight"><pre><code class="language-php" data-lang="php"><span class="nv">$jumbleIPs</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span><span class="s2">"0.0.0.0"</span><span class="p">);</span></code></pre></figure>
+
 <p>and add spammer IPs as such :</p>
-<div class="highlight"><pre><span class="x">$jumbleIPs = array("10.1.12.13","34.123.45.3");</span>
-</pre></div>
-<p>This is what the 'Jumble Up!' plugin will do to the commenters which you consider as spammers or trolls, based on their IP address. I took some inspiration from the <a title="View this plugin" hreflang="en" href="http://wiki.wordpress.org/Disemvoweler">Disemvoweler plugin</a> for the spam targeting.</p>
+
+<figure class="highlight"><pre><code class="language-php" data-lang="php"><span class="nv">$jumbleIPs</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span><span class="s2">"10.1.12.13"</span><span class="p">,</span><span class="s2">"34.123.45.3"</span><span class="p">);</span></code></pre></figure>
+
+<p>This is what the ‘Jumble Up!’ plugin will do to the commenters which you consider as spammers or trolls, based on their IP address. I took some inspiration from the <a title="View this plugin" hreflang="en" href="http://wiki.wordpress.org/Disemvoweler">Disemvoweler plugin</a> for the spam targeting.</p>
+
 <p>Install is not difficult : <a href="http://www.jfoucher.marinetechs.com/jumble.php.txt">Download</a>, rename to jumble.php, upload it to your wp-contents/plugins directory and activate it from the admin interface.</p>
+
 <p>Now, to target specific IPs for jumble-isation, open jumble.php and edit the line where it says :</p>
-<div class="highlight"><pre><span class="x">$jumbleIPs = array("0.0.0.0");</span>
-</pre></div>
+
+<figure class="highlight"><pre><code class="language-php" data-lang="php"><span class="nv">$jumbleIPs</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span><span class="s2">"0.0.0.0"</span><span class="p">);</span></code></pre></figure>
+
 <p>and add spammer IPs as such :</p>
-<div class="highlight"><pre><span class="x">$jumbleIPs = array("10.1.12.13","34.123.45.3")</span>
-</pre></div>
+
+<figure class="highlight"><pre><code class="language-php" data-lang="php"><span class="nv">$jumbleIPs</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span><span class="s2">"10.1.12.13"</span><span class="p">,</span><span class="s2">"34.123.45.3"</span><span class="p">)</span></code></pre></figure>
+
+
   </div>
 
   <h3 style="text-align: center; margin-top: 2em">Older posts</h3>
@@ -132,8 +143,8 @@
       <li>
         <span class="date">September 02, 2004</span>
         <h3><a class="post-link" href="/2004/09/stylesheet-chooser-version-02.html">Stylesheet Chooser Version 0.2</a></h3>
-        <p class="meta">September 02, 2004 | <span class="time">3</span> Minutes Read</p>
-        <p class="description">This plugin is deprecated. I had tried for a while to find a way to allow users to choose their favorite theme for this website. I decided to do it as a Wordpress plugin, which I offer today for other Wordpress users.Installing it is quite simple: Download, rename to stylesheet_chooser.php, upload it to your wp-contents/plugins directory and activate it from the admin interface.To define which stylesheets to use (no, it's not automatic...), you have to define an array called $styles, before you ...</p>
+        <p class="meta">September 02, 2004 | <span class="time">2</span> Minutes Read</p>
+        <p class="description">This plugin is deprecated.I had tried for a while to find a way to allow users to choose their favorite theme for this website. I decided to do it as a Wordpress plugin, which I offer today for other Wordpress users.Installing it is quite simple: Download, rename to stylesheet_chooser.php, upload it to your wp-contents/plugins directory and activate it from the admin interface.To define which stylesheets to use (no, it’s not automatic…), you have to define an array called $styles, before you ...</p>
       </li>
 
     
@@ -141,7 +152,7 @@
         <span class="date">August 11, 2004</span>
         <h3><a class="post-link" href="/2004/08/mise-leau.html">Mise   l'eau</a></h3>
         <p class="meta">August 11, 2004 | <span class="time">2</span> Minutes Read</p>
-        <p class="description">Ca y est, Salamba a touché son élément !Nous l'avons mis à l'eau a l'occasion du test de flottabilité requis pour l'homologation en cinquième catégorie en tant que voilier insubmersible.Sur la première image, on peut voir le bateau tel qu'il flotte à vide, assez haut sur l'eau par rapport à la ligne de flottaison, ce qui est conforme   ce que l'on espérait. Sur la deuxième photo, on voit le bateau chargé avec trois personnes, et la coque principale qui s'enfonce jusqu'a la ligne de ...</p>
+        <p class="description">            </p>
       </li>
 
     
@@ -149,7 +160,7 @@
         <span class="date">April 13, 2004</span>
         <h3><a class="post-link" href="/2004/04/nouveau-projet-2.html">Nouveau projet.</a></h3>
         <p class="meta">April 13, 2004 | <span class="time">1</span> Minutes Read</p>
-        <p class="description">J'ai eu il y a quelques jours une id?e pour un nouveau bateau. Ce serait un trimaran bas? sur un catamaran de sport.Il s'agirait de r?cup?rer un cata d'environ 18 pieds, comme un Nacra 5.5 ou similaire, et de rajouter une coque d'environ 7m 50 entre les deux &quot;flotteurs&quot;. On pourrait sans doute r?utiliser le gr?ement du cata, bien qu'il soit possible que le trimaran, ?tant plus lourd, soit sous-toil?...L'id?al serait de disposer d'un Tornado incomplet, et d'utiliser les coques et le gr?...</p>
+        <p class="description">J’ai eu il y a quelques jours une id?e pour un nouveau bateau. Ce serait un trimaran bas? sur un catamaran de sport.Il s’agirait de r?cup?rer un cata d’environ 18 pieds, comme un Nacra 5.5 ou similaire, et de rajouter une coque d’environ 7m 50 entre les deux “flotteurs”. On pourrait sans doute r?utiliser le gr?ement du cata, bien qu’il soit possible que le trimaran, ?tant plus lourd, soit sous-toil?…L’id?al serait de disposer d’un Tornado incomplet, et d’utiliser les coques et le gr?ement pou...</p>
       </li>
 
     
@@ -157,15 +168,15 @@
         <span class="date">April 10, 2004</span>
         <h3><a class="post-link" href="/2004/04/conception-web-par-jonathan-foucher.html">Conception Web par Jonathan Foucher</a></h3>
         <p class="meta">April 10, 2004 | <span class="time">1</span> Minutes Read</p>
-        <p class="description">Si vous souhaitez faire concevoir un site internet, que ce soit   usage personnel ou professionnel, vous pourriez difficilement faire un meilleur choix que de nous le confier   Jonathan Foucher.En effet, que vous ayez besoin d'un site de pr?sentation simple, comme un CV en ligne ou un blog (journal en ligne) ou d'un site commercial extremement complet, vous pourrez ?tre assur?s d'obtenir une pr?sence internet qui soit    la fois conforme aux standards, simple   g?rer, attractive et mise en ligne...</p>
+        <p class="description">Si vous souhaitez faire concevoir un site internet, que ce soit   usage personnel ou professionnel, vous pourriez difficilement faire un meilleur choix que de nous le confier   Jonathan Foucher.</p>
       </li>
 
     
       <li>
         <span class="date">March 20, 2004</span>
         <h3><a class="post-link" href="/2004/03/mon-nouveau-weblog.html">Mon nouveau weblog!</a></h3>
-        <p class="meta">March 20, 2004 | <span class="time">1</span> Minutes Read</p>
-        <p class="description">Alors ca y est. J'y pensais depuis un moment, en me demandant ce que c'etait que ces histoires de weblog, blogger, blog, etc... Et puis finalement j'ai d?cid? d'essayer, c'est une dr?le de sensation de faire ca. Ca doit avoir une utilit? pour certaines personnes, je suppose, mais alors pour moi, aucune... Et pourtant......Ca m'amuse.De l'utilit? du blog!!Je sais pasc'est rigolodire des conneries et se demander ce que ceux qui les lisent pourront bien penserecrire des trucs interessants (hein???)...</p>
+        <p class="meta">March 20, 2004 | <span class="time">0</span> Minutes Read</p>
+        <p class="description">Alors ca y est. J'y pensais depuis un moment, en me demandant ce que c'etait que ces histoires de weblog, blogger, blog, etc... Et puis finalement j'ai d?cid? d'essayer, c'est une dr?le de sensation de faire ca. Ca doit avoir une utilit? pour certaines personnes, je suppose, mais alors pour moi, aucune... Et pourtant...</p>
       </li>
 
     
@@ -180,6 +191,7 @@
     
   </div>
 </div>
+
       </div>
    </div><!-- end .content -->
 

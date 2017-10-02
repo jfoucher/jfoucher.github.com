@@ -99,68 +99,62 @@
       <div class="container">
          <div class="post">
   
-  <h1 class="postTitle"><a href="">Timeseries charts with Chart.js</a></h1>
-  <p class="meta">August 18, 2017 | <span class="time">4</span> Minute Read</p>
+  <h1 class="postTitle"><a href="/2017/08/timeseries-charts-with-chart.js.html">Timeseries charts with Chart.js</a></h1>
+  <p class="meta">August 18, 2017 | <span class="time">2</span> Minute Read</p>
   
   <!-- <div class="featuredImage">
       <img src="/uploads/2017/08/chart.png" alt="" />
     </div> -->
 
-  <p>Somehow I always end up having to do timeseries charts. Chart.js is my tool of choice for that task, but I never seem to remember what options to pass and what format the data should have. Yesterday I must have spent 2 hours looking at the docs and trying various things, mostly because it didn’t occur to me to check the last project where I used them, <a href="https://budgt.eu">Budgt</a></p>
-
+  <p>Somehow I always end up having to do timeseries charts. Chart.js is my tool of choice for that task, but I never seem to remember what options to pass and what format the data should have. Yesterday I must have spent 2 hours looking at the docs and trying various things, mostly because it didn't occur to me to check the last project where I used them, <a href="https://budgt.eu">Budgt</a></p>
 <p>So anyway, note to self : this is how you do timeseries graphs in chart.js</p>
-
-<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
-<span class="kd">const</span> <span class="nx">ctx</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'chartCanvas'</span><span class="p">).</span><span class="nx">getContext</span><span class="p">(</span><span class="s1">'2d'</span><span class="p">);</span>
-<span class="kd">const</span> <span class="nx">data</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="c1">// Labels should be Date objects</span>
-    <span class="na">labels</span><span class="p">:</span> <span class="p">[</span><span class="k">new</span> <span class="nb">Date</span><span class="p">(</span><span class="mi">2017</span><span class="p">,</span> <span class="mi">08</span><span class="p">,</span> <span class="mi">16</span><span class="p">),</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">(</span><span class="mi">2017</span><span class="p">,</span> <span class="mi">08</span><span class="p">,</span> <span class="mi">17</span><span class="p">),</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">(</span><span class="mi">2017</span><span class="p">,</span> <span class="mi">08</span><span class="p">,</span> <span class="mi">18</span><span class="p">)],</span>
-    <span class="na">datasets</span><span class="p">:</span> <span class="p">[{</span>
-        <span class="na">fill</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
-        <span class="na">label</span><span class="p">:</span> <span class="s1">'Page Views'</span><span class="p">,</span>
-        <span class="na">data</span><span class="p">:</span> <span class="p">[</span><span class="mi">280</span><span class="p">,</span> <span class="mi">250</span><span class="p">,</span> <span class="mi">340</span><span class="p">],</span>
-        <span class="na">borderColor</span><span class="p">:</span> <span class="s1">'#fe8b36'</span><span class="p">,</span>
-        <span class="na">backgroundColor</span><span class="p">:</span> <span class="s1">'#fe8b36'</span><span class="p">,</span>
-        <span class="na">lineTension</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-    <span class="p">}]</span>
-<span class="p">}</span>
-<span class="kd">const</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="na">type</span><span class="p">:</span> <span class="s1">'line'</span><span class="p">,</span>
-    <span class="na">data</span><span class="p">:</span> <span class="nx">data</span><span class="p">,</span>
-    <span class="na">options</span><span class="p">:</span> <span class="p">{</span>
-        <span class="na">fill</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
-        <span class="na">responsive</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
-        <span class="na">scales</span><span class="p">:</span> <span class="p">{</span>
-            <span class="na">xAxes</span><span class="p">:</span> <span class="p">[{</span>
-                <span class="na">type</span><span class="p">:</span> <span class="s1">'time'</span><span class="p">,</span>
-                <span class="na">display</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
-                <span class="na">scaleLabel</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="na">display</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
-                    <span class="na">labelString</span><span class="p">:</span> <span class="s2">"Date"</span><span class="p">,</span>
-                <span class="p">}</span>
-            <span class="p">}],</span>
-            <span class="na">yAxes</span><span class="p">:</span> <span class="p">[{</span>
-                <span class="na">ticks</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="na">beginAtZero</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
-                <span class="p">},</span>
-                <span class="na">display</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
-                <span class="na">scaleLabel</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="na">display</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
-                    <span class="na">labelString</span><span class="p">:</span> <span class="s2">"Page Views"</span><span class="p">,</span>
-                <span class="p">}</span>
-            <span class="p">}]</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-<span class="kd">const</span> <span class="nx">chart</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Chart</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="nx">options</span><span class="p">);</span>
-
-</code></pre></div></div>
-
-<p>And here’s what it looks like:</p>
-
+<pre><code class="language-js">
+const ctx = document.getElementById('chartCanvas').getContext('2d');
+const data = {
+    // Labels should be Date objects
+    labels: [new Date(2017, 08, 16), new Date(2017, 08, 17), new Date(2017, 08, 18)],
+    datasets: [{
+        fill: false,
+        label: 'Page Views',
+        data: [280, 250, 340],
+        borderColor: '#fe8b36',
+        backgroundColor: '#fe8b36',
+        lineTension: 0,
+    }]
+}
+const options = {
+    type: 'line',
+    data: data,
+    options: {
+        fill: false,
+        responsive: true,
+        scales: {
+            xAxes: [{
+                type: 'time',
+                display: true,
+                scaleLabel: {
+                    display: true,
+                    labelString: "Date",
+                }
+            }],
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true,
+                },
+                display: true,
+                scaleLabel: {
+                    display: true,
+                    labelString: "Page Views",
+                }
+            }]
+        }
+    }
+}
+const chart = new Chart(ctx, options);
+</code></pre>
+<p>And here's what it looks like:</p>
 <canvas id="chartCanvas" width="400" height="200"></canvas>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.bundle.min.js"></script>
-
 <script>
 const ctx = document.getElementById('chartCanvas').getContext('2d');
 const data = {
@@ -205,10 +199,7 @@ const options = {
 }
 const chart = new Chart(ctx, options);
 </script>
-
-<p>That’s it. Hopefully I’ll remember I posted this here next time I need timeseries charts in chart.js</p>
-
-
+<p>That's it. Hopefully I'll remember I posted this here next time I need timeseries charts in chart.js</p>
 
   </div>
 
@@ -237,7 +228,6 @@ const chart = new Chart(ctx, options);
       </a>
     
 </div>
-
       </div>
    </div><!-- end .content -->
 

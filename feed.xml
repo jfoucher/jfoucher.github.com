@@ -5,13 +5,13 @@
     <description>Jonathan Foucher's blog &amp; web development notebook</description>
     <link>https://jfoucher.com/</link>
     <atom:link href="https://jfoucher.com/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>2017-10-02T16:21:20+00:00</pubDate>
-    <lastBuildDate>2017-10-02T16:21:20+00:00</lastBuildDate>
+    <pubDate>2017-10-07T23:32:29+00:00</pubDate>
+    <lastBuildDate>2017-10-07T23:32:29+00:00</lastBuildDate>
     <generator>Stati (https://stati.jfoucher.com)</generator>
     
       <item>
         <title>Stati, a PHP static site generator that works on any existing Jekyll site</title>
-        <description>&lt;h3&gt;Success !&lt;/h3&gt;
+        <description>&lt;h3&gt;Success !!!!!!!&lt;/h3&gt;
 &lt;p&gt;Well it's been quite a week. Having had an unexpected lull in my contract work, I decided to work on something fun. I use jekyll for most of my static sites, and I quite like it. It's still a mistery to me why I decided to build a clone of it. But anyway, one week later, here we are. &lt;a href=&quot;https://github.com/jfoucher/stati&quot;&gt;Stati&lt;/a&gt; can now build all my ex-Jekyll sites properly. Actually this blog is now generated with Stati!&lt;/p&gt;
 &lt;h3&gt;Architecture&lt;/h3&gt;
 &lt;p&gt;I read this &lt;a href=&quot;https://www.bytesandwich.com/jekyll/software/blogging/2016/09/14/how-does-jekyll-work.html&quot;&gt;How does Jekyll work&lt;/a&gt; blog post that gives a nice high level overview of the jekyll architecture, and I decided to mostly use the same kind of process.&lt;/p&gt;

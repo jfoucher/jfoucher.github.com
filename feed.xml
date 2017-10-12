@@ -5,25 +5,38 @@
     <description>Jonathan Foucher's blog &amp; web development notebook</description>
     <link>https://jfoucher.com/</link>
     <atom:link href="https://jfoucher.com/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>2017-10-07T23:32:29+00:00</pubDate>
-    <lastBuildDate>2017-10-07T23:32:29+00:00</lastBuildDate>
+    <pubDate>2017-10-12T12:11:14+00:00</pubDate>
+    <lastBuildDate>2017-10-12T12:11:14+00:00</lastBuildDate>
     <generator>Stati (https://stati.jfoucher.com)</generator>
     
       <item>
         <title>Stati, a PHP static site generator that works on any existing Jekyll site</title>
         <description>&lt;h3&gt;Success !!!!!!!&lt;/h3&gt;
+
 &lt;p&gt;Well it's been quite a week. Having had an unexpected lull in my contract work, I decided to work on something fun. I use jekyll for most of my static sites, and I quite like it. It's still a mistery to me why I decided to build a clone of it. But anyway, one week later, here we are. &lt;a href=&quot;https://github.com/jfoucher/stati&quot;&gt;Stati&lt;/a&gt; can now build all my ex-Jekyll sites properly. Actually this blog is now generated with Stati!&lt;/p&gt;
+
 &lt;h3&gt;Architecture&lt;/h3&gt;
+
 &lt;p&gt;I read this &lt;a href=&quot;https://www.bytesandwich.com/jekyll/software/blogging/2016/09/14/how-does-jekyll-work.html&quot;&gt;How does Jekyll work&lt;/a&gt; blog post that gives a nice high level overview of the jekyll architecture, and I decided to mostly use the same kind of process.&lt;/p&gt;
+
 &lt;p&gt;A main Site class holds most of the state while the generation is in progress, with &lt;a href=&quot;http://symfony.com/doc/current/components/event_dispatcher.html&quot;&gt;events&lt;/a&gt; being dispatched at several steps along the process so that plugins can hook into them and modify the input, the output, or simply monitor the progress of the generation process.&lt;/p&gt;
+
 &lt;p&gt;First all files are read, in different manner depending on their type (static files, posts or pages), then they are rendered (again differently depending on their type) and finally they are written to disk at the correct path.&lt;/p&gt;
+
 &lt;h3&gt;Plugins&lt;/h3&gt;
+
 &lt;p&gt;At each point in this process, a plugin can come into play to add pages, have them written in different locations, etc...&lt;/p&gt;
+
 &lt;p&gt;The first plugin, and the one that is used by most Jekyll sites I know of, is the paginator. In the case of Stati, it basically takes a list of all posts and generates a new html page for each page of posts. The core Writer then takes care of putting it in it's proper path.&lt;/p&gt;
+
 &lt;p&gt;The second plugin is a related posts plugin. For each post it calculates the levenshtein distance of it's title to all the other posts titles and gets the 10 best matches. Lots of room for improvement here.&lt;/p&gt;
+
 &lt;h3&gt;Try it now!&lt;/h3&gt;
+
 &lt;p&gt;So basically that's it, a fun project that I will probably continue to use and improve. If you'd like to give it a try, you can &lt;a href=&quot;https://github.com/jfoucher/stati/releases/latest&quot;&gt;get the latest release from github&lt;/a&gt; and, most importantly, &lt;a href=&quot;https://github.com/jfoucher/stati/issues/new&quot;&gt;open an issue&lt;/a&gt; if you run into a snag!&lt;/p&gt;
+
 &lt;p&gt;PS. I just remembered I have a &lt;a href=&quot;/2005/03/changes-coming-soon.html&quot;&gt;history&lt;/a&gt; of &lt;a href=&quot;/2005/03/new-blog.html&quot;&gt;doing this kind of thing&lt;/a&gt;&lt;/p&gt;
+
 &lt;p&gt;UPDATE : Just got some &lt;a href=&quot;https://stati.jfoucher.com&quot;&gt;documentation&lt;/a&gt; online&lt;/p&gt;</description>
         
           <description>Why and how I built a Jekyll clone in PHP</description>
@@ -46,12 +59,19 @@
       <item>
         <title>Processing custom events in kernel.terminate</title>
         <description>&lt;h3&gt;What is the kernel.terminate event?&lt;/h3&gt;
+
 &lt;p&gt;It is the last event that is triggered in Symfony, just after the response has been sent to the client (only on php-fpm). This means that we can do some heavy lifting here because our response time is not affected. The client gets the response quickly and our processing will occur afterwards. &lt;/p&gt;
+
 &lt;p&gt;The Symfony SwiftMailer bundle does this by default, so we should be ok with emails, but my latest project needs to connect to various APIs on some events, and this takes quite some time. &lt;/p&gt;
+
 &lt;p&gt;In this post I will explain the method I use to make them run in the &lt;code&gt;kernel.terminate&lt;/code&gt; event.&lt;/p&gt;
+
 &lt;p&gt;For a primer about Symfony events, I recommend the &lt;a href=&quot;https://symfony.com/doc/current/reference/events.html&quot;&gt;official Symfony documentation&lt;/a&gt;&lt;/p&gt;
+
 &lt;h3&gt;Custom events&lt;/h3&gt;
+
 &lt;p&gt;Custom events are trigerred from our own code, generally in the controller, and it goes something like this:&lt;/p&gt;
+
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;sd&quot;&gt;/** &lt;/span&gt;
 &lt;span class=&quot;sd&quot;&gt;* @var $dispatcher \Symfony\Component\EventDispatcher\EventDispatcherInterface &lt;/span&gt;
 &lt;span class=&quot;sd&quot;&gt;*/&lt;/span&gt;
@@ -63,8 +83,10 @@
 &lt;span class=&quot;nv&quot;&gt;$dispatcher&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;dispatch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;AppEvents&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;NEW_USER&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$event&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 &lt;h3&gt;The event subscriber&lt;/h3&gt;
+
 &lt;p&gt;Then we have an EventSubscriber that will listen to our custom events, in my case it's called &lt;code&gt;ApiSubscriber&lt;/code&gt; and is located in &lt;code&gt;src/EventSubscriber&lt;/code&gt;. In this case it listens to two different events:
 &lt;code&gt;AppEvents::NEW_USER&lt;/code&gt; and &lt;code&gt;AppEvents::DELETE_USER&lt;/code&gt;.&lt;/p&gt;
+
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ApiSubscriber&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;EventSubscriberInterface&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
 
     &lt;span class=&quot;k&quot;&gt;protected&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$container&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
@@ -85,8 +107,11 @@
 &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 &lt;h3&gt;Configure the service&lt;/h3&gt;
+
 &lt;p&gt;You will notice that I inject the container as it makes it easy to get everything we need, such as parameters or other services.&lt;/p&gt;
+
 &lt;p&gt;Don't forget to configure the event subscriber in &lt;code&gt;app/config/services.yml&lt;/code&gt; like so:&lt;/p&gt;
+
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;l-Scalar-Plain&quot;&gt;services&lt;/span&gt;&lt;span class=&quot;p-Indicator&quot;&gt;:&lt;/span&gt;
     &lt;span class=&quot;l-Scalar-Plain&quot;&gt;api.subscriber&lt;/span&gt;&lt;span class=&quot;p-Indicator&quot;&gt;:&lt;/span&gt;
         &lt;span class=&quot;l-Scalar-Plain&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;p-Indicator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;l-Scalar-Plain&quot;&gt;AppBundle\EventSubscriber\ApiSubscriber&lt;/span&gt;
@@ -95,9 +120,14 @@
             &lt;span class=&quot;p-Indicator&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;p-Indicator&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p-Indicator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;kernel.event_subscriber&lt;/span&gt; &lt;span class=&quot;p-Indicator&quot;&gt;}&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;Now our event subscriber is ready for action whenever we trigger the event from our controllers.&lt;/p&gt;
+
 &lt;h3&gt;Handle your custom event&lt;/h3&gt;
+
+
 &lt;p&gt;The event handling function is where the magic happens. Say when a new user is created, the &lt;code&gt;AppEvents::NEW_USER&lt;/code&gt; is triggered and the &lt;code&gt;ApiSubscriber::newUser&lt;/code&gt; function is called.&lt;/p&gt;
+
 &lt;p&gt;Here it is, I'll explain later&lt;/p&gt;
+
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;newUser&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;NewUserEvent&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$newUserEvent&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
     &lt;span class=&quot;c1&quot;&gt;// Get the request from our custom event&lt;/span&gt;
@@ -119,9 +149,13 @@
 &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;So, from this code it is clear what happens. We first get the request from our custom event, then we set custom attributes on the request (simply because we need to retrieve them later from our static function) and finally we add a new listener (our static function, could also be an anonymous function) to the kernel.terminate event.&lt;/p&gt;
+
 &lt;h3&gt;Do the job&lt;/h3&gt;
+
 &lt;p&gt;The final piece of the puzzle is our &lt;code&gt;createThingOnApi&lt;/code&gt; static function that will do the real work.&lt;/p&gt;
+
 &lt;p&gt;Here it is:&lt;/p&gt;
+
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;createThingOnApi&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;PostResponseEvent&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$event&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
     &lt;span class=&quot;nv&quot;&gt;$attrs&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$event&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getRequest&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;attributes&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
@@ -148,10 +182,15 @@
 &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;This basically retrives our data from the request attributes, and then make some sort of curl request to an external API.&lt;/p&gt;
+
 &lt;h3&gt;All done !&lt;/h3&gt;
+
 &lt;p&gt;Do this and watch your response times go way down (&lt;a href=&quot;https://symfony.com/doc/current/components/http_kernel.html#component-http-kernel-kernel-terminate&quot;&gt;only on php-pfm&lt;/a&gt;)&lt;/p&gt;
+
 &lt;p&gt;I'm not saying the is the best or even the only method to achieve this, just the one I personally use. the alternative would be some sort of mesasge queue, but it still seems like premature optimisation for an app of this size. If you have other options to achieve this, let me know in the comments on HN.&lt;/p&gt;
+
 &lt;h3&gt;Profiler results&lt;/h3&gt;
+
 &lt;p class=&quot;image&quot;&gt;
 &lt;img src=&quot;/uploads/2017/08/symfony-kernel.terminate.png&quot; alt=&quot;Profiler results&quot; /&gt;&lt;/p&gt;</description>
         
@@ -173,7 +212,9 @@
       <item>
         <title>Timeseries charts with Chart.js</title>
         <description>&lt;p&gt;Somehow I always end up having to do timeseries charts. Chart.js is my tool of choice for that task, but I never seem to remember what options to pass and what format the data should have. Yesterday I must have spent 2 hours looking at the docs and trying various things, mostly because it didn't occur to me to check the last project where I used them, &lt;a href=&quot;https://budgt.eu&quot;&gt;Budgt&lt;/a&gt;&lt;/p&gt;
+
 &lt;p&gt;So anyway, note to self : this is how you do timeseries graphs in chart.js&lt;/p&gt;
+
 &lt;pre&gt;&lt;code class=&quot;language-js&quot;&gt;
 const ctx = document.getElementById('chartCanvas').getContext('2d');
 const data = {
@@ -218,7 +259,11 @@ const options = {
 }
 const chart = new Chart(ctx, options);
 &lt;/code&gt;&lt;/pre&gt;
+
+
+
 &lt;p&gt;And here's what it looks like:&lt;/p&gt;
+
 &lt;canvas id=&quot;chartCanvas&quot; width=&quot;400&quot; height=&quot;200&quot;&gt;&lt;/canvas&gt;
 &lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.bundle.min.js&quot;&gt;&lt;/script&gt;
 &lt;script&gt;
@@ -287,22 +332,34 @@ const chart = new Chart(ctx, options);
       <item>
         <title>Communication between iframes with React and postMessage for an html template editor</title>
         <description>&lt;p&gt;I'm working on a project where I need some sort of simple landing page editor, where &amp;quot;blocks&amp;quot; are defined at the template level and they can be rearranged, text changed or added, and not much more. Most of the software I could find was either way too complex for my needs, gave the user the freedom to &lt;em&gt;completely&lt;/em&gt; destroy the template, or were otherwise pretty useless. &lt;/p&gt;
+
 &lt;p class=&quot;image&quot;&gt;
 &lt;img src=&quot;/uploads/2017/08/leanr.jpg&quot; alt=&quot;Editor in action&quot; /&gt;&lt;/p&gt;
+
 &lt;p&gt;If it was frustrating for me I imagine how it would feel for my users who need to do this quickly and efficiently. What I needed would't have drag and drop, nor 300 sliders for everything, neither would it give the user the ability to completely modify the template. (Users can provide custom HTML for their pages if they so choose). Anyway, all I &lt;em&gt;need&lt;/em&gt; was the ability to place some template blocks on a page, move them up and down, remove them, and change the text bits.&lt;/p&gt;
+
 &lt;blockquote&gt;
 &lt;p&gt;&lt;em&gt;&amp;quot;How hard can it be ?&amp;quot;&lt;/em&gt; &lt;br&gt;&lt;small&gt;- me, at 3 AM on thursday night.&lt;/small&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
+
 &lt;p&gt;How hard indeed ? Well, as it turns out, &lt;em&gt;quite&lt;/em&gt;. But it's my fault. Scope creep. I decided it would also be possible to change the images. And also upload them. And maybe add custom buttons. And edit the background images. And the background colors. Anyway, here we are now, and this is how I've (almost, anyday now) done it :&lt;/p&gt;
+
 &lt;p&gt;I used an iframe to hold the displayed template, as that allows complete style (and everything else) isolation, and gives a good preview of the final result. &lt;em&gt;However&lt;/em&gt;, javascript between the iframe and the &amp;quot;controlling&amp;quot; page is not that easy. Because of &lt;a href=&quot;https://developer.mozilla.org/en-US/docs/Web/Security/Same-origin_policy&quot;&gt;same origin policy&lt;/a&gt; we can't just tell the iframe to do this or that, or read it's elements to see the html that's in them.&lt;/p&gt;
+
 &lt;blockquote&gt;
 &lt;p&gt;&lt;em&gt;&amp;quot;Inter-frame communication is like inter-process communication&amp;quot;&lt;/em&gt; &lt;br&gt;&lt;small&gt;- My buddy who does C (or C++ maybe?)&lt;/small&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
+
 &lt;p&gt;Oh I forgot to say, I want to store somewhat structured data about the edits, not just the raw HTML, to enable easier further edits if necessary. &lt;a href=&quot;https://github.com/bustle/mobiledoc-kit&quot;&gt;mobiledoc&lt;/a&gt; seemed promising. I spent about an hour investigating it (my internet was slow that day, I swear!) before I realised it's basically markdown. I thought adapting it to my use case, but it felt futile (as in: too much work). So what was I on about ? ah yes, iframes ! Mmmm who doesn't love a  good iframe? You don't? Good, 'cause me neither. Anyway, inter-frame communication is like inter-process communication (or so says my buddy that does printer drivers for HP -- Yeah, I'll curse him on your behalf if you have an HP printer): you have to pass messages around, in our case with &lt;a href=&quot;https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage&quot;&gt;&lt;code&gt;window.postMessage()&lt;/code&gt;&lt;/a&gt;. It works, it's great!&lt;/p&gt;
+
 &lt;p&gt;Anyway, here's how it works: I like to think of it as communication between say a frontend and an API, mostly because of the asynchronous nature of the communication. So basically, the parent page get ready to receive messages from the iframe by listening to the &amp;quot;message&amp;quot; event, like so:&lt;/p&gt;
+
 &lt;pre&gt;&lt;code class=&quot;language-js&quot;&gt;    window.addEventListener('message', this.handleFrameTasks.bind(this))&lt;/code&gt;&lt;/pre&gt;
+
 &lt;p&gt;I'm using react for the frontend, so this went in the &lt;code&gt;componentDidMount()&lt;/code&gt; method, but you could place it anywhere, really, as long as it runs when you want to start editing on the iframe side.&lt;/p&gt;
+
 &lt;p&gt;And then on the iframe side I have something like this:&lt;/p&gt;
+
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;    &lt;span class=&quot;c1&quot;&gt;// Send message to react&lt;/span&gt;
     &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;data&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
         &lt;span class=&quot;nx&quot;&gt;action&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'deleteBlock'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
@@ -311,9 +368,13 @@ const chart = new Chart(ctx, options);
     &lt;span class=&quot;nx&quot;&gt;top&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;postMessage&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'*'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;In fact at the start I was &lt;code&gt;JSON.stringify()&lt;/code&gt;ing the data I sent, as I remember it being necessary a few years ago, but that's not required anymore.&lt;/p&gt;
+
 &lt;p&gt;Then on the parent React side, the &lt;code&gt;handleFrameTasks&lt;/code&gt; dispatches the actions required depending on what the iframe requested. For example in the case above it will delete the page block with id &lt;code&gt;blockId&lt;/code&gt; from it's page data structure.&lt;/p&gt;
+
 &lt;p&gt;Did I mention that the iframe content is generated dynamically and injected in the iframe src with a data blob URL? Well then, maybe I'll post about that the next time.&lt;/p&gt;
+
 &lt;p&gt;Until then, keep coding !&lt;/p&gt;
+
 &lt;p&gt;PS Oh about that &lt;a href=&quot;/2017/03/one-project-per-month-first-budget-tracking.html&quot;&gt;One project per month challenge&lt;/a&gt;? This one is bigger than I expected, so it will (has already been) longer than a month. It will be great, I hope. Everything you need for an early stage startup. &lt;a href=&quot;/contact.html&quot;&gt;Contact me&lt;/a&gt; if you'd like some more info.&lt;/p&gt;</description>
         
           <description>I decided to roll my own HTML template editor because most opensource ones, while good looking and well designed, are impossible to use.</description>
@@ -336,15 +397,23 @@ const chart = new Chart(ctx, options);
       <item>
         <title>One project per month during 2017. Here are my first two for January and february</title>
         <description>&lt;p&gt;So at the start of January I discovered the &lt;a href=&quot;https://github.com/1ppm/1ppmLog&quot;&gt;One Project per Month&lt;/a&gt; project, and decided to give it a go. You can follow my progress &lt;a href=&quot;https://github.com/1ppm/1ppmLog/blob/master/HallOfFame.md#jfoucher&quot;&gt;here&lt;/a&gt; and I'll also try to post here somewhat regularly about my experiences.&lt;/p&gt;
+
 &lt;p&gt;The first project was an app that does &lt;a href=&quot;https://budgt.eu&quot;&gt;budget tracking&lt;/a&gt;. Well, not really budgeting, more like to track what I was spending. I've been wondering where all the money went, and this app was made to help me achieve some visibility about that. It's great, &lt;a href=&quot;https://budgt.eu&quot;&gt;check it out&lt;/a&gt; ! If the queen of england needed a way to track her spending, she told me she'd definitely use it !&lt;/p&gt;
+
 &lt;p class=&quot;image&quot;&gt;
 &lt;img src=&quot;/assets/img/posts/queen-says-budgt-is-best-tracking-app.jpeg&quot; alt=&quot;Queen of England says budgt is the best app to track your spending&quot; /&gt;&lt;/p&gt;
+
 &lt;p&gt;Not that you care, but if you did you could go to the &lt;a href=&quot;https://github.com/jfoucher/budgetTracker&quot;&gt;github repo&lt;/a&gt; and there you might be able to find out that it was made with React, PouchDB and quite a few more nice things.&lt;/p&gt;
+
 &lt;p&gt;Anyway, the second project was the February one (that's what one per month means, for all of you following from your nursing home bed). I wanted to try my hand at native iOS apps. I looked at the Swift docs, installed Xcode but then I saw got bored and saw on hackernews that someone had built an app with react native and liked, so I said to myself : &amp;quot;Jonathan : do the right and be lazy. The important thing is to get this ready before the 28th&amp;quot; (Yes February was limited to 28 days by royal decree this year, and well, most years really... Who knows why ?) Anyway, so since &lt;a href=&quot;http://blogoscoped.com/archive/2005-08-24-n14.html&quot;&gt;all good programmers are lazy&lt;/a&gt; I didn't feel too bad about myself. &lt;/p&gt;
+
 &lt;p class=&quot;image&quot;&gt;
 &lt;img src=&quot;/assets/img/posts/become-lazy.jpeg&quot; alt=&quot;One does not simply become lazy&quot; /&gt;&lt;/p&gt;
+
 &lt;p&gt;So react-native is was then. Let me tell you, this thing is great ! It works perfectly, you can design stuff with CSS like ease, and all the logic is in javascript. Easy peasy. You can't get it anywhere though because Apple wants 100&euro; so that I can upload my free app. But do come by my house and I'll gladly install it on your phone. If you have an android maybe I'll just keep for a little while to do a bit of testing. But I'll give it back. Eventually.&lt;/p&gt;
+
 &lt;p&gt;So yes. So far so good. No idea for March though. Maybe I'll just do a react-native app for the &lt;a href=&quot;https://budgt.eu&quot;&gt;budget tracker&lt;/a&gt;&lt;/p&gt;
+
 &lt;p&gt;Any ideas ? &lt;a href=&quot;/contact&quot;&gt;Contact me&lt;/a&gt;.&lt;/p&gt;</description>
         
           <description>This year I decided to try and develop one project every month. Here's how January and February went</description>
@@ -365,18 +434,24 @@ const chart = new Chart(ctx, options);
       <item>
         <title>Building a webGL and webworkers boat hydrostatics app</title>
         <description>&lt;p&gt;I've recently felt the urge to start designing boats again, as I have had some ideas I wanted to explore, specifically for boats of the &lt;a href=&quot;http://classemini.org&quot;&gt;Mini 650 class&lt;/a&gt;. The software I use has basic hydrostatics capabilities, but only for an upright boat. It cannot calculate the GZ curve, or get the righting moment at specific heel angles, which is a crucial data for the kind of craft I wanted to design.&lt;/p&gt;
+
 &lt;p&gt;Existing solutions are extremely powerful and extremely expensive, so I decided i'd spend a few days rolling my own, with only the features I needed for the time being. I have all the technical background for this type of calculations, so I figured it shouldn't be too hard. I really wanted to display a 3D view of the model, and not have it only output data in table format, and since I had never used web GL and was curious about, I figured it was the perfect time to try it out. Pro tip : if you're not used to openGL or working in 3D programatically, use &lt;a href=&quot;https://threejs.org/&quot;&gt;three.js&lt;/a&gt;. Thank me later.&lt;/p&gt;
+
 &lt;p&gt;So at first I built something very basic that just displayed the model in threejs and did some static calculations, in the UI thread. At first it worked ok, but as soon as I added functionality to solve for trim (to align longitudinal center of gravity with the longitudinal center of buoyancy) it started to get very slow. The 3D view could not even be moved around anymore because the UI thread was doing all the calculations in the foreground. Basically to do this kind of calculations, you have to move the model up and down to adjust for the correct displacement, and then pitch it forwards or aft until the center of buoyancy aligns with the center of gravity. This loop is computationally intensive and made everything grind to a halt.&lt;/p&gt;
+
 &lt;p&gt;So webworkers to the rescue. I had never really used them either, but they promised to make it easy to send most of the work to a background thread that would not slow down my UI. I refactored my code to put all the heavy lifting into separate files that could then be called as a web worker. I also had to add messaging to pass data to and from the UI javascript. That was fairly easy to do, as they are simple calls to postMessage, and a callback function in the UI and the worker to receive sent messages. Very easy and obvious, so great !&lt;/p&gt;
+
 &lt;p&gt;The calculations are accurate, I've had them checked in many cases against an old Hydromax version, which is an established solution in the field, and the results match within about a percentage point. The only difficulty I'm still struggling with is to properly draw the underwater stations and the waterline, but this is only a display bug and does not affect the results. What happens is that there are many edge cases that have to be accounted for, depending on the type and quality of the input file. I'm still working on that.&lt;/p&gt;
+
 &lt;p&gt;If you like designing boats and currently do these kinds of calculations by hand or in a spreadsheet, or if your current software does not solve for trim, you will definitely want to &lt;a href=&quot;https://hydro.marinetechs.com/?utm_source=jfoucher&amp;amp;utm_campaign=launch&amp;amp;utm_medium=blog&quot;&gt;give this tool a try&lt;/a&gt;&lt;/p&gt;
+
 &lt;p&gt;If you do, and you like it, or you hate it, or it doesn't work, or anything, your feedback would be invaluable. Contact me &lt;a href=&quot;mailto:j_foucher@marinetechs.com&quot;&gt;by email&lt;/a&gt; or through &lt;a href=&quot;/contact&quot;&gt;this blog's contact form&lt;/a&gt;.&lt;/p&gt;</description>
         
           <description>I had a need for a simple program to do some calculations for a boat design I'm studying, so I built it from scratch with webGL and webworkers.</description>
         
         <pubDate>2016-12-20T10:17:07+02:00</pubDate>
-        <link>https://jfoucher.com/2016/12/webGL-webworkers-boat-calculations.html</link>
-        <guid isPermaLink="true">https://jfoucher.com/2016/12/webGL-webworkers-boat-calculations.html</guid>
+        <link>https://jfoucher.com/2016/12/webgl-webworkers-boat-calculations.html</link>
+        <guid isPermaLink="true">https://jfoucher.com/2016/12/webgl-webworkers-boat-calculations.html</guid>
         
         <category>javascript</category>
         
@@ -392,29 +467,57 @@ const chart = new Chart(ctx, options);
       <item>
         <title>How I built running shoes for my whole family in one sunday afternoon (Huarache sandals)</title>
         <description>&lt;p&gt;Some time ago, &lt;a href=&quot;http://diegosantamarta.com&quot;&gt;Diego Santamarta&lt;/a&gt; casually mentioned that the shoes he was wearing were not regular flip flops, but rather some kind of sandal which I had never heard about. &amp;quot;Oh ok&amp;quot; was my less than enthusiastic answer. In the meantime, and even before, I had been reading about barefoot running, even though I had never run more than a few hundred meters without panting uncontrollably. Yes, 15 years smoking does take it's toll. After two years tobacco free, I feel I'm only now starting to recover.&lt;/p&gt;
+
 &lt;p&gt;Anyway, I had dismissed barefoot running as something that I would love to do&amp;nbsp;&amp;mdash;&amp;nbsp;and probably the only way that I would ever run for pleasure&amp;nbsp;&amp;mdash;&amp;nbsp;but that seemed very uncomfortable bordering on dangerous. Two days ago, that same Diego Santamarta posts to facebook a link about those sandals as used by barefoot runners to protect their feet on difficult terrain.&lt;/p&gt;
+
 &lt;h3&gt;Documentation and materials&lt;/h3&gt;
+
 &lt;p&gt;I almost immediately started &lt;a href=&quot;http://bit.ly/10znWIx&quot;&gt;reading about them&lt;/a&gt;, watching &lt;a href=&quot;http://bit.ly/10WcB48&quot;&gt;youtube videos&lt;/a&gt; or &lt;a href=&quot;http://bit.ly/10zo22R&quot;&gt;instructables&lt;/a&gt; explaining how to build them. I had an old tire in the growing &amp;quot;to throw away&amp;quot; pile which I never get around to bringing to the recycling center, so that was the main part of the material sorted. I also have some polypropylene cord (the blue one used to tie straw bales and some black one) which could be used as laces. As will be seen later this is not comfortable nor durable so I used some more elaborate string for the laces.&lt;/p&gt;
+
 &lt;p&gt;Trace your foot on paper and locate the holes as indicated in one of these guides.&lt;/p&gt;
+
 &lt;h3&gt;Cutting the sole&lt;/h3&gt;
+
 &lt;p&gt;Now the real work begins. We will need to hack at that tire, and it truly is tiresome work. I had some tin snips on hand which I thought would be perfect for  the job. They are in fact totally useless. I did the job with a hacksaw to cut through the metal ring where the tire meets the wheel, and then one of my trusty &lt;a href=&quot;https://en.wikipedia.org/wiki/Opinel&quot;&gt;Opinels&lt;/a&gt; to cut through the reinforced rubber outwall. If the knife is kept sharp, this is actually fairly easy work.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;http://jfoucher.com/uploads/2013/05/cutting-tire.jpg&quot; alt=&quot;&quot;Cutting the tire&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p class=&quot;image&quot;&gt;
+&lt;img src=&quot;http://jfoucher.com/uploads/2013/05/cutting-tire.jpg&quot; alt=&quot;&quot;Cutting the tire&quot;&quot; /&gt;&lt;/p&gt;
+
 &lt;p&gt;I cut some rough pieces from the outerwall, one from each side of the tire to match the curvature of the outerwall to the natural curve of each foot.&lt;/p&gt;
+
 &lt;p&gt;You then trace the outline of your paper pattern on the pieces you just cut, enabling you to have perfect tire soles for your huarache sandals.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;http://jfoucher.com/uploads/2013/05/cutting-soles.jpg&quot; alt=&quot;&quot;Matching sole to template&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p class=&quot;image&quot;&gt;
+&lt;img src=&quot;http://jfoucher.com/uploads/2013/05/cutting-soles.jpg&quot; alt=&quot;&quot;Matching sole to template&quot;&quot; /&gt;&lt;/p&gt;
+
 &lt;p&gt;I then used a small drill bit, around 5mm to drill the holes.&lt;/p&gt;
+
 &lt;h3&gt;Putting the laces in places&lt;/h3&gt;
+
 &lt;p&gt;The are many lacing systems that can be used, the one I used seemed simple enough, and can be slipped on and off easily.&lt;/p&gt;
+
 &lt;p&gt;To pull the string through the holes, I used a piece of bent wire as a threader, and pliers to pull on it if need be. A &lt;a href=&quot;http://en.wikipedia.org/wiki/Figure-eight_knot&quot;&gt;figure of 8 knot&lt;/a&gt; locks the string in the toe hole. the string then goes throught the outer hole, around the heel, through the inner whole, and ties around the front part of the lace&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;http://jfoucher.com/uploads/2013/05/threading-cord.jpg&quot; alt=&quot;&quot;Threading the cord&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p class=&quot;image&quot;&gt;
+&lt;img src=&quot;http://jfoucher.com/uploads/2013/05/threading-cord.jpg&quot; alt=&quot;&quot;Threading the cord&quot;&quot; /&gt;&lt;/p&gt;
+
 &lt;p&gt;Here is the result: my son's sandals. He complained that they were not very comfortable though, so I changed the cord (which was too thin) and used a thicker braided one I had around, which is much more comfortable.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;http://jfoucher.com/uploads/2013/05/huarache-running-sandal-kid.jpg&quot; alt=&quot;&quot;Huarache running sandal complete&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p class=&quot;image&quot;&gt;
+&lt;img src=&quot;http://jfoucher.com/uploads/2013/05/huarache-running-sandal-kid.jpg&quot; alt=&quot;&quot;Huarache running sandal complete&quot;&quot; /&gt;&lt;/p&gt;
+
 &lt;p&gt;Once everyone had their sandals ready, I decided to go for a short run to try them out&lt;/p&gt;
+
 &lt;h3&gt;Running&lt;/h3&gt;
+
 &lt;p&gt;Please keep in mind that I was a heavy smoker for many years, have &lt;em&gt;never&lt;/em&gt; run unless obligated to, and never more than a few hundred meters.&lt;/p&gt;
+
 &lt;p&gt;The first segment was downhill, and I had to readjust the shoes almost immediately, for the only time in the entire run.&lt;/p&gt;
+
 &lt;p&gt;When I arrived at the first uphill segment I got out of breath quickly and decide to alternate running and fast walking for the rest of the outing. That worked out pretty good, and the running actually felt easier and easier. The shoes are superb. They are pretty comfortable, provide just the right amount of protection to avoid having to look out for every little piece of gravel and can be used to cross streams without fear of them becoming slippery.&lt;/p&gt;
+
 &lt;p&gt;My calves started hurting at around the ten minute mark, I think from landing on the front portion of the feet. It only got worse from then on, and now I can barely walk, it feels like I have a continuous cramp in these muscles. The feet are in perfect condition though, I just feel that they have had a good workout.&lt;/p&gt;
+
 &lt;p&gt;Can't wait to go out tomorrow for more!&lt;/p&gt;</description>
         
           <description>I never run unless forced to, but today I decided to build modern/traditional running shoes for my whole family and go for a run. Boy am I sore.</description>
@@ -435,12 +538,19 @@ const chart = new Chart(ctx, options);
       <item>
         <title>Installing PHP, Apache2 and nginx for faster websites</title>
         <description>&lt;p&gt;My contract with my previous shared hosting contractor is coming to a close, and as they seem to have all but abandoned their business, I decided it was time to move away. I looked at using Amazon's EC2, but ultimately decided to go with Bhost, with which I'm fairly happy so far. To get some decent performance out of it, I planned to use Nginx as my web server&lt;/p&gt;
+
 &lt;h3&gt;Keep using Apache as usual&lt;/h3&gt;
+
 &lt;p&gt;All my websites are configured to work with apache, sometimes using fairly advanced rewrite rules, and a fair proportion of wordpress sites. So to save myself a ton of work I decided to just use Nginx as a proxy to apache and not reconfigure each site to use Nginx's rewrite rules.&lt;/p&gt;
+
 &lt;h3&gt;Install required software&lt;/h3&gt;
+
 &lt;p&gt;I'm using Ubuntu, but the steps below should be fairly easy to adapt to your distribution of choice. To install everything from scratch, just run &lt;code&gt;sudo apt-get install php5 apache2 mysql-server php5-mysql nginx&lt;/code&gt;. This installs mysql, Apache, PHP and Nginx&lt;/p&gt;
+
 &lt;h3&gt;Configure Apache and Nginx&lt;/h3&gt;
+
 &lt;p&gt;I created one bash script that creates the necessary virtual hosts files for Apache and Nginx, by taking a template a doing a search/replace with sed. Here is the apache virtual host template that goes into &lt;code&gt;/etc/apache2/sites-available&lt;/code&gt;:&lt;/p&gt;
+
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;    &lt;span class=&quot;nt&quot;&gt;&amp;lt;VirtualHost&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;*:8080&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
         &lt;span class=&quot;nb&quot;&gt;ServerAdmin&lt;/span&gt; webmaster@localhost
         &lt;span class=&quot;nb&quot;&gt;ServerName&lt;/span&gt; template
@@ -479,6 +589,7 @@ const chart = new Chart(ctx, options);
     &lt;span class=&quot;nt&quot;&gt;&amp;lt;/VirtualHost&amp;gt;&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;You'll notice that Apache listens on port 8080. You need to change the port from 80 to 8080 in &lt;code&gt;/etc/apache2/ports.conf&lt;/code&gt; as well, this is what mine looks like after the change :&lt;/p&gt;
+
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;    &lt;span class=&quot;nb&quot;&gt;NameVirtualHost&lt;/span&gt; *:8080
     &lt;span class=&quot;nb&quot;&gt;Listen&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;8080&lt;/span&gt;
     &lt;span class=&quot;nt&quot;&gt;&amp;lt;IfModule&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;mod_ssl.c&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
@@ -494,6 +605,7 @@ const chart = new Chart(ctx, options);
     &lt;span class=&quot;nt&quot;&gt;&amp;lt;/IfModule&amp;gt;&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;Next up is the template for the default nginx site, which is much simpler and goes in &lt;code&gt;/etc/nginx/sites-available&lt;/code&gt;:&lt;/p&gt;
+
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;    &lt;span class=&quot;k&quot;&gt;server&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
         &lt;span class=&quot;kn&quot;&gt;listen&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;80&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
         &lt;span class=&quot;kn&quot;&gt;access_log&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;/var/log/nginx.access.log&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
@@ -513,7 +625,9 @@ const chart = new Chart(ctx, options);
     &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;All that does is proxy everything to apache on localhost, port 8080&lt;/p&gt;
+
 &lt;p&gt;So, our virtual host templates are ready, and if you only have one or two sites you could copy the contents to a new file by hand and change the word &lt;code&gt;template&lt;/code&gt; for your actual domain name / folder, but as I had quite a few sites to convert, I created a small bash script that takes car of it for me, by just calling it with the hostname:&lt;/p&gt;
+
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;    &lt;span class=&quot;c&quot;&gt;#!/bin/bash&lt;/span&gt;
     &lt;span class=&quot;nv&quot;&gt;CMDLN_ARGS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$@&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt; &lt;span class=&quot;c&quot;&gt;# Command line arguments for this script&lt;/span&gt;
     &lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;CMDLN_ARGS
@@ -543,12 +657,19 @@ const chart = new Chart(ctx, options);
     /etc/init.d/nginx restart
 &lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;Put this say in your home folder and give it executable permission with &lt;code&gt;chmod 755 new_host&lt;/code&gt; or whatever you named the file.&lt;/p&gt;
+
 &lt;p&gt;Then run it with &lt;code&gt;./new_host example.com&lt;/code&gt;&lt;/p&gt;
+
 &lt;p&gt;This will create a folder in &lt;code&gt;/var/www/example.com&lt;/code&gt;, copy the updated template virtual host configuration to the required location and restart apache and nginx.&lt;/p&gt;
+
 &lt;p&gt;Now put some content in that folder and configure your mysql connection if neccesary&lt;/p&gt;
+
 &lt;p&gt;You should now be able to browse to example.com and see your brand new site. Some quick benchmarking with ab gives roughly a tenfold increase in requests per second, depending on the configuration of the website itself&lt;/p&gt;
+
 &lt;p&gt;These are some rough numbers for &lt;a href=&quot;http://6px.eu&quot;&gt;Six Pixels&lt;/a&gt;, built with Kohana2 without any caching mechanism&lt;/p&gt;
+
 &lt;p&gt;&lt;code&gt;ab -c20 -n200 http://6px.eu:8080/&lt;/code&gt; is hitting Apache on port 8080&lt;/p&gt;
+
 &lt;pre&gt;&lt;code&gt;Server Hostname:        6px.eu
 Server Port:            8080
 
@@ -566,7 +687,12 @@ Requests per second:    0.71 [#/sec] (mean)
 Time per request:       28267.940 [ms] (mean)
 Time per request:       1413.397 [ms] (mean, across all concurrent requests)
 Transfer rate:          8.59 [Kbytes/sec] received&lt;/code&gt;&lt;/pre&gt;
+
+
+
 &lt;p&gt;Now with nginx &lt;code&gt;ab -c20 -n200 http://6px.eu/&lt;/code&gt;&lt;/p&gt;
+
+
 &lt;pre&gt;&lt;code&gt;Server Hostname:        6px.eu
 Server Port:            80
 
@@ -584,12 +710,18 @@ Requests per second:    4.93 [#/sec] (mean)
 Time per request:       4060.612 [ms] (mean)
 Time per request:       203.031 [ms] (mean, across all concurrent requests)
 Transfer rate:          59.69 [Kbytes/sec] received&lt;/code&gt;&lt;/pre&gt;
+
+
+
 &lt;h3&gt;Update:&lt;/h3&gt;
+
 &lt;p&gt;As rightly noted by &lt;a href=&quot;https://twitter.com/#!/arnaud_lb/status/196610128261296129&quot;&gt;@arnaud_lb&lt;/a&gt; the benchmarks should give nearly the same results,
 as nginx is waiting for Apache to return it's data before sending it along.
 What happened in those benchmarks is that &lt;a href=&quot;http://cloudflare.com&quot;&gt;cloudflare.com&lt;/a&gt; (highly recommended by the way) was caching some results and not others.&lt;/p&gt;
+
 &lt;p&gt;When I tried on localhost, the results were effectively the same.
 So the way to get better performance is to get nginx to cache the results from apache, by adding the following to your nginx virtual host definition :&lt;/p&gt;
+
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;    &lt;span class=&quot;k&quot;&gt;proxy_cache&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;on&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
     &lt;span class=&quot;k&quot;&gt;proxy_cache_use_stale&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;error&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;timeout&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;invalid_header&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;updating&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
     &lt;span class=&quot;k&quot;&gt;proxy_cache_key&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$scheme$host$request_uri&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
@@ -598,11 +730,15 @@ So the way to get better performance is to get nginx to cache the results from a
     &lt;span class=&quot;k&quot;&gt;proxy_cache_valid&lt;/span&gt;       &lt;span class=&quot;s&quot;&gt;any&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;15m&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;where the &lt;code&gt;proxy_cache&lt;/code&gt; named &lt;code&gt;one&lt;/code&gt; is defined in nginx.conf as such :&lt;/p&gt;
+
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;    &lt;span class=&quot;k&quot;&gt;proxy_cache_path&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;/usr/local/nginx/proxy&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;levels=1:2&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;keys_zone=one:15m&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;inactive=7d&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;max_size=1000m&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;The &lt;code&gt;proxy_cache_valid&lt;/code&gt; entries above define different cache times for various response codes&lt;/p&gt;
+
 &lt;p&gt;And here are the real benchmarks :&lt;/p&gt;
+
 &lt;h4&gt;Apache:&lt;/h4&gt;
+
 &lt;pre&gt;&lt;code&gt;Server Hostname:        direct.6px.eu
 Server Port:            8080
 
@@ -620,7 +756,11 @@ Requests per second:    13.26 [#/sec] (mean)
 Time per request:       754.075 [ms] (mean)
 Time per request:       75.408 [ms] (mean, across all concurrent requests)
 Transfer rate:          151.43 [Kbytes/sec] received&lt;/code&gt;&lt;/pre&gt;
+
+
+
 &lt;h4&gt;Nginx:&lt;/h4&gt;
+
 &lt;pre&gt;&lt;code&gt;Server Hostname:        direct.6px.eu
 Server Port:            80
 
@@ -638,8 +778,14 @@ Requests per second:    7305.94 [#/sec] (mean)
 Time per request:       1.369 [ms] (mean)
 Time per request:       0.137 [ms] (mean, across all concurrent requests)
 Transfer rate:          23351.88 [Kbytes/sec] received&lt;/code&gt;&lt;/pre&gt;
+
+
+
+
 &lt;p&gt;Just, wow...&lt;/p&gt;
+
 &lt;p&gt;Careful though as this will wreak havoc on your sessions, at the minimum you can disable caching for logged-in users with&lt;/p&gt;
+
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;    &lt;span class=&quot;k&quot;&gt;proxy_cache_bypass&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$cookie_session&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
     &lt;span class=&quot;k&quot;&gt;proxy_no_cache&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$cookie_session&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
@@ -663,9 +809,13 @@ Transfer rate:          23351.88 [Kbytes/sec] received&lt;/code&gt;&lt;/pre&gt;
       <item>
         <title>Import contacts from Google by entering your email and password</title>
         <description>&lt;p&gt;What I wanted to do was something similar to what Dropbox does for their referral program: Allow the user to input their email and password, show them a list of their contacts and allow them to select who to invite. The invited contacts' emails would then be saved directly to database and an email sent to them.&lt;/p&gt;
+
 &lt;p&gt;This is what google calls the &lt;a href=&quot;https://developers.google.com/accounts/docs/AuthForInstalledApps#Using&quot;&gt;ClientLogin&lt;/a&gt; method of authentication. It allow your user to simply input their username and password and see a list of their contacts displayed, where they can select which ones to invite, in this case.&lt;/p&gt;
+
 &lt;p&gt;The way to do that is pretty easy, first we have to make a POST request to google to get an authentification token for the subsequent authenticated requests. I chose to use the &lt;a href=&quot;https://github.com/kriswallsmith/Buzz&quot;&gt;Buzz PHP library&lt;/a&gt; as my HTTP client. It makes everything easy and removes the necessity of countless &lt;code&gt;curl_set_opts()&lt;/code&gt;. Buzz requires PHP 5.3, but I'm using Symfony2 which also does, so that's not a problem, actually more of a boon as I find PHP5.3 code generally cleaner.&lt;/p&gt;
+
 &lt;p&gt;I created a class &lt;code&gt;Importer&lt;/code&gt; with a protected variable &lt;code&gt;$browser&lt;/code&gt; which is the Buzz\Browser instance we'll be using to connect to google. Google returns the data in a line based format, so I used a little helper function to convert it to a PHP array:&lt;/p&gt;
+
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;x&quot;&gt;    &lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
         &lt;span class=&quot;k&quot;&gt;protected&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;unserializeGoogleData&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
             &lt;span class=&quot;nv&quot;&gt;$returns&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;array&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
@@ -681,6 +831,7 @@ Transfer rate:          23351.88 [Kbytes/sec] received&lt;/code&gt;&lt;/pre&gt;
     &lt;span class=&quot;cp&quot;&gt;?&amp;gt;&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;So first we need to get the auth token from google:&lt;/p&gt;
+
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;x&quot;&gt;    &lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
     &lt;span class=&quot;nv&quot;&gt;$params&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;array&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
         &lt;span class=&quot;s1&quot;&gt;'accountType'&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'HOSTED_OR_GOOGLE'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
@@ -696,7 +847,9 @@ Transfer rate:          23351.88 [Kbytes/sec] received&lt;/code&gt;&lt;/pre&gt;
     &lt;span class=&quot;cp&quot;&gt;?&amp;gt;&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;Where &lt;code&gt;$data['email']&lt;/code&gt; and &lt;code&gt;$data['password']&lt;/code&gt; are the user's email and password, respectively.&lt;/p&gt;
+
 &lt;p&gt;If everything went fine, the &lt;code&gt;$returns&lt;/code&gt; variable now contains an associative array with a key &lt;code&gt;Auth&lt;/code&gt;, so we can proceed with the next step, actually getting the contacts:&lt;/p&gt;
+
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;x&quot;&gt;    &lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
     &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;isset&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$returns&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'Auth'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]))&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
         &lt;span class=&quot;nv&quot;&gt;$feed_url&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;https://www.google.com/m8/feeds/contacts/&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;
@@ -729,6 +882,7 @@ Transfer rate:          23351.88 [Kbytes/sec] received&lt;/code&gt;&lt;/pre&gt;
 &lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;If the user and password were incorrect, the &lt;code&gt;Auth&lt;/code&gt; key will not be present in the array, and so we simply return &lt;code&gt;false&lt;/code&gt;. It is recommended to see if Google requires the user to solve a catcha, in which case it should be displayed. But as that was not necessary in this case, it will be left as an exercise for the reader.
 On the other hand, if everything was ok, the &lt;code&gt;$results&lt;/code&gt; array is now populated with the user's contacts, so the next step is to walk over the array extracting the data we need, in this case only the main email and the full name of the contact. We populate an array with the required data and simply return it for the caller to use.&lt;/p&gt;
+
 &lt;p&gt;I hope this will be useful to someone, but please note that Google &lt;a href=&quot;https://developers.google.com/accounts/docs/AuthForInstalledApps&quot;&gt;recommends&lt;/a&gt; you use OAuth for that kind of things.&lt;/p&gt;</description>
         
           <description>In some sites like for example Dropbox, you invite people from your Gmail contacts by simply entering your email and password: this is how it's done.</description>
@@ -750,19 +904,27 @@ On the other hand, if everything was ok, the &lt;code&gt;$results&lt;/code&gt; a
         <title>Git tips from stackoverflow</title>
         <description>&lt;p&gt;Here are some pretty cool and very useful git tricks I learnt  by searching or reading stackoverflow.
 Most of them are operations that should be pretty easy to do, and seem pointlessly complicated. The second one is an excellent example of both the flexibility and the lack of user friendliness of the git UI&lt;/p&gt;
+
 &lt;h3&gt;Prevent a file from being commited, ever&lt;/h3&gt;
+
 &lt;p&gt;&lt;a href=&quot;http://stackoverflow.com/a/8485503/210824&quot;&gt;Git: Never Commit Changed Files (But still keep original revisioned.)&lt;/a&gt;&lt;/p&gt;
+
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;    git update-index --assume-unchanged &amp;lt;file&amp;gt;
 &lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;To make it commitable again run&lt;/p&gt;
+
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;    git update-index --no-assume-unchanged &amp;lt;file&amp;gt;
 &lt;/pre&gt;&lt;/div&gt;
 &lt;h3&gt;Commits no yet pushed&lt;/h3&gt;
+
 &lt;p&gt;&lt;a href=&quot;http://stackoverflow.com/a/3338774/210824&quot;&gt;Viewing Unpushed Git Commits&lt;/a&gt;&lt;/p&gt;
+
 &lt;p&gt;If you want to see all commits on all branches that aren't pushed yet, you might be looking for something like this:&lt;/p&gt;
+
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;    git log --branches --not --remotes
 &lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;And if you only want to see the most recent commit on each branch, and the branch names, this:&lt;/p&gt;
+
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;    git log --branches --not --remotes --simplify-by-decoration --decorate --oneline
 &lt;/pre&gt;&lt;/div&gt;</description>
         

@@ -102,18 +102,28 @@
     <h1 class="postTitle"><a href="/2004/10/articles-populaires.html">Articles populaires</a></h1>
     <p class="meta">October 11, 2004 | <span class="time">2</span> Minutes Read</p>
     <p>Ce plugin est une autre extension de <a href="http://randypeterman.com/StatTraq">StatTraq</a> de ma création, donc n'oubliez pas de <a href="http://randypeterman.com/StatTraq/index.php?p=14">télécharger StatTraq</a>. Ce plugin récupère les articles les plus lus de la table de StatTraq et les affiche selon le format de votre choix.</p>
+
 <p>Téléchargez le <a href="http://jfoucher.com/source/most_popular.gz">fichier gzip</a> (ou bien <a href="http://jfoucher.com/source/most_popular">jetez un oeil au code source</a>)</p>
+
 <p>Décompressez le fichier et mettez le dans votre dossier wp-content/plugins, puis activez le dans l'interface d'administration.
 Pour utiliser le plugin, vous devez mettre le code ci-dessous dans votre fichier index.php.</p>
+
 <pre><code>  &lt;?php 
  popular('chaîne', entier);
  ?&gt;</code></pre>
+
 <p>Où 'chaîne' représente le format de sortie que vous souhaitez obtenir. La chaîne par défaut est :</p>
+
 <pre><code> '&lt;li&gt;&lt;a href="%u" title="%t"&gt;%t (%v views)&lt;/a&gt;&lt;/li&gt;'</code></pre>
+
 <p>Dans cette chaîne, %u sera remplacé par l'url de l'article, %t par son titre, et %v par le nombre de fois que cet article a été lu. Il est ainsi très facile de choisir le format de sortie que vous souhaitez.</p>
+
 <p>Le deuxième paramètre (un nombre entier) d?finit le nombre d'articles que vous souhaitez afficher.</p>
+
 <p><strong>Versions</strong></p>
+
 <p>0.1: Première sortie</p>
+
 <p>0.12: Devrait fonctionner avec toutes les structures de parmaliens, merci de me faire savoir si ce n'est pas le cas. Applique le filtre pour 'the_title'.</p>
   </div>
 
@@ -126,7 +136,7 @@ Pour utiliser le plugin, vous devez mettre le code ci-dessous dans votre fichier
         <span class="date">October 09, 2004</span>
         <h3><a class="post-link" href="/2004/10/external-links-wordpress-plugin.html">External Links Wordpress Plugin</a></h3>
         <p class="meta">October 09, 2004 | <span class="time">2</span> Minutes Read</p>
-        <p class="description">External links:The little images that appear after an external link on this site used to be created by pure CSS, using the following rules:.commentlist a[href*="http"], .storycontent a[href*="http"]{    padding-right: 12px;    background: url('/wp-images/ext-link.gif') right top no-repeat;}.commentlist a[href*="jfoucher.info"], .storycontent a[href*="jfoucher.info"]{    padding-right: 0;    background-image: none;}But, as you may know, this does not work in Internet Explorer. So I decided to wri...</p>
+        <p class="description">External links:</p>
       </li>
 
     
@@ -134,7 +144,7 @@ Pour utiliser le plugin, vous devez mettre le code ci-dessous dans votre fichier
         <span class="date">October 08, 2004</span>
         <h3><a class="post-link" href="/2004/10/plugin-wordpress-page-auteur.html">Plugin Wordpress : Page Auteur</a></h3>
         <p class="meta">October 08, 2004 | <span class="time">4</span> Minutes Read</p>
-        <p class="description">Cette extension de Wordpress créé une page spécifique pour chaque auteur, qui montre le nombre d'articles publiés, et les données du compte wordpress de cet utilisateur, tels que biographie, addresse du site web, etc... et optionellement l'adresse email (si vous n'avez pas peur du spam...) Il est aussi possible d'afficher un formulaire qui enverra un message à l'auteur par email, mais sans que l'adresse soit visible.Vous pouvez vous en servir comme d'une page 'à propos' dans un blog perso...</p>
+        <p class="description">Cette extension de Wordpress créé une page spécifique pour chaque auteur, qui montre le nombre d'articles publiés, et les données du compte wordpress de cet utilisateur, tels que biographie, addresse du site web, etc... et optionellement l'adresse email (si vous n'avez pas peur du spam...) Il est aussi possible d'afficher un formulaire qui enverra un message à l'auteur par email, mais sans que l'adresse soit visible.</p>
       </li>
 
     
@@ -142,7 +152,7 @@ Pour utiliser le plugin, vous devez mettre le code ci-dessous dans votre fichier
         <span class="date">October 06, 2004</span>
         <h3><a class="post-link" href="/2004/10/referents-de-larticle.html">Rérents de l'article</a></h3>
         <p class="meta">October 06, 2004 | <span class="time">2</span> Minutes Read</p>
-        <p class="description">C'est un plugin pour Wordpress Qui montre les derniers sites d'où sont venus vos visiteurs. Vous aurez besoin du plugin Stattraq.Installation :    Téléchargez et installez Stattraq.    Envoyer le fichier résultant à votre dossier /wp-content/plugins    Activez le plugin dans votre interface d'administrationL'utilisation est simple :Ajouter le code suivant dans votre fichier index.phppost_referrers(8, "&lt;li&gt;", "&lt;/li&gt;", "Pas encore...", "self");où 8 est le nombre pe pages référe...</p>
+        <p class="description">C'est un plugin pour Wordpress Qui montre les derniers sites d'où sont venus vos visiteurs. Vous aurez besoin du plugin Stattraq.</p>
       </li>
 
     
@@ -150,7 +160,7 @@ Pour utiliser le plugin, vous devez mettre le code ci-dessous dans votre fichier
         <span class="date">October 06, 2004</span>
         <h3><a class="post-link" href="/2004/10/idec-en-route-vers-cadix.html">Idec en route vers Cadix.</a></h3>
         <p class="meta">October 06, 2004 | <span class="time">1</span> Minutes Read</p>
-        <p class="description">Francis Joyon, sur Idec, va tenter d'établir un nouveau record Cadix - San salvador (Bahamas) sur un parcours que l'on appelle la 'Route de la découverte'Francis est &quot;[...] sur le trimaran matin, midi et soir, je n'arrète pas de bricoler, car il y atoujours une foule de petites choses   faire&quot; Il fait tout lui même, sur un bateau qui est censé être mené par un équipage de gaillards surentraînés et pris en charge par une équipe à terre imposante...Il part prochainement de La...</p>
+        <p class="description">Francis Joyon, sur Idec, va tenter d'établir un nouveau record Cadix - San salvador (Bahamas) sur un parcours que l'on appelle la 'Route de la découverte'</p>
       </li>
 
     
@@ -158,7 +168,7 @@ Pour utiliser le plugin, vous devez mettre le code ci-dessous dans votre fichier
         <span class="date">October 06, 2004</span>
         <h3><a class="post-link" href="/2004/10/censored-comment-wordpress-plugin.html">Censored Comment Wordpress plugin</a></h3>
         <p class="meta">October 06, 2004 | <span class="time">1</span> Minutes Read</p>
-        <p class="description">Another wordpress plugin. This one shows a user definable text on comments that have been edited or censored. I got the idea from Michael Heilemann complaining about some useless comments on his site. I would like to have a way of showing which comments have been moderated [...]Well, there you go, Michael!Download the source or the same in gzip format and put it in a php file in your wp-content/plugins directory. Activate it from the admin interface. That's it, good to go!You can change the text...</p>
+        <p class="description">Another wordpress plugin. This one shows a user definable text on comments that have been edited or censored. I got the idea from Michael Heilemann complaining about some useless comments on his site. </p>
       </li>
 
     
@@ -173,6 +183,7 @@ Pour utiliser le plugin, vous devez mettre le code ci-dessous dans votre fichier
     
   </div>
 </div>
+
       </div>
    </div><!-- end .content -->
 

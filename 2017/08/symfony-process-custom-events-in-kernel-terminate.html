@@ -13,7 +13,7 @@
     
     
     <title>Processing custom events in kernel.terminate</title>
-<seo/>
+
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="/assets/img/favicon.ico" />
 
@@ -32,7 +32,7 @@
     <![endif]-->
     
     <style>
-.container:after,.header .container:after{content:" ";display:block;clear:both}.header h1 a,.nav-collapse ul li a{text-decoration:none;color:#fff}h1{margin:.5rem 0 1.5rem;font-family:"Open Sans",Helvetica,Arial,sans-serif;font-size:1.6em;line-height:1.25}html{box-sizing:border-box}*,:after,:before{box-sizing:inherit}body{font-family:"PT Serif",Georgia,Times,serif;line-height:1.75;font-size:112.5%;color:#111;overflow-x:hidden;margin:0}.header h1,.nav-collapse ul li a,.post .meta{font-family:"Open Sans",Helvetica,Arial,sans-serif}body p,body ul{margin:0 0 2rem}.container{max-width:610px;margin-left:auto;margin-right:auto;padding:0 20px}a{color:#fe941c}.nav-collapse{z-index:1}.nav-collapse ul{margin:0;padding:0;width:100%;display:block;list-style:none}.nav-collapse ul li{width:100%;display:block;background:#fe941c;border-bottom:2px solid #fea035}.nav-collapse ul li a{display:block;padding:5px 2rem}.noList{list-style:none;padding-left:0;margin-left:0}.content{padding-top:1em}.header{background-color:#fe941c;background-image:url(/assets/img/touring.jpg);background-size:cover;background-position:center bottom;color:#fff;padding:0;height:3em}.header .container{padding:0;max-width:100%;margin-left:auto;margin-right:auto}.header h1{margin:0;float:left;padding-left:2rem;font-size:1em;line-height:3em;font-weight:800;text-transform:uppercase}.post .postTitle{text-align:center;margin-top:2rem;margin-bottom:1rem}.post .meta{text-align:center;color:gray;font-weight:300}@media only screen and (min-width:800px){.container,.header .container{max-width:800px;margin-left:auto;margin-right:auto}.content{padding-top:0;position:relative;z-index:1}.content:after{z-index:-1;background:#fff;content:"";display:block;width:100%;height:5em;position:absolute;top:-2em;left:0;-webkit-transform:skewY(-2deg);-ms-transform:skewY(-2deg);transform:skewY(-2deg);-webkit-transform-origin:bottom left;-ms-transform-origin:bottom left;transform-origin:bottom left}.container:after,.header .container:after{content:" ";display:block;clear:both}.container{padding:0}.header{height:15em;position:relative;padding-bottom:2em}.header .container{position:relative;top:50%;-webkit-transform:translateY(-50%);-ms-transform:translateY(-50%);transform:translateY(-50%)}.header h1{font-size:2em;line-height:1;letter-spacing:-3px;padding-left:0}.header nav{float:left;clear:left;margin-left:-10px;margin-left:calc(-5px - .25em)}.header nav ul{margin:0}.header nav ul li{display:inline-block;line-height:1em;background:0 0;padding:0 5px;border:none;width:auto}.header nav ul li a{color:#fff;font-size:.9em;text-decoration:none;padding:0 .25em}.header nav ul li.current{padding-bottom:.25em;border-bottom:4px solid rgba(255,255,255,.4)}.post h1,.post p{width:74.46809%;float:none;margin:0 auto 2rem}.post h1{margin:1rem auto}}
+.container:after,.header .container:after{content:" ";display:block;clear:both}.header h1 a,.nav-collapse ul li a{text-decoration:none;color:#fff}h1{margin:.5rem 0 1.5rem;font-family:"Open Sans",Helvetica,Arial,sans-serif;font-size:1.6em;line-height:1.25}html{box-sizing:border-box}*,:after,:before{box-sizing:inherit}body{font-family:"PT Serif",Georgia,Times,serif;line-height:1.75;font-size:112.5%;color:#111;overflow-x:hidden;margin:0}.header h1,.nav-collapse ul li a,.post .meta{font-family:"Open Sans",Helvetica,Arial,sans-serif}body p,body ul{margin:0 0 2rem}.container{max-width:610px;margin-left:auto;margin-right:auto;padding:0 20px}a{color:#fe941c}.nav-collapse{z-index:1}.nav-collapse ul{margin:0;padding:0;width:100%;display:block;list-style:none}.nav-collapse ul li{width:100%;display:block;background:#fe941c;border-bottom:2px solid #fea035}.nav-collapse ul li a{display:block;padding:5px 2rem}.noList{list-style:none;padding-left:0;margin-left:0}.content{padding-top:1em}.header{background-color:#fe941c;background-image:url(/assets/img/out.svg);background-size:cover;background-position:center bottom;color:#fff;padding:0;height:3em}.header .container{padding:0;max-width:100%;margin-left:auto;margin-right:auto}.header h1{margin:0;float:left;padding-left:2rem;font-size:1em;line-height:3em;font-weight:800;text-transform:uppercase}.post .postTitle{text-align:center;margin-top:2rem;margin-bottom:1rem}.post .meta{text-align:center;color:gray;font-weight:300}@media only screen and (min-width:800px){.container,.header .container{max-width:800px;margin-left:auto;margin-right:auto}.content{padding-top:0;position:relative;z-index:1}.content:after{z-index:-1;background:#fff;content:"";display:block;width:100%;height:5em;position:absolute;top:-2em;left:0;-webkit-transform:skewY(-2deg);-ms-transform:skewY(-2deg);transform:skewY(-2deg);-webkit-transform-origin:bottom left;-ms-transform-origin:bottom left;transform-origin:bottom left}.container:after,.header .container:after{content:" ";display:block;clear:both}.container{padding:0}.header{height:15em;position:relative;padding-bottom:2em}.header .container{position:relative;top:50%;-webkit-transform:translateY(-50%);-ms-transform:translateY(-50%);transform:translateY(-50%)}.header h1{font-size:2em;line-height:1;letter-spacing:-3px;padding-left:0}.header nav{float:left;clear:left;margin-left:-10px;margin-left:calc(-5px - .25em)}.header nav ul{margin:0}.header nav ul li{display:inline-block;line-height:1em;background:0 0;padding:0 5px;border:none;width:auto}.header nav ul li a{color:#fff;font-size:.9em;text-decoration:none;padding:0 .25em}.header nav ul li.current{padding-bottom:.25em;border-bottom:4px solid rgba(255,255,255,.4)}.post h1,.post p{width:74.46809%;float:none;margin:0 auto 2rem}.post h1{margin:1rem auto}}
         </style>
 
      <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
@@ -107,12 +107,19 @@
     </div> -->
 
   <h3>What is the kernel.terminate event?</h3>
+
 <p>It is the last event that is triggered in Symfony, just after the response has been sent to the client (only on php-fpm). This means that we can do some heavy lifting here because our response time is not affected. The client gets the response quickly and our processing will occur afterwards. </p>
+
 <p>The Symfony SwiftMailer bundle does this by default, so we should be ok with emails, but my latest project needs to connect to various APIs on some events, and this takes quite some time. </p>
+
 <p>In this post I will explain the method I use to make them run in the <code>kernel.terminate</code> event.</p>
+
 <p>For a primer about Symfony events, I recommend the <a href="https://symfony.com/doc/current/reference/events.html">official Symfony documentation</a></p>
+
 <h3>Custom events</h3>
+
 <p>Custom events are trigerred from our own code, generally in the controller, and it goes something like this:</p>
+
 <div class="highlight"><pre><span class="sd">/** </span>
 <span class="sd">* @var $dispatcher \Symfony\Component\EventDispatcher\EventDispatcherInterface </span>
 <span class="sd">*/</span>
@@ -124,8 +131,10 @@
 <span class="nv">$dispatcher</span><span class="o">-&gt;</span><span class="na">dispatch</span><span class="p">(</span><span class="nx">AppEvents</span><span class="o">::</span><span class="na">NEW_USER</span><span class="p">,</span> <span class="nv">$event</span><span class="p">);</span>
 </pre></div>
 <h3>The event subscriber</h3>
+
 <p>Then we have an EventSubscriber that will listen to our custom events, in my case it's called <code>ApiSubscriber</code> and is located in <code>src/EventSubscriber</code>. In this case it listens to two different events:
 <code>AppEvents::NEW_USER</code> and <code>AppEvents::DELETE_USER</code>.</p>
+
 <div class="highlight"><pre><span class="k">class</span> <span class="nc">ApiSubscriber</span> <span class="k">implements</span> <span class="nx">EventSubscriberInterface</span> <span class="p">{</span>
 
     <span class="k">protected</span> <span class="nv">$container</span><span class="p">;</span>
@@ -146,8 +155,11 @@
 <span class="p">}</span>
 </pre></div>
 <h3>Configure the service</h3>
+
 <p>You will notice that I inject the container as it makes it easy to get everything we need, such as parameters or other services.</p>
+
 <p>Don't forget to configure the event subscriber in <code>app/config/services.yml</code> like so:</p>
+
 <div class="highlight"><pre><span class="l-Scalar-Plain">services</span><span class="p-Indicator">:</span>
     <span class="l-Scalar-Plain">api.subscriber</span><span class="p-Indicator">:</span>
         <span class="l-Scalar-Plain">class</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">AppBundle\EventSubscriber\ApiSubscriber</span>
@@ -156,9 +168,14 @@
             <span class="p-Indicator">-</span> <span class="p-Indicator">{</span> <span class="nv">name</span><span class="p-Indicator">:</span> <span class="nv">kernel.event_subscriber</span> <span class="p-Indicator">}</span>
 </pre></div>
 <p>Now our event subscriber is ready for action whenever we trigger the event from our controllers.</p>
+
 <h3>Handle your custom event</h3>
+
+
 <p>The event handling function is where the magic happens. Say when a new user is created, the <code>AppEvents::NEW_USER</code> is triggered and the <code>ApiSubscriber::newUser</code> function is called.</p>
+
 <p>Here it is, I'll explain later</p>
+
 <div class="highlight"><pre><span class="k">public</span> <span class="k">function</span> <span class="nf">newUser</span><span class="p">(</span><span class="nx">NewUserEvent</span> <span class="nv">$newUserEvent</span><span class="p">)</span>
 <span class="p">{</span>
     <span class="c1">// Get the request from our custom event</span>
@@ -180,9 +197,13 @@
 <span class="p">}</span>
 </pre></div>
 <p>So, from this code it is clear what happens. We first get the request from our custom event, then we set custom attributes on the request (simply because we need to retrieve them later from our static function) and finally we add a new listener (our static function, could also be an anonymous function) to the kernel.terminate event.</p>
+
 <h3>Do the job</h3>
+
 <p>The final piece of the puzzle is our <code>createThingOnApi</code> static function that will do the real work.</p>
+
 <p>Here it is:</p>
+
 <div class="highlight"><pre><span class="k">public</span> <span class="k">static</span> <span class="k">function</span> <span class="nf">createThingOnApi</span><span class="p">(</span><span class="nx">PostResponseEvent</span> <span class="nv">$event</span><span class="p">)</span>
 <span class="p">{</span>
     <span class="nv">$attrs</span> <span class="o">=</span> <span class="nv">$event</span><span class="o">-&gt;</span><span class="na">getRequest</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">attributes</span><span class="p">;</span>
@@ -209,10 +230,15 @@
 <span class="p">}</span>
 </pre></div>
 <p>This basically retrives our data from the request attributes, and then make some sort of curl request to an external API.</p>
+
 <h3>All done !</h3>
+
 <p>Do this and watch your response times go way down (<a href="https://symfony.com/doc/current/components/http_kernel.html#component-http-kernel-kernel-terminate">only on php-pfm</a>)</p>
+
 <p>I'm not saying the is the best or even the only method to achieve this, just the one I personally use. the alternative would be some sort of mesasge queue, but it still seems like premature optimisation for an app of this size. If you have other options to achieve this, let me know in the comments on HN.</p>
+
 <h3>Profiler results</h3>
+
 <p class="image">
 <img src="/uploads/2017/08/symfony-kernel.terminate.png" alt="Profiler results" /></p>
 
@@ -241,6 +267,7 @@
       </a>
     
 </div>
+
       </div>
    </div><!-- end .content -->
 

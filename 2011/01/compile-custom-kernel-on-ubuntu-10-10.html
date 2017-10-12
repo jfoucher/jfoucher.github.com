@@ -13,7 +13,7 @@
     
     
     <title>Compile custom kernel on Ubuntu 10.10</title>
-<seo/>
+
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="/assets/img/favicon.ico" />
 
@@ -32,7 +32,7 @@
     <![endif]-->
     
     <style>
-.container:after,.header .container:after{content:" ";display:block;clear:both}.header h1 a,.nav-collapse ul li a{text-decoration:none;color:#fff}h1{margin:.5rem 0 1.5rem;font-family:"Open Sans",Helvetica,Arial,sans-serif;font-size:1.6em;line-height:1.25}html{box-sizing:border-box}*,:after,:before{box-sizing:inherit}body{font-family:"PT Serif",Georgia,Times,serif;line-height:1.75;font-size:112.5%;color:#111;overflow-x:hidden;margin:0}.header h1,.nav-collapse ul li a,.post .meta{font-family:"Open Sans",Helvetica,Arial,sans-serif}body p,body ul{margin:0 0 2rem}.container{max-width:610px;margin-left:auto;margin-right:auto;padding:0 20px}a{color:#fe941c}.nav-collapse{z-index:1}.nav-collapse ul{margin:0;padding:0;width:100%;display:block;list-style:none}.nav-collapse ul li{width:100%;display:block;background:#fe941c;border-bottom:2px solid #fea035}.nav-collapse ul li a{display:block;padding:5px 2rem}.noList{list-style:none;padding-left:0;margin-left:0}.content{padding-top:1em}.header{background-color:#fe941c;background-image:url(/assets/img/touring.jpg);background-size:cover;background-position:center bottom;color:#fff;padding:0;height:3em}.header .container{padding:0;max-width:100%;margin-left:auto;margin-right:auto}.header h1{margin:0;float:left;padding-left:2rem;font-size:1em;line-height:3em;font-weight:800;text-transform:uppercase}.post .postTitle{text-align:center;margin-top:2rem;margin-bottom:1rem}.post .meta{text-align:center;color:gray;font-weight:300}@media only screen and (min-width:800px){.container,.header .container{max-width:800px;margin-left:auto;margin-right:auto}.content{padding-top:0;position:relative;z-index:1}.content:after{z-index:-1;background:#fff;content:"";display:block;width:100%;height:5em;position:absolute;top:-2em;left:0;-webkit-transform:skewY(-2deg);-ms-transform:skewY(-2deg);transform:skewY(-2deg);-webkit-transform-origin:bottom left;-ms-transform-origin:bottom left;transform-origin:bottom left}.container:after,.header .container:after{content:" ";display:block;clear:both}.container{padding:0}.header{height:15em;position:relative;padding-bottom:2em}.header .container{position:relative;top:50%;-webkit-transform:translateY(-50%);-ms-transform:translateY(-50%);transform:translateY(-50%)}.header h1{font-size:2em;line-height:1;letter-spacing:-3px;padding-left:0}.header nav{float:left;clear:left;margin-left:-10px;margin-left:calc(-5px - .25em)}.header nav ul{margin:0}.header nav ul li{display:inline-block;line-height:1em;background:0 0;padding:0 5px;border:none;width:auto}.header nav ul li a{color:#fff;font-size:.9em;text-decoration:none;padding:0 .25em}.header nav ul li.current{padding-bottom:.25em;border-bottom:4px solid rgba(255,255,255,.4)}.post h1,.post p{width:74.46809%;float:none;margin:0 auto 2rem}.post h1{margin:1rem auto}}
+.container:after,.header .container:after{content:" ";display:block;clear:both}.header h1 a,.nav-collapse ul li a{text-decoration:none;color:#fff}h1{margin:.5rem 0 1.5rem;font-family:"Open Sans",Helvetica,Arial,sans-serif;font-size:1.6em;line-height:1.25}html{box-sizing:border-box}*,:after,:before{box-sizing:inherit}body{font-family:"PT Serif",Georgia,Times,serif;line-height:1.75;font-size:112.5%;color:#111;overflow-x:hidden;margin:0}.header h1,.nav-collapse ul li a,.post .meta{font-family:"Open Sans",Helvetica,Arial,sans-serif}body p,body ul{margin:0 0 2rem}.container{max-width:610px;margin-left:auto;margin-right:auto;padding:0 20px}a{color:#fe941c}.nav-collapse{z-index:1}.nav-collapse ul{margin:0;padding:0;width:100%;display:block;list-style:none}.nav-collapse ul li{width:100%;display:block;background:#fe941c;border-bottom:2px solid #fea035}.nav-collapse ul li a{display:block;padding:5px 2rem}.noList{list-style:none;padding-left:0;margin-left:0}.content{padding-top:1em}.header{background-color:#fe941c;background-image:url(/assets/img/out.svg);background-size:cover;background-position:center bottom;color:#fff;padding:0;height:3em}.header .container{padding:0;max-width:100%;margin-left:auto;margin-right:auto}.header h1{margin:0;float:left;padding-left:2rem;font-size:1em;line-height:3em;font-weight:800;text-transform:uppercase}.post .postTitle{text-align:center;margin-top:2rem;margin-bottom:1rem}.post .meta{text-align:center;color:gray;font-weight:300}@media only screen and (min-width:800px){.container,.header .container{max-width:800px;margin-left:auto;margin-right:auto}.content{padding-top:0;position:relative;z-index:1}.content:after{z-index:-1;background:#fff;content:"";display:block;width:100%;height:5em;position:absolute;top:-2em;left:0;-webkit-transform:skewY(-2deg);-ms-transform:skewY(-2deg);transform:skewY(-2deg);-webkit-transform-origin:bottom left;-ms-transform-origin:bottom left;transform-origin:bottom left}.container:after,.header .container:after{content:" ";display:block;clear:both}.container{padding:0}.header{height:15em;position:relative;padding-bottom:2em}.header .container{position:relative;top:50%;-webkit-transform:translateY(-50%);-ms-transform:translateY(-50%);transform:translateY(-50%)}.header h1{font-size:2em;line-height:1;letter-spacing:-3px;padding-left:0}.header nav{float:left;clear:left;margin-left:-10px;margin-left:calc(-5px - .25em)}.header nav ul{margin:0}.header nav ul li{display:inline-block;line-height:1em;background:0 0;padding:0 5px;border:none;width:auto}.header nav ul li a{color:#fff;font-size:.9em;text-decoration:none;padding:0 .25em}.header nav ul li.current{padding-bottom:.25em;border-bottom:4px solid rgba(255,255,255,.4)}.post h1,.post p{width:74.46809%;float:none;margin:0 auto 2rem}.post h1{margin:1rem auto}}
         </style>
 
      <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
@@ -101,27 +101,45 @@
   <p class="meta">January 12, 2011 | <span class="time">5</span> Minute Read</p>
   
   <p>First off, you want to grab the latest kernel source from <a href="http://kernel.org/"><a href="http://kernel.org/">http://kernel.org/</a></a> and save it to a folder on your computer. I used my browser's default : <code>~/Downloads</code>. Right click on the archive and select &quot;extract here&quot;</p>
+
 <h3>Configuration</h3>
+
 <p>Open a terminal, &quot;cd&quot; to your source directory, in my case <code>cd ~/Downloads/linux-2.6.37</code> and run <code>make gconfig</code> if using Ubuntu or <code>make kconfig</code> if running Kubuntu. At that point, you'll need to know a fair bit about your system's hardware, to select only the options that are applicable. I like to reuse my current config as a starting point, so if you are using the default ubuntu kernel, the configuration used is stored in the <code>boot</code> directory, with names like <code>config-2.6.35-24-generic</code></p>
+
 <p>Copy the latest one to your linux source directory. When the configuration editor is loaded, choose <code>File &gt;&gt; Load</code> and select the file you just copied over. Now the Ubuntu default configuration is loaded. If you were to compile your kernel you would get the same kind of system you have now : functional but suboptimal.</p>
+
 <h3>We'll try and better that a bit.</h3>
+
 <p>The first submenu I open is Processor type and features. In there, I disable everything related to SMP and Paravirtualized guest support as I do not plan to run this as a VM guest. I choose the type of processor appropriate to my machine, in this case &quot;new Xeon&quot;</p>
+
 <p>You can use <code>make localmodconfig</code> which will disable all the modules not currently loaded from your config file. Be careful though, because if there are devices and/of file systems you're not using at the moment, the drivers won't be added.</p>
+
 <h3>Compiling and instalation</h3>
+
 <p>Once you're happy with the configuration, save and close the editor, and run <code>make all</code> or <code>make -j4 all</code> on multicore processors to run several processes in parallel, which will compile the kernel and the modules specified in the <code>.config</code> file</p>
+
 <p>That's the regular debian method, in which you have to run mkinitrd afterwards. I ended up doing it <a href="https://help.ubuntu.com/community/Kernel/Compile">the ubuntu way</a>, where you create .deb packages you can later install with your preferred package manager.</p>
+
 <p>If you re-used the existing configuration, note that Ubuntu kernels build with debugging information on, which makes the resulting kernel modules (*.ko files) much larger than they would otherwise be. To turn this off, go into the config's &quot;Kernel hacking&quot; and turn OFF &quot;Compile the kernel with debug info&quot;.</p>
+
 <h3>Now you can compile the kernel and create the packages:</h3>
+
 <div class="highlight"><pre>    make-kpkg clean <span class="c"># only needed if you want to do a "clean" build</span>
     fakeroot make-kpkg --initrd --append-to-version<span class="o">=</span>-some-string-here kernel-image kernel-headers
 </pre></div>
 <img class="aligncenter" src="http://media.tumblr.com/tumblr_let0e9SCP01qzbvjd.png" alt="" width="500" height="338" />
 <p>Much easier...</p>
+
 <h3>Drivers</h3>
+
 <p>Of course, if you're using non-free drivers, you'll want to reinstall them. The first time I booted the new kernel, X did not start because it couldn't load the nvidia kernel module. Luckily, I had the latest driver around from a previous install, so installed straight away from the command line.</p>
+
 <p>You should now have a working Ubuntu install running your own custom kernel. Of course, you are responsible for upgradin kernel and binary drivers, as the updates from Ubuntu are not going to work any longer... Although I'm not so sure about that. I'll see in a while I guess.</p>
+
 <h3>Done!</h3>
+
 <p>Anyway, in my case this upgrade is really worth it because I get a functioning built-in microphone on my Vaio! Yay!</p>
+
 <p>So the moral is: don't be scared of trying a custom kernel, it really got much easier, and if you don't like it, going back is as easy as selecting another entry in grub...</p>
 
   </div>
@@ -143,6 +161,7 @@
       </a>
     
 </div>
+
       </div>
    </div><!-- end .content -->
 

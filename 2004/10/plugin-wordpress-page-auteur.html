@@ -8,12 +8,12 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Jonathan Foucher's blog & web development notebook">
+    <meta name="description" content="<p>Cette extension de Wordpress créé une page spécifique pour chaque auteur, qui montre le nombre d'articles publiés, et les données du compte wordpress de cet utilisateur, tels que biographie, addresse du site web, etc... et optionellement l'adresse email (si vous n'avez pas peur du spam...) Il est aussi possible d'afficher un formulaire qui enverra un message à l'auteur par email, mais sans que l'adresse soit visible.</p>">
     <meta name="generator" content="Stati (https://stati.jfoucher.com)" />
     
     
     <title>Plugin Wordpress : Page Auteur</title>
-<seo/>
+
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="/assets/img/favicon.ico" />
 
@@ -32,7 +32,7 @@
     <![endif]-->
     
     <style>
-.container:after,.header .container:after{content:" ";display:block;clear:both}.header h1 a,.nav-collapse ul li a{text-decoration:none;color:#fff}h1{margin:.5rem 0 1.5rem;font-family:"Open Sans",Helvetica,Arial,sans-serif;font-size:1.6em;line-height:1.25}html{box-sizing:border-box}*,:after,:before{box-sizing:inherit}body{font-family:"PT Serif",Georgia,Times,serif;line-height:1.75;font-size:112.5%;color:#111;overflow-x:hidden;margin:0}.header h1,.nav-collapse ul li a,.post .meta{font-family:"Open Sans",Helvetica,Arial,sans-serif}body p,body ul{margin:0 0 2rem}.container{max-width:610px;margin-left:auto;margin-right:auto;padding:0 20px}a{color:#fe941c}.nav-collapse{z-index:1}.nav-collapse ul{margin:0;padding:0;width:100%;display:block;list-style:none}.nav-collapse ul li{width:100%;display:block;background:#fe941c;border-bottom:2px solid #fea035}.nav-collapse ul li a{display:block;padding:5px 2rem}.noList{list-style:none;padding-left:0;margin-left:0}.content{padding-top:1em}.header{background-color:#fe941c;background-image:url(/assets/img/touring.jpg);background-size:cover;background-position:center bottom;color:#fff;padding:0;height:3em}.header .container{padding:0;max-width:100%;margin-left:auto;margin-right:auto}.header h1{margin:0;float:left;padding-left:2rem;font-size:1em;line-height:3em;font-weight:800;text-transform:uppercase}.post .postTitle{text-align:center;margin-top:2rem;margin-bottom:1rem}.post .meta{text-align:center;color:gray;font-weight:300}@media only screen and (min-width:800px){.container,.header .container{max-width:800px;margin-left:auto;margin-right:auto}.content{padding-top:0;position:relative;z-index:1}.content:after{z-index:-1;background:#fff;content:"";display:block;width:100%;height:5em;position:absolute;top:-2em;left:0;-webkit-transform:skewY(-2deg);-ms-transform:skewY(-2deg);transform:skewY(-2deg);-webkit-transform-origin:bottom left;-ms-transform-origin:bottom left;transform-origin:bottom left}.container:after,.header .container:after{content:" ";display:block;clear:both}.container{padding:0}.header{height:15em;position:relative;padding-bottom:2em}.header .container{position:relative;top:50%;-webkit-transform:translateY(-50%);-ms-transform:translateY(-50%);transform:translateY(-50%)}.header h1{font-size:2em;line-height:1;letter-spacing:-3px;padding-left:0}.header nav{float:left;clear:left;margin-left:-10px;margin-left:calc(-5px - .25em)}.header nav ul{margin:0}.header nav ul li{display:inline-block;line-height:1em;background:0 0;padding:0 5px;border:none;width:auto}.header nav ul li a{color:#fff;font-size:.9em;text-decoration:none;padding:0 .25em}.header nav ul li.current{padding-bottom:.25em;border-bottom:4px solid rgba(255,255,255,.4)}.post h1,.post p{width:74.46809%;float:none;margin:0 auto 2rem}.post h1{margin:1rem auto}}
+.container:after,.header .container:after{content:" ";display:block;clear:both}.header h1 a,.nav-collapse ul li a{text-decoration:none;color:#fff}h1{margin:.5rem 0 1.5rem;font-family:"Open Sans",Helvetica,Arial,sans-serif;font-size:1.6em;line-height:1.25}html{box-sizing:border-box}*,:after,:before{box-sizing:inherit}body{font-family:"PT Serif",Georgia,Times,serif;line-height:1.75;font-size:112.5%;color:#111;overflow-x:hidden;margin:0}.header h1,.nav-collapse ul li a,.post .meta{font-family:"Open Sans",Helvetica,Arial,sans-serif}body p,body ul{margin:0 0 2rem}.container{max-width:610px;margin-left:auto;margin-right:auto;padding:0 20px}a{color:#fe941c}.nav-collapse{z-index:1}.nav-collapse ul{margin:0;padding:0;width:100%;display:block;list-style:none}.nav-collapse ul li{width:100%;display:block;background:#fe941c;border-bottom:2px solid #fea035}.nav-collapse ul li a{display:block;padding:5px 2rem}.noList{list-style:none;padding-left:0;margin-left:0}.content{padding-top:1em}.header{background-color:#fe941c;background-image:url(/assets/img/out.svg);background-size:cover;background-position:center bottom;color:#fff;padding:0;height:3em}.header .container{padding:0;max-width:100%;margin-left:auto;margin-right:auto}.header h1{margin:0;float:left;padding-left:2rem;font-size:1em;line-height:3em;font-weight:800;text-transform:uppercase}.post .postTitle{text-align:center;margin-top:2rem;margin-bottom:1rem}.post .meta{text-align:center;color:gray;font-weight:300}@media only screen and (min-width:800px){.container,.header .container{max-width:800px;margin-left:auto;margin-right:auto}.content{padding-top:0;position:relative;z-index:1}.content:after{z-index:-1;background:#fff;content:"";display:block;width:100%;height:5em;position:absolute;top:-2em;left:0;-webkit-transform:skewY(-2deg);-ms-transform:skewY(-2deg);transform:skewY(-2deg);-webkit-transform-origin:bottom left;-ms-transform-origin:bottom left;transform-origin:bottom left}.container:after,.header .container:after{content:" ";display:block;clear:both}.container{padding:0}.header{height:15em;position:relative;padding-bottom:2em}.header .container{position:relative;top:50%;-webkit-transform:translateY(-50%);-ms-transform:translateY(-50%);transform:translateY(-50%)}.header h1{font-size:2em;line-height:1;letter-spacing:-3px;padding-left:0}.header nav{float:left;clear:left;margin-left:-10px;margin-left:calc(-5px - .25em)}.header nav ul{margin:0}.header nav ul li{display:inline-block;line-height:1em;background:0 0;padding:0 5px;border:none;width:auto}.header nav ul li a{color:#fff;font-size:.9em;text-decoration:none;padding:0 .25em}.header nav ul li.current{padding-bottom:.25em;border-bottom:4px solid rgba(255,255,255,.4)}.post h1,.post p{width:74.46809%;float:none;margin:0 auto 2rem}.post h1{margin:1rem auto}}
         </style>
 
      <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
@@ -101,34 +101,57 @@
   <p class="meta">October 08, 2004 | <span class="time">4</span> Minute Read</p>
   
   <p>Cette extension de Wordpress créé une page spécifique pour chaque auteur, qui montre le nombre d'articles publiés, et les données du compte wordpress de cet utilisateur, tels que biographie, addresse du site web, etc... et optionellement l'adresse email (si vous n'avez pas peur du spam...) Il est aussi possible d'afficher un formulaire qui enverra un message à l'auteur par email, mais sans que l'adresse soit visible.</p>
+
 <p>Vous pouvez vous en servir comme d'une page 'à propos' dans un blog personnel ou pour donner une présentation de chaque auteur dans un site collaboratif.</p>
+
 <p>Pour l'installer, téléchargez le fichier <a href="http://jfoucher.com/source/author.gz">gzip</a> et décompressez-le</p>
+
 <p>Envoyez  le fichier résultant dans votre dossier wp-content/plugins et activez le depuis l'interface d'administration.</p>
+
 <p>Pour l'utiliser, écrivez 'author()' dans votre fichier index.php, là où normalement apparaît le message signalant l'absence d'article.</p>
+
 <p>Dans le fichier index.php par défaut, ça ressemble à ça :</p>
+
 <pre><code> &lt;?php endforeach; else: ?&gt;
  &lt;p&gt;&lt;?php _e('Sorry, no posts matched your criteria.'); ?&gt;&lt;/p&gt;
  &lt;?php endif; ?&gt;</code></pre>
+
 <p>Remplacez le par :</p>
+
 <pre><code> &lt;?php endforeach; else:
  author(true, 5,false);
  endif; ?&gt;</code></pre>
+
 <p>Le premier param?tre bool?en (optionel) vous permet de choisir si vous souhaitez afficher un formulaire de contact ou pas. 'true' est le param?tre par d?fault (affiche le formulaire).</p>
+
 <p>Dans les versions 0.2+, le deuxième paramètre permet de définir le nombre de derniers articles à afficher. Etabli à 0 par d?fault (ne pas afficher les derniers articles publiés).</p>
+
 <p>Pour les versions 0.22+, le troisième paramètre booléen permet d'afficher ou pas l'adresse email de l'auteur. Cette option est à 'false' par d?faut (ne pas afficher l'adresse email).</p>
+
 <p>Les textes dans le plugin sont en Français, mais vous souhaiterez paut être les changer. Ne vous gênez pas ;)</p>
+
 <p>Pour faire un lien vers la page de l'auteur, vous devez faire quelque chose comme ?a :</p>
+
 <pre><code> &lt;a href="index.php?author_name=&lt;?php the_author_login(); ?&gt;"&gt;
  &lt;?php the_author(); ?&gt;&lt;/a&gt;</code></pre>
+
 <p>Si vous ne pouvez ou ne voulez pas utiliser les <a href="http://httpd.apache.org/docs/misc/rewriteguide.html">RewriteRules</a> (règles de réécriture d'url <a href="http://httpd.apache.org">Apache</a>).</p>
+
 <p>Sur ce site, j'utilise la règle de réécriture suivante :</p>
+
 <pre><code>RewriteRule ^author/?(.*)/? /index.php?author_name=$1 [QSA]</code></pre>
+
 <p>Donc le lien vers la page auteur est comme ceci :</p>
+
 <pre><code> &lt;a href="http://jfoucher.com/author/&lt;?php the_author_login(); ?&gt;"&gt;
  &lt;?php the_author(); ?&gt;&lt;/a&gt;</code></pre>
+
 <p>Mais vous pourriez tout aussi bien utliser le règle suivante :</p>
+
 <pre><code>RewriteRule ^a-propos/? /index.php?author_name=login [QSA]</code></pre>
+
 <p>en remplacant 'login' par votre propre identifiant, et créér un lien vers cette page comme ceci :</p>
+
 <pre><code> &lt;a href="http://jfoucher.com/a-propos/"&gt;A propos&lt;/a&gt;</code></pre>
 
   </div>
@@ -150,6 +173,7 @@
       </a>
     
 </div>
+
       </div>
    </div><!-- end .content -->
 

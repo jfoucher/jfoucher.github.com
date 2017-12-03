@@ -5,13 +5,13 @@
     <description>Jonathan Foucher's blog &amp; web development notebook</description>
     <link>https://jfoucher.com/</link>
     <atom:link href="https://jfoucher.com/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>2017-10-12T12:11:14+00:00</pubDate>
-    <lastBuildDate>2017-10-12T12:11:14+00:00</lastBuildDate>
+    <pubDate>2017-12-03T17:30:00+00:00</pubDate>
+    <lastBuildDate>2017-12-03T17:30:00+00:00</lastBuildDate>
     <generator>Stati (https://stati.jfoucher.com)</generator>
     
       <item>
         <title>Stati, a PHP static site generator that works on any existing Jekyll site</title>
-        <description>&lt;h3&gt;Success !!!!!!!&lt;/h3&gt;
+        <description>&lt;h3&gt;Success !&lt;/h3&gt;
 
 &lt;p&gt;Well it's been quite a week. Having had an unexpected lull in my contract work, I decided to work on something fun. I use jekyll for most of my static sites, and I quite like it. It's still a mistery to me why I decided to build a clone of it. But anyway, one week later, here we are. &lt;a href=&quot;https://github.com/jfoucher/stati&quot;&gt;Stati&lt;/a&gt; can now build all my ex-Jekyll sites properly. Actually this blog is now generated with Stati!&lt;/p&gt;
 
@@ -375,7 +375,7 @@ const chart = new Chart(ctx, options);
 
 &lt;p&gt;Until then, keep coding !&lt;/p&gt;
 
-&lt;p&gt;PS Oh about that &lt;a href=&quot;/2017/03/one-project-per-month-first-budget-tracking.html&quot;&gt;One project per month challenge&lt;/a&gt;? This one is bigger than I expected, so it will (has already been) longer than a month. It will be great, I hope. Everything you need for an early stage startup. &lt;a href=&quot;/contact.html&quot;&gt;Contact me&lt;/a&gt; if you'd like some more info.&lt;/p&gt;</description>
+&lt;p&gt;PS Oh about that &lt;a href=&quot;/2016/03/one-project-per-month-first-budget-tracking.html&quot;&gt;One project per month challenge&lt;/a&gt;? This one is bigger than I expected, so it will (has already been) longer than a month. It will be great, I hope. Everything you need for an early stage startup. &lt;a href=&quot;/contact.html&quot;&gt;Contact me&lt;/a&gt; if you'd like some more info.&lt;/p&gt;</description>
         
           <description>I decided to roll my own HTML template editor because most opensource ones, while good looking and well designed, are impossible to use.</description>
         
@@ -390,6 +390,39 @@ const chart = new Chart(ctx, options);
         <category>iframe</category>
         
         <category>webdev</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>Building a webGL and webworkers boat hydrostatics app</title>
+        <description>&lt;p&gt;I've recently felt the urge to start designing boats again, as I have had some ideas I wanted to explore, specifically for boats of the &lt;a href=&quot;http://classemini.org&quot;&gt;Mini 650 class&lt;/a&gt;. The software I use has basic hydrostatics capabilities, but only for an upright boat. It cannot calculate the GZ curve, or get the righting moment at specific heel angles, which is a crucial data for the kind of craft I wanted to design.&lt;/p&gt;
+
+&lt;p&gt;Existing solutions are extremely powerful and extremely expensive, so I decided i'd spend a few days rolling my own, with only the features I needed for the time being. I have all the technical background for this type of calculations, so I figured it shouldn't be too hard. I really wanted to display a 3D view of the model, and not have it only output data in table format, and since I had never used web GL and was curious about, I figured it was the perfect time to try it out. Pro tip : if you're not used to openGL or working in 3D programatically, use &lt;a href=&quot;https://threejs.org/&quot;&gt;three.js&lt;/a&gt;. Thank me later.&lt;/p&gt;
+
+&lt;p&gt;So at first I built something very basic that just displayed the model in threejs and did some static calculations, in the UI thread. At first it worked ok, but as soon as I added functionality to solve for trim (to align longitudinal center of gravity with the longitudinal center of buoyancy) it started to get very slow. The 3D view could not even be moved around anymore because the UI thread was doing all the calculations in the foreground. Basically to do this kind of calculations, you have to move the model up and down to adjust for the correct displacement, and then pitch it forwards or aft until the center of buoyancy aligns with the center of gravity. This loop is computationally intensive and made everything grind to a halt.&lt;/p&gt;
+
+&lt;p&gt;So webworkers to the rescue. I had never really used them either, but they promised to make it easy to send most of the work to a background thread that would not slow down my UI. I refactored my code to put all the heavy lifting into separate files that could then be called as a web worker. I also had to add messaging to pass data to and from the UI javascript. That was fairly easy to do, as they are simple calls to postMessage, and a callback function in the UI and the worker to receive sent messages. Very easy and obvious, so great !&lt;/p&gt;
+
+&lt;p&gt;The calculations are accurate, I've had them checked in many cases against an old Hydromax version, which is an established solution in the field, and the results match within about a percentage point. The only difficulty I'm still struggling with is to properly draw the underwater stations and the waterline, but this is only a display bug and does not affect the results. What happens is that there are many edge cases that have to be accounted for, depending on the type and quality of the input file. I'm still working on that.&lt;/p&gt;
+
+&lt;p&gt;If you like designing boats and currently do these kinds of calculations by hand or in a spreadsheet, or if your current software does not solve for trim, you will definitely want to &lt;a href=&quot;https://hydro.marinetechs.com/?utm_source=jfoucher&amp;amp;utm_campaign=launch&amp;amp;utm_medium=blog&quot;&gt;give this tool a try&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;If you do, and you like it, or you hate it, or it doesn't work, or anything, your feedback would be invaluable. Contact me &lt;a href=&quot;mailto:j_foucher@marinetechs.com&quot;&gt;by email&lt;/a&gt; or through &lt;a href=&quot;/contact&quot;&gt;this blog's contact form&lt;/a&gt;.&lt;/p&gt;</description>
+        
+          <description>I had a need for a simple program to do some calculations for a boat design I'm studying, so I built it from scratch with webGL and webworkers.</description>
+        
+        <pubDate>2016-12-25T00:00:00+00:00</pubDate>
+        <link>https://jfoucher.com/2016/12/webgl-webworkers-boat-calculations.html</link>
+        <guid isPermaLink="true">https://jfoucher.com/2016/12/webgl-webworkers-boat-calculations.html</guid>
+        
+        <category>javascript</category>
+        
+        <category>webgl</category>
+        
+        <category>webworker</category>
+        
+        <category>yachtdesign</category>
         
         
       </item>
@@ -418,48 +451,15 @@ const chart = new Chart(ctx, options);
         
           <description>This year I decided to try and develop one project every month. Here's how January and February went</description>
         
-        <pubDate>2017-03-01T10:17:07+02:00</pubDate>
-        <link>https://jfoucher.com/2017/03/one-project-per-month-first-budget-tracking.html</link>
-        <guid isPermaLink="true">https://jfoucher.com/2017/03/one-project-per-month-first-budget-tracking.html</guid>
+        <pubDate>2016-03-01T00:00:00+00:00</pubDate>
+        <link>https://jfoucher.com/2016/03/one-project-per-month-first-budget-tracking.html</link>
+        <guid isPermaLink="true">https://jfoucher.com/2016/03/one-project-per-month-first-budget-tracking.html</guid>
         
         <category>javascript</category>
         
         <category>project</category>
         
         <category>web</category>
-        
-        
-      </item>
-    
-      <item>
-        <title>Building a webGL and webworkers boat hydrostatics app</title>
-        <description>&lt;p&gt;I've recently felt the urge to start designing boats again, as I have had some ideas I wanted to explore, specifically for boats of the &lt;a href=&quot;http://classemini.org&quot;&gt;Mini 650 class&lt;/a&gt;. The software I use has basic hydrostatics capabilities, but only for an upright boat. It cannot calculate the GZ curve, or get the righting moment at specific heel angles, which is a crucial data for the kind of craft I wanted to design.&lt;/p&gt;
-
-&lt;p&gt;Existing solutions are extremely powerful and extremely expensive, so I decided i'd spend a few days rolling my own, with only the features I needed for the time being. I have all the technical background for this type of calculations, so I figured it shouldn't be too hard. I really wanted to display a 3D view of the model, and not have it only output data in table format, and since I had never used web GL and was curious about, I figured it was the perfect time to try it out. Pro tip : if you're not used to openGL or working in 3D programatically, use &lt;a href=&quot;https://threejs.org/&quot;&gt;three.js&lt;/a&gt;. Thank me later.&lt;/p&gt;
-
-&lt;p&gt;So at first I built something very basic that just displayed the model in threejs and did some static calculations, in the UI thread. At first it worked ok, but as soon as I added functionality to solve for trim (to align longitudinal center of gravity with the longitudinal center of buoyancy) it started to get very slow. The 3D view could not even be moved around anymore because the UI thread was doing all the calculations in the foreground. Basically to do this kind of calculations, you have to move the model up and down to adjust for the correct displacement, and then pitch it forwards or aft until the center of buoyancy aligns with the center of gravity. This loop is computationally intensive and made everything grind to a halt.&lt;/p&gt;
-
-&lt;p&gt;So webworkers to the rescue. I had never really used them either, but they promised to make it easy to send most of the work to a background thread that would not slow down my UI. I refactored my code to put all the heavy lifting into separate files that could then be called as a web worker. I also had to add messaging to pass data to and from the UI javascript. That was fairly easy to do, as they are simple calls to postMessage, and a callback function in the UI and the worker to receive sent messages. Very easy and obvious, so great !&lt;/p&gt;
-
-&lt;p&gt;The calculations are accurate, I've had them checked in many cases against an old Hydromax version, which is an established solution in the field, and the results match within about a percentage point. The only difficulty I'm still struggling with is to properly draw the underwater stations and the waterline, but this is only a display bug and does not affect the results. What happens is that there are many edge cases that have to be accounted for, depending on the type and quality of the input file. I'm still working on that.&lt;/p&gt;
-
-&lt;p&gt;If you like designing boats and currently do these kinds of calculations by hand or in a spreadsheet, or if your current software does not solve for trim, you will definitely want to &lt;a href=&quot;https://hydro.marinetechs.com/?utm_source=jfoucher&amp;amp;utm_campaign=launch&amp;amp;utm_medium=blog&quot;&gt;give this tool a try&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;If you do, and you like it, or you hate it, or it doesn't work, or anything, your feedback would be invaluable. Contact me &lt;a href=&quot;mailto:j_foucher@marinetechs.com&quot;&gt;by email&lt;/a&gt; or through &lt;a href=&quot;/contact&quot;&gt;this blog's contact form&lt;/a&gt;.&lt;/p&gt;</description>
-        
-          <description>I had a need for a simple program to do some calculations for a boat design I'm studying, so I built it from scratch with webGL and webworkers.</description>
-        
-        <pubDate>2016-12-20T10:17:07+02:00</pubDate>
-        <link>https://jfoucher.com/2016/12/webgl-webworkers-boat-calculations.html</link>
-        <guid isPermaLink="true">https://jfoucher.com/2016/12/webgl-webworkers-boat-calculations.html</guid>
-        
-        <category>javascript</category>
-        
-        <category>webgl</category>
-        
-        <category>webworker</category>
-        
-        <category>yachtdesign</category>
         
         
       </item>
@@ -522,7 +522,7 @@ const chart = new Chart(ctx, options);
         
           <description>I never run unless forced to, but today I decided to build modern/traditional running shoes for my whole family and go for a run. Boy am I sore.</description>
         
-        <pubDate>2013-05-26T21:17:07+02:00</pubDate>
+        <pubDate>2013-05-26T00:00:00+00:00</pubDate>
         <link>https://jfoucher.com/2013/05/building-and-using-minimalist-running-shoes.html</link>
         <guid isPermaLink="true">https://jfoucher.com/2013/05/building-and-using-minimalist-running-shoes.html</guid>
         
@@ -793,7 +793,7 @@ Transfer rate:          23351.88 [Kbytes/sec] received&lt;/code&gt;&lt;/pre&gt;
         
           <description>I recently decided to go with a small VPS for some of my sites, and to get decent performance without too much work I used Nginx as a proxy to Apache2.</description>
         
-        <pubDate>2012-04-23T08:17:07+02:00</pubDate>
+        <pubDate>2012-04-23T00:00:00+00:00</pubDate>
         <link>https://jfoucher.com/2012/04/installing-apache-php-and-nginx-for-faster-websites.html</link>
         <guid isPermaLink="true">https://jfoucher.com/2012/04/installing-apache-php-and-nginx-for-faster-websites.html</guid>
         
@@ -887,7 +887,7 @@ On the other hand, if everything was ok, the &lt;code&gt;$results&lt;/code&gt; a
         
           <description>In some sites like for example Dropbox, you invite people from your Gmail contacts by simply entering your email and password: this is how it's done.</description>
         
-        <pubDate>2012-04-16T09:17:07+02:00</pubDate>
+        <pubDate>2012-04-15T00:00:00+00:00</pubDate>
         <link>https://jfoucher.com/2012/04/getting-your-users-gmail-contacts.html</link>
         <guid isPermaLink="true">https://jfoucher.com/2012/04/getting-your-users-gmail-contacts.html</guid>
         

@@ -99,40 +99,38 @@
 
   <div class="post">
     
-    <h1 class="postTitle"><a href="/2017/09/stati-static-site-generator.html">Stati, a PHP static site generator that works on any existing Jekyll site</a></h1>
-    <p class="meta">September 28, 2017 | <span class="time">3</span> Minutes Read</p>
-    <h3>Success !</h3>
+    <h1 class="postTitle"><a href="/2019/02/mailocal-a-local-smtp-server-to-debug-your-emails.html">Mailocal, a simple SMTP server and web interface to debug your emails</a></h1>
+    <p class="meta">February 28, 2019 | <span class="time">2</span> Minutes Read</p>
+    <h3>Testing emails</h3>
 
-<p>Well it's been quite a week. Having had an unexpected lull in my contract work, I decided to work on something fun. I use jekyll for most of my static sites, and I quite like it. It's still a mistery to me why I decided to build a clone of it. But anyway, one week later, here we are. <a href="https://github.com/jfoucher/stati">Stati</a> can now build all my ex-Jekyll sites properly. Actually this blog is now generated with Stati!</p>
+<p>The way I used to do it is to have all emails sent to me via a configuration setting in either Symfony or Laravel. This works fine but there can be a significant delay between the moment when the email is sent and the moment it is received, which is annoying. I have heard about mailtrap, which is a hosted service that does more or less what <a href="https://mailocal.jfoucher.com">Mailocal</a> does. But I'm not a fan of sending my customers' info to a third party.</p>
 
-<h3>Architecture</h3>
+<h3>Mailocal</h3>
 
-<p>I read this <a href="https://www.bytesandwich.com/jekyll/software/blogging/2016/09/14/how-does-jekyll-work.html">How does Jekyll work</a> blog post that gives a nice high level overview of the jekyll architecture, and I decided to mostly use the same kind of process.</p>
+<p>So over a couple of days I developed <a href="https://mailocal.jfoucher.com">Mailocal</a> which is a smtp server you run locally, with a web interface to view the emails is has received.</p>
 
-<p>A main Site class holds most of the state while the generation is in progress, with <a href="http://symfony.com/doc/current/components/event_dispatcher.html">events</a> being dispatched at several steps along the process so that plugins can hook into them and modify the input, the output, or simply monitor the progress of the generation process.</p>
+<p>It is built almost fully with PHP (Symfony) with only a light smattering of javascript for the front-end.
+It works pretty good for the time I spent on it, although I can't be sure it will parse all emails equally well.</p>
 
-<p>First all files are read, in different manner depending on their type (static files, posts or pages), then they are rendered (again differently depending on their type) and finally they are written to disk at the correct path.</p>
+<p>Obviously this is something that should not be run on a production server because I haven't looked at the security aspects much, but that's not the use case anyway.</p>
 
-<h3>Plugins</h3>
+<p>So I hope you enjoy it and <a href="mailto:jfoucher@gmail.com">let me know</a> if you find any issues.</p>
 
-<p>At each point in this process, a plugin can come into play to add pages, have them written in different locations, etc...</p>
-
-<p>The first plugin, and the one that is used by most Jekyll sites I know of, is the paginator. In the case of Stati, it basically takes a list of all posts and generates a new html page for each page of posts. The core Writer then takes care of putting it in it's proper path.</p>
-
-<p>The second plugin is a related posts plugin. For each post it calculates the levenshtein distance of it's title to all the other posts titles and gets the 10 best matches. Lots of room for improvement here.</p>
-
-<h3>Try it now!</h3>
-
-<p>So basically that's it, a fun project that I will probably continue to use and improve. If you'd like to give it a try, you can <a href="https://github.com/jfoucher/stati/releases/latest">get the latest release from github</a> and, most importantly, <a href="https://github.com/jfoucher/stati/issues/new">open an issue</a> if you run into a snag!</p>
-
-<p>PS. I just remembered I have a <a href="/2005/03/changes-coming-soon.html">history</a> of <a href="/2005/03/new-blog.html">doing this kind of thing</a></p>
-
-<p>UPDATE : Just got some <a href="https://stati.jfoucher.com">documentation</a> online</p>
+<p><a href="https://mailocal.jfoucher.com">Mailocal documentation</a>
+<a href="https://github.com/jfoucher/mailocal">Source code</a></p>
   </div>
 
   <h3 style="text-align: center; margin-top: 2em">Older posts</h3>
 
   <ul class="posts noList">
+
+    
+      <li>
+        <span class="date">September 28, 2017</span>
+        <h3><a class="post-link" href="/2017/09/stati-static-site-generator.html">Stati, a PHP static site generator that works on any existing Jekyll site</a></h3>
+        <p class="meta">September 28, 2017 | <span class="time">3</span> Minutes Read</p>
+        <p class="description">Why and how I built a Jekyll clone in PHP</p>
+      </li>
 
     
       <li>
@@ -161,17 +159,9 @@
     
       <li>
         <span class="date">December 25, 2016</span>
-        <h3><a class="post-link" href="/2016/12/webGL-webworkers-boat-calculations.html">Building a webGL and webworkers boat hydrostatics app</a></h3>
+        <h3><a class="post-link" href="/2016/12/webgl-webworkers-boat-calculations.html">Building a webGL and webworkers boat hydrostatics app</a></h3>
         <p class="meta">December 25, 2016 | <span class="time">5</span> Minutes Read</p>
         <p class="description">I had a need for a simple program to do some calculations for a boat design I'm studying, so I built it from scratch with webGL and webworkers.</p>
-      </li>
-
-    
-      <li>
-        <span class="date">March 01, 2016</span>
-        <h3><a class="post-link" href="/2016/03/one-project-per-month-first-budget-tracking.html">One project per month during 2017. Here are my first two for January and february</a></h3>
-        <p class="meta">March 01, 2016 | <span class="time">3</span> Minutes Read</p>
-        <p class="description">This year I decided to try and develop one project every month. Here's how January and February went</p>
       </li>
 
     

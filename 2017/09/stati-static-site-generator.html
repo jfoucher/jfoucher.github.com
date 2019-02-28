@@ -97,14 +97,14 @@
       <div class="container">
          <div class="post">
   
-  <h1 class="postTitle"><a href="">Stati, a PHP static site generator that works on any existing Jekyll site</a></h1>
+  <h1 class="postTitle"><a href="/2017/09/stati-static-site-generator.html">Stati, a PHP static site generator that works on any existing Jekyll site</a></h1>
   <p class="meta">September 28, 2017 | <span class="time">3</span> Minute Read</p>
   
-  <h3 id="success-">Success !</h3>
+  <h3>Success !</h3>
 
-<p>Well it’s been quite a week. Having had an unexpected lull in my contract work, I decided to work on something fun. I use jekyll for most of my static sites, and I quite like it. It’s still a mistery to me why I decided to build a clone of it. But anyway, one week later, here we are. <a href="https://github.com/jfoucher/stati">Stati</a> can now build all my ex-Jekyll sites properly. Actually this blog is now generated with Stati!</p>
+<p>Well it's been quite a week. Having had an unexpected lull in my contract work, I decided to work on something fun. I use jekyll for most of my static sites, and I quite like it. It's still a mistery to me why I decided to build a clone of it. But anyway, one week later, here we are. <a href="https://github.com/jfoucher/stati">Stati</a> can now build all my ex-Jekyll sites properly. Actually this blog is now generated with Stati!</p>
 
-<h3 id="architecture">Architecture</h3>
+<h3>Architecture</h3>
 
 <p>I read this <a href="https://www.bytesandwich.com/jekyll/software/blogging/2016/09/14/how-does-jekyll-work.html">How does Jekyll work</a> blog post that gives a nice high level overview of the jekyll architecture, and I decided to mostly use the same kind of process.</p>
 
@@ -112,22 +112,21 @@
 
 <p>First all files are read, in different manner depending on their type (static files, posts or pages), then they are rendered (again differently depending on their type) and finally they are written to disk at the correct path.</p>
 
-<h3 id="plugins">Plugins</h3>
+<h3>Plugins</h3>
 
-<p>At each point in this process, a plugin can come into play to add pages, have them written in different locations, etc…</p>
+<p>At each point in this process, a plugin can come into play to add pages, have them written in different locations, etc...</p>
 
-<p>The first plugin, and the one that is used by most Jekyll sites I know of, is the paginator. In the case of Stati, it basically takes a list of all posts and generates a new html page for each page of posts. The core Writer then takes care of putting it in it’s proper path.</p>
+<p>The first plugin, and the one that is used by most Jekyll sites I know of, is the paginator. In the case of Stati, it basically takes a list of all posts and generates a new html page for each page of posts. The core Writer then takes care of putting it in it's proper path.</p>
 
-<p>The second plugin is a related posts plugin. For each post it calculates the levenshtein distance of it’s title to all the other posts titles and gets the 10 best matches. Lots of room for improvement here.</p>
+<p>The second plugin is a related posts plugin. For each post it calculates the levenshtein distance of it's title to all the other posts titles and gets the 10 best matches. Lots of room for improvement here.</p>
 
-<h3 id="try-it-now">Try it now!</h3>
+<h3>Try it now!</h3>
 
-<p>So basically that’s it, a fun project that I will probably continue to use and improve. If you’d like to give it a try, you can <a href="https://github.com/jfoucher/stati/releases/latest">get the latest release from github</a> and, most importantly, <a href="https://github.com/jfoucher/stati/issues/new">open an issue</a> if you run into a snag!</p>
+<p>So basically that's it, a fun project that I will probably continue to use and improve. If you'd like to give it a try, you can <a href="https://github.com/jfoucher/stati/releases/latest">get the latest release from github</a> and, most importantly, <a href="https://github.com/jfoucher/stati/issues/new">open an issue</a> if you run into a snag!</p>
 
 <p>PS. I just remembered I have a <a href="/2005/03/changes-coming-soon.html">history</a> of <a href="/2005/03/new-blog.html">doing this kind of thing</a></p>
 
 <p>UPDATE : Just got some <a href="https://stati.jfoucher.com">documentation</a> online</p>
-
 
   </div>
 
@@ -148,12 +147,6 @@
       
     </a>
     
-    
-      <a class="next image" href="/2019/02/mailocal-a-local-smtp-server-to-debug-your-emails.html"><span>Mailocal, a simple SMTP server and web interface to debug your emails&nbsp;&raquo;</span>
-      
-        <img src="/uploads/2019/02/mailocal.png" alt="">
-      
-      </a>
     
 </div>
 

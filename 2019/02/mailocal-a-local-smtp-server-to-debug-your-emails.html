@@ -99,30 +99,31 @@
       <div class="container">
          <div class="post">
   
-  <h1 class="postTitle"><a href="/2019/02/mailocal-a-local-smtp-server-to-debug-your-emails.html">Mailocal, a simple SMTP server and web interface to debug your emails</a></h1>
-  <p class="meta">February 28, 2019 | <span class="time">2</span> Minute Read</p>
+  <h1 class="postTitle"><a href="">Mailocal, a simple SMTP server and web interface to debug your emails</a></h1>
+  <p class="meta">February 28, 2019 | <span class="time">1</span> Minute Read</p>
   
-  <!-- <div class="featuredImage">
+  <div class="featuredImage">
       <img src="/uploads/2019/02/mailocal.png" alt="" />
-    </div> -->
+    </div>
 
-  <h3>Testing emails</h3>
+  <h3 id="testing-emails">Testing emails</h3>
 
-<p>The way I used to do it is to have all emails sent to me via a configuration setting in either Symfony or Laravel. This works fine but there can be a significant delay between the moment when the email is sent and the moment it is received, which is annoying. I have heard about mailtrap, which is a hosted service that does more or less what <a href="https://mailocal.jfoucher.com">Mailocal</a> does. But I'm not a fan of sending my customers' info to a third party.</p>
+<p>The way I used to do it is to have all emails sent to me via a configuration setting in either Symfony or Laravel. This works fine but there can be a significant delay between the moment when the email is sent and the moment it is received, which is annoying. I have heard about mailtrap, which is a hosted service that does more or less what <a href="https://mailocal.jfoucher.com">Mailocal</a> does. But I’m not a fan of sending my customers’ info to a third party.</p>
 
-<h3>Mailocal</h3>
+<h3 id="mailocal">Mailocal</h3>
 
 <p>So over a couple of days I developed <a href="https://mailocal.jfoucher.com">Mailocal</a> which is a smtp server you run locally, with a web interface to view the emails is has received.</p>
 
 <p>It is built almost fully with PHP (Symfony) with only a light smattering of javascript for the front-end.
-It works pretty good for the time I spent on it, although I can't be sure it will parse all emails equally well.</p>
+It works pretty good for the time I spent on it, although I can’t be sure it will parse all emails equally well.</p>
 
-<p>Obviously this is something that should not be run on a production server because I haven't looked at the security aspects much, but that's not the use case anyway.</p>
+<p>Obviously this is something that should not be run on a production server because I haven’t looked at the security aspects much, but that’s not the use case anyway.</p>
 
 <p>So I hope you enjoy it and <a href="mailto:jfoucher@gmail.com">let me know</a> if you find any issues.</p>
 
 <p><a href="https://mailocal.jfoucher.com">Mailocal documentation</a>
 <a href="https://github.com/jfoucher/mailocal">Source code</a></p>
+
 
   </div>
 

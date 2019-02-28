@@ -97,13 +97,14 @@
       <div class="container">
          <div class="post">
   
-  <h1 class="postTitle"><a href="/2011/01/wordpress-email-404-notification.html">Wordpress 404 notification by email</a></h1>
+  <h1 class="postTitle"><a href="">Wordpress 404 notification by email</a></h1>
   <p class="meta">January 22, 2011 | <span class="time">2</span> Minute Read</p>
   
-  <p>I couldn't find something that did just what I wanted and no more: send me an email when someone gets a 404 error on my blog. It seems pretty simple, and it really is. More than that actually. It's problably the simplest plugin I've ever written.</p>
+  <p>I couldn’t find something that did just what I wanted and no more: send me an email when someone gets a 404 error on my blog. It seems pretty simple, and it really is. More than that actually. It’s problably the simplest plugin I’ve ever written.</p>
 
 <p>Check it out:</p>
-<div class="highlight"><pre><span class="cp">&lt;?php</span>
+
+<figure class="highlight"><pre><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
 <span class="k">function</span> <span class="nf">email_error</span><span class="p">(){</span>
     <span class="k">global</span> <span class="nv">$wp_query</span><span class="p">;</span>
     <span class="nv">$location</span><span class="o">=</span><span class="nv">$_SERVER</span><span class="p">[</span><span class="s1">'REQUEST_URI'</span><span class="p">];</span>
@@ -112,11 +113,11 @@
     <span class="p">}</span>
 <span class="p">}</span>
 <span class="nx">add_action</span><span class="p">(</span><span class="s1">'get_header'</span><span class="p">,</span> <span class="s1">'email_error'</span><span class="p">);</span>
-<span class="cp">?&gt;</span><span class="x"></span>
-</pre></div>
-<p>This is the main part of the code, the one gets executed everytime the <code>get_header</code> hook is called. It basically just checks the $wp_query object to see if the current url gives a 404 error and then passes that url to the email_admin function</p>
+<span class="cp">?&gt;</span></code></pre></figure>
 
-<div class="highlight"><pre><span class="cp">&lt;?php</span>
+<p>This is the main part of the code, the one gets executed everytime the <code class="highlighter-rouge">get_header</code> hook is called. It basically just checks the $wp_query object to see if the current url gives a 404 error and then passes that url to the email_admin function</p>
+
+<figure class="highlight"><pre><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
 <span class="k">function</span> <span class="nf">email_admin</span><span class="p">(</span><span class="nv">$location</span><span class="p">){</span>
     <span class="nv">$name</span><span class="o">=</span><span class="nx">get_option</span><span class="p">(</span><span class="s1">'blogname'</span><span class="p">);</span>
     <span class="nv">$email</span> <span class="o">=</span> <span class="nx">get_option</span><span class="p">(</span><span class="s1">'admin_email'</span><span class="p">);</span>
@@ -127,11 +128,13 @@
     <span class="nv">$body</span><span class="o">=</span><span class="s1">'A 404 error occured at the following url: '</span><span class="o">.</span><span class="nv">$_SERVER</span><span class="p">[</span><span class="s1">'SERVER_NAME'</span><span class="p">]</span><span class="o">.</span><span class="nv">$location</span><span class="p">;</span>
     <span class="o">@</span><span class="nb">mail</span><span class="p">(</span><span class="nv">$email</span><span class="p">,</span><span class="nv">$subject</span><span class="p">,</span><span class="nv">$body</span><span class="p">,</span><span class="nv">$headers</span><span class="p">);</span>
 <span class="p">}</span>
-<span class="cp">?&gt;</span><span class="x"></span>
-</pre></div>
-<p>This function sets some headers for the email, such as the sender's name and email, and the subject of the message, and then sends the message. No error is shown if the message can't be sent, as this would be displayed on the page.</p>
+<span class="cp">?&gt;</span></code></pre></figure>
+
+<p>This function sets some headers for the email, such as the sender’s name and email, and the subject of the message, and then sends the message. No error is shown if the message can’t be sent, as this would be displayed on the page.</p>
 
 <p><em>UPDATE</em>: Finally available on the <a href="http://wordpress.org/extend/plugins/email-404/">wordpress plugin repository</a></p>
+
+
 
   </div>
 

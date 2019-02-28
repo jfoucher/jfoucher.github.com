@@ -5,8 +5,8 @@
     <description>Jonathan Foucher's blog &amp; web development notebook</description>
     <link>https://jfoucher.com/</link>
     <atom:link href="https://jfoucher.com/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>2018-01-20T23:33:19+00:00</pubDate>
-    <lastBuildDate>2018-01-20T23:33:19+00:00</lastBuildDate>
+    <pubDate>2019-02-28T14:13:14+01:00</pubDate>
+    <lastBuildDate>2019-02-28T14:13:14+01:00</lastBuildDate>
     <generator>Stati (https://stati.jfoucher.com)</generator>
     
       <item>
@@ -41,7 +41,7 @@
         
           <description>Why and how I built a Jekyll clone in PHP</description>
         
-        <pubDate>2017-09-28T00:00:00+00:00</pubDate>
+        <pubDate>2017-09-28T00:00:00+02:00</pubDate>
         <link>https://jfoucher.com/2017/09/stati-static-site-generator.html</link>
         <guid isPermaLink="true">https://jfoucher.com/2017/09/stati-static-site-generator.html</guid>
         
@@ -196,7 +196,7 @@
         
           <description>When you have some long running processes to trigger on request, best practice with Symfony is to have them run in the kernel.terminate event.</description>
         
-        <pubDate>2017-08-25T00:00:00+00:00</pubDate>
+        <pubDate>2017-08-25T00:00:00+02:00</pubDate>
         <link>https://jfoucher.com/2017/08/symfony-process-custom-events-in-kernel-terminate.html</link>
         <guid isPermaLink="true">https://jfoucher.com/2017/08/symfony-process-custom-events-in-kernel-terminate.html</guid>
         
@@ -314,7 +314,7 @@ const chart = new Chart(ctx, options);
         
           <description>This is more of a note to myself as I seem to always take ages to do time series charts with Chart.js and somehow can't remember how I did it last time.</description>
         
-        <pubDate>2017-08-18T00:00:00+00:00</pubDate>
+        <pubDate>2017-08-18T00:00:00+02:00</pubDate>
         <link>https://jfoucher.com/2017/08/timeseries-charts-with-chart.js.html</link>
         <guid isPermaLink="true">https://jfoucher.com/2017/08/timeseries-charts-with-chart.js.html</guid>
         
@@ -379,7 +379,7 @@ const chart = new Chart(ctx, options);
         
           <description>I decided to roll my own HTML template editor because most opensource ones, while good looking and well designed, are impossible to use.</description>
         
-        <pubDate>2017-08-10T00:00:00+00:00</pubDate>
+        <pubDate>2017-08-10T00:00:00+02:00</pubDate>
         <link>https://jfoucher.com/2017/08/interframe-communication-with-postmessage.html</link>
         <guid isPermaLink="true">https://jfoucher.com/2017/08/interframe-communication-with-postmessage.html</guid>
         
@@ -412,7 +412,7 @@ const chart = new Chart(ctx, options);
         
           <description>I had a need for a simple program to do some calculations for a boat design I'm studying, so I built it from scratch with webGL and webworkers.</description>
         
-        <pubDate>2016-12-25T00:00:00+00:00</pubDate>
+        <pubDate>2016-12-25T00:00:00+01:00</pubDate>
         <link>https://jfoucher.com/2016/12/webgl-webworkers-boat-calculations.html</link>
         <guid isPermaLink="true">https://jfoucher.com/2016/12/webgl-webworkers-boat-calculations.html</guid>
         
@@ -451,7 +451,7 @@ const chart = new Chart(ctx, options);
         
           <description>This year I decided to try and develop one project every month. Here's how January and February went</description>
         
-        <pubDate>2016-03-01T00:00:00+00:00</pubDate>
+        <pubDate>2016-03-01T00:00:00+01:00</pubDate>
         <link>https://jfoucher.com/2016/03/one-project-per-month-first-budget-tracking.html</link>
         <guid isPermaLink="true">https://jfoucher.com/2016/03/one-project-per-month-first-budget-tracking.html</guid>
         
@@ -522,7 +522,7 @@ const chart = new Chart(ctx, options);
         
           <description>I never run unless forced to, but today I decided to build modern/traditional running shoes for my whole family and go for a run. Boy am I sore.</description>
         
-        <pubDate>2013-05-26T00:00:00+00:00</pubDate>
+        <pubDate>2013-05-26T00:00:00+02:00</pubDate>
         <link>https://jfoucher.com/2013/05/building-and-using-minimalist-running-shoes.html</link>
         <guid isPermaLink="true">https://jfoucher.com/2013/05/building-and-using-minimalist-running-shoes.html</guid>
         
@@ -793,7 +793,7 @@ Transfer rate:          23351.88 [Kbytes/sec] received&lt;/code&gt;&lt;/pre&gt;
         
           <description>I recently decided to go with a small VPS for some of my sites, and to get decent performance without too much work I used Nginx as a proxy to Apache2.</description>
         
-        <pubDate>2012-04-23T00:00:00+00:00</pubDate>
+        <pubDate>2012-04-23T00:00:00+02:00</pubDate>
         <link>https://jfoucher.com/2012/04/installing-apache-php-and-nginx-for-faster-websites.html</link>
         <guid isPermaLink="true">https://jfoucher.com/2012/04/installing-apache-php-and-nginx-for-faster-websites.html</guid>
         
@@ -887,7 +887,7 @@ On the other hand, if everything was ok, the &lt;code&gt;$results&lt;/code&gt; a
         
           <description>In some sites like for example Dropbox, you invite people from your Gmail contacts by simply entering your email and password: this is how it's done.</description>
         
-        <pubDate>2012-04-15T00:00:00+00:00</pubDate>
+        <pubDate>2012-04-15T00:00:00+02:00</pubDate>
         <link>https://jfoucher.com/2012/04/getting-your-users-gmail-contacts.html</link>
         <guid isPermaLink="true">https://jfoucher.com/2012/04/getting-your-users-gmail-contacts.html</guid>
         
@@ -930,7 +930,7 @@ Most of them are operations that should be pretty easy to do, and seem pointless
         
           <description>Sometimes git is confusing, and things that should be simple quickly look like magic incantations. Here are two such cases.</description>
         
-        <pubDate>2012-04-09T00:00:00+00:00</pubDate>
+        <pubDate>2012-04-09T00:00:00+02:00</pubDate>
         <link>https://jfoucher.com/2012/04/github-tricks-from-stackoverflow.html</link>
         <guid isPermaLink="true">https://jfoucher.com/2012/04/github-tricks-from-stackoverflow.html</guid>
         

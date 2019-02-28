@@ -97,34 +97,34 @@
       <div class="container">
          <div class="post">
   
-  <h1 class="postTitle"><a href="/2012/04/github-tricks-from-stackoverflow.html">Git tips from stackoverflow</a></h1>
+  <h1 class="postTitle"><a href="">Git tips from stackoverflow</a></h1>
   <p class="meta">April 09, 2012 | <span class="time">1</span> Minute Read</p>
   
   <p>Here are some pretty cool and very useful git tricks I learnt  by searching or reading stackoverflow.
 Most of them are operations that should be pretty easy to do, and seem pointlessly complicated. The second one is an excellent example of both the flexibility and the lack of user friendliness of the git UI</p>
 
-<h3>Prevent a file from being commited, ever</h3>
+<h3 id="prevent-a-file-from-being-commited-ever">Prevent a file from being commited, ever</h3>
 
 <p><a href="http://stackoverflow.com/a/8485503/210824">Git: Never Commit Changed Files (But still keep original revisioned.)</a></p>
 
-<div class="highlight"><pre>    git update-index --assume-unchanged &lt;file&gt;
-</pre></div>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">    git update-index <span class="nt">--assume-unchanged</span> &lt;file&gt;</code></pre></figure>
+
 <p>To make it commitable again run</p>
 
-<div class="highlight"><pre>    git update-index --no-assume-unchanged &lt;file&gt;
-</pre></div>
-<h3>Commits no yet pushed</h3>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">    git update-index <span class="nt">--no-assume-unchanged</span> &lt;file&gt;</code></pre></figure>
+
+<h3 id="commits-no-yet-pushed">Commits no yet pushed</h3>
 
 <p><a href="http://stackoverflow.com/a/3338774/210824">Viewing Unpushed Git Commits</a></p>
 
-<p>If you want to see all commits on all branches that aren't pushed yet, you might be looking for something like this:</p>
+<p>If you want to see all commits on all branches that aren’t pushed yet, you might be looking for something like this:</p>
 
-<div class="highlight"><pre>    git log --branches --not --remotes
-</pre></div>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">    git log <span class="nt">--branches</span> <span class="nt">--not</span> <span class="nt">--remotes</span></code></pre></figure>
+
 <p>And if you only want to see the most recent commit on each branch, and the branch names, this:</p>
 
-<div class="highlight"><pre>    git log --branches --not --remotes --simplify-by-decoration --decorate --oneline
-</pre></div>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">    git log <span class="nt">--branches</span> <span class="nt">--not</span> <span class="nt">--remotes</span> <span class="nt">--simplify-by-decoration</span> <span class="nt">--decorate</span> <span class="nt">--oneline</span></code></pre></figure>
+
 
   </div>
 

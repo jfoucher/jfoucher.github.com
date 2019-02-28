@@ -102,6 +102,10 @@
   <h1 class="postTitle"><a href="">Processing custom events in kernel.terminate</a></h1>
   <p class="meta">August 25, 2017 | <span class="time">8</span> Minute Read</p>
   
+  <div class="featuredImage">
+      <img src="/uploads/2017/08/symfony-kernel.terminate.png" alt="" />
+    </div>
+
   <h3 id="what-is-the-kernelterminate-event">What is the kernel.terminate event?</h3>
 
 <p>It is the last event that is triggered in Symfony, just after the response has been sent to the client (only on php-fpm). This means that we can do some heavy lifting here because our response time is not affected. The client gets the response quickly and our processing will occur afterwards.</p>

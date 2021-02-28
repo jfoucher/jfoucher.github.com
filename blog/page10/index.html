@@ -99,17 +99,49 @@
 
   <div class="post">
     
-    <h1 class="postTitle"><a href="/2004/10/spam-dans-les-refrents.html">Spam dans les référents</a></h1>
-    <p class="meta">October 14, 2004 | <span class="time">0</span> Minutes Read</p>
-    <p>Comme vous avez pu le voir si vous êtes venu sur ce blog récemment, j’ai été sujet à une attaque de spam dans les référents. Je pense avoir réglé le problème en empêchant certains mots d’apparaître dans les logs de StatTraq, mais n’hésitez pas à me contacter si cela devait se reproduire.</p>
+    <h1 class="postTitle"><a href="/2004/10/avis-aux-utilisateurs-des-extensions-pour-stattraq.html">Avis aux utilisateurs des extensions pour StatTraq</a></h1>
+    <p class="meta">October 14, 2004 | <span class="time">1</span> Minutes Read</p>
+    <h3 id="le-problème">Le Problème</h3>
 
-<p>Une autre méthode que j’ai utilisée pour essayer de réduire ce problème est d’utiliser une redirection Google pour les liens vers les référents, dans le plugin <a href="http://jfoucher.com/?p=24">Référents</a>, ce qui évite aux spammers de profiter de mon pagerank, et donc rendre cette méthode moins attractive. Ou suis-je trop optimiste ?</p>
+<p>C’est que si vous utilisez une structure des permaliens où l’id du billet n’est pas présente, telle que celle-ci:</p>
+
+<figure class="highlight"><pre><code class="language-php" data-lang="php">     <span class="o">/%</span><span class="nx">year</span><span class="o">%/%</span><span class="nx">monthnum</span><span class="o">%/%</span><span class="nx">day</span><span class="o">%/%</span><span class="nx">postname</span><span class="o">%/</span></code></pre></figure>
+
+<p>L’id du billet n’est pas ajouté à la table de Stat Traq, ce qui fait que mon plugin <a href="http://jfoucher.com/2004/10/popular-posts-wordpress-plugin">Populaires</a> ne comprend plus ce qu’il lui arrive. La solution est en fait très simple</p>
+
+<h3 id="la-solution-jespère">La Solution (j’espère)</h3>
+
+<p>Dans le fichier stattraq.php, vous trouverez les lignes suivantes (25 et 26)</p>
+
+<figure class="highlight"><pre><code class="language-php" data-lang="php">    <span class="k">if</span> <span class="p">((</span><span class="nv">$p</span> <span class="o">!=</span> <span class="s1">''</span><span class="p">)){</span>
+    <span class="nv">$p</span> <span class="o">=</span> <span class="nb">intval</span><span class="p">(</span><span class="nv">$p</span><span class="p">);</span></code></pre></figure>
+
+<p>Mais la variable</p>
+<figure class="highlight"><pre><code class="language-php" data-lang="php"><span class="nv">$p</span></code></pre></figure>
+<p>n’existe que si le billet est sélectionné par son id. S’il a été selectionné par nom,</p>
+<figure class="highlight"><pre><code class="language-php" data-lang="php"><span class="nv">$p</span></code></pre></figure>
+<p>est nul.</p>
+
+<p>Il faut donc remplacer les lignes ci-dessus par celles-la</p>
+
+<figure class="highlight"><pre><code class="language-php" data-lang="php">     <span class="k">if</span> <span class="p">((</span><span class="nv">$post</span><span class="o">-&gt;</span><span class="na">ID</span> <span class="o">!=</span> <span class="s1">''</span><span class="p">)){</span>
+     <span class="nv">$p</span> <span class="o">=</span> <span class="nb">intval</span><span class="p">(</span><span class="nv">$post</span><span class="o">-&gt;</span><span class="na">ID</span><span class="p">);</span></code></pre></figure>
+
+<p>Et ça a l’air de marcher avec tous les schémas de réécriture.</p>
 
   </div>
 
   <h3 style="text-align: center; margin-top: 2em">Older posts</h3>
 
   <ul class="posts noList">
+
+    
+      <li>
+        <span class="date">October 14, 2004</span>
+        <h3><a class="post-link" href="/2004/10/spam-dans-les-refrents.html">Spam dans les référents</a></h3>
+        <p class="meta">October 14, 2004 | <span class="time">0</span> Minutes Read</p>
+        <p class="description">Comme vous avez pu le voir si vous êtes venu sur ce blog récemment, j’ai été sujet à une attaque de spam dans les référents. Je pense avoir réglé le problème en empêchant certains mots d’apparaître dans les logs de StatTraq, mais n’hésitez pas à me contacter si cela devait se reproduire.</p>
+      </li>
 
     
       <li>
@@ -141,14 +173,6 @@
         <h3><a class="post-link" href="/2004/10/referents-de-larticle.html">Rérents de l'article</a></h3>
         <p class="meta">October 06, 2004 | <span class="time">2</span> Minutes Read</p>
         <p class="description">C’est un plugin pour Wordpress Qui montre les derniers sites d’où sont venus vos visiteurs. Vous aurez besoin du plugin Stattraq.Installation :	Téléchargez et installez Stattraq.	Envoyer le fichier résultant à votre dossier /wp-content/plugins	Activez le plugin dans votre interface d'administrationL’utilisation est simple :Ajouter le code suivant dans votre fichier index.phppost_referrers(8, "&lt;li&gt;", "&lt;/li&gt;", "Pas encore...", "self");où 8 est le nombre pe pages référentes à affiche...</p>
-      </li>
-
-    
-      <li>
-        <span class="date">October 06, 2004</span>
-        <h3><a class="post-link" href="/2004/10/idec-en-route-vers-cadix.html">Idec en route vers Cadix.</a></h3>
-        <p class="meta">October 06, 2004 | <span class="time">1</span> Minutes Read</p>
-        <p class="description">Francis Joyon, sur Idec, va tenter d’établir un nouveau record Cadix - San salvador (Bahamas) sur un parcours que l’on appelle la ‘Route de la découverte’</p>
       </li>
 
     

@@ -99,60 +99,60 @@
 
   <div class="post">
     
-    <h1 class="postTitle"><a href="/2011/04/the-making-of-flickholdr-an-image-placeholder-generator.html">The making of flickholdr.com, an image placeholder generator</a></h1>
-    <p class="meta">April 03, 2011 | <span class="time">3</span> Minutes Read</p>
-    <p>There are a few services available to web designer and HTML coders to use dummy images in their html mockups or templates. The one I used to use is <a href="http://dummyimage.com">dummyimage</a> but it is somewhat limited in that the images are completely static: a flat color and some text. I needed the same kind of service, but with actual images or photographs rather than simple placeholders. Something like dynamically generated stock images.</p>
+    <h1 class="postTitle"><a href="/2011/04/css-minification-library-for-codeigniter.html">CSS minification library for codeigniter</a></h1>
+    <p class="meta">April 11, 2011 | <span class="time">3</span> Minutes Read</p>
+    <p>For my latest project, I wanted to be able to easily minify CSS stylesheets, using the simplest syntax possible, ideally using a simple tag in the header, like</p>
+<figure class="highlight"><pre><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">css</span><span class="o">-&gt;</span><span class="na">link</span><span class="p">(</span><span class="k">array</span><span class="p">(</span><span class="s1">'/assets/css/fonts.css'</span><span class="p">,</span><span class="s1">'/assets/css/layout.css'</span><span class="p">);</span><span class="cp">?&gt;</span></code></pre></figure>
 
-<h3 id="the-idea">The idea</h3>
+<p>After some searching, I found a css minification library for PHP, <a href="https://code.google.com/p/minify/">minify</a></p>
 
-<p>And then the idea dawned on me: why not use <a href="http://flickr.com">flickr</a>’s <a href="http://creativecommons.org/">creative commons</a> licensed images? The quality is often very good, especially for “interesting” images, a lot of sizes are available, and users often use tags to classify their images, making it rather easy to get placeholder images about a particular subject.</p>
+<p>It was very easy to modify it so that It could be used in our CodeIgniter applications like any other libraries.
+All I did was wrap the main minification function in Codeigniter specific code.
+I modelled the interaction on the image library, as I guess that’s what most people are used to.</p>
 
-<p><a href="http://jfoucher.com/uploads/2011/03/FlickHoldr1.png"><img class="size-full wp-image-413" title="FlickHoldr" src="http://jfoucher.com/uploads/2011/03/FlickHoldr1.png" alt="screenshot of flickholdr.com" width="600" height="417" /></a></p>
+<div class="image-with-caption aligncenter" style="width:300px"><div class="caption">css minification library for codeigniter</div><a href="http://jfoucher.com/uploads/2011/04/Screenshot.png"><img class="size-medium wp-image-450" title="css minification for codeigniter" src="http://jfoucher.com/uploads/2011/04/Screenshot-300x162.png" alt="css minification for codeigniter" width="300" height="162" /></a></div>
 
-<h3 id="the-execution">The execution</h3>
+<h3>How to use</h3>
+<p>Using the library involves loading it, setting up an array with some configuration values, such as the source css file(s), the destination file (optional) or the time that the generated file should be cached, and finally initializing the library with the configuration array() .</p>
 
-<p>So I proceeded to develop a little webapp to do just that, using <a href="http://codeigniter.com">codeigniter</a>, my framework of choice for rapid application development</p>
+<p>The following code, which should go in your controller, will look very familiar to Codeigniter users.</p>
 
-<p>I used Codeigniter 2.0 from bitbucket, as I think it is the most up-to-date code available at the moment.</p>
+<figure class="highlight"><pre><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">load</span><span class="o">-&gt;</span><span class="na">library</span><span class="p">(</span><span class="s1">'css'</span><span class="p">);</span>
+<span class="c1">//array of files to concatenate and minify
+</span><span class="nv">$config</span><span class="p">[</span><span class="s1">'source_file'</span><span class="p">]</span><span class="o">=</span><span class="k">array</span><span class="p">(</span><span class="s1">'/assets/css/layout.css'</span><span class="p">,</span><span class="s1">'/assets/css/fonts.css'</span><span class="p">);</span>
+<span class="c1">//where to output the result
+</span><span class="nv">$config</span><span class="p">[</span><span class="s1">'dest_file'</span><span class="p">]</span><span class="s1">'/assets/css/css.min.css'</span><span class="p">;</span>
+<span class="c1">//Cache time in hours
+</span><span class="nv">$config</span><span class="p">[</span><span class="s1">'cache_time'</span><span class="p">]</span><span class="o">=</span><span class="mi">48</span><span class="p">;</span>
+<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">css</span><span class="o">-&gt;</span><span class="na">initialize</span><span class="p">(</span><span class="nv">$config</span><span class="p">);</span>
+<span class="k">echo</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">css</span><span class="o">-&gt;</span><span class="na">link</span><span class="p">();</span>
+<span class="cp">?&gt;</span></code></pre></figure>
 
-<p>If the requested image already exists in the cache (i.e. it has already been requested) we simply echo that out, with proper headers, otherwise, we have to generate the image.</p>
-<h3 id="getting-images-from-flickr">Getting images from flickr</h3>
-<p>Most of the code deals with pulling images from flickr, and then doing various to them before display. The code that pulls the image from flickr is located in a model called Flickr_model with three methods:</p>
-<ul>
-  <li>A public method called</li>
-</ul>
-<figure class="highlight"><pre><code class="language-php" data-lang="php"><span class="nx">search</span><span class="p">()</span></code></pre></figure>
-<p>that gets images using the <a href="http://www.flickr.com/services/api/">flickr API</a></p>
-<ul>
-  <li>A private method called</li>
-</ul>
-<figure class="highlight"><pre><code class="language-php" data-lang="php"><span class="nx">_get_sizes</span><span class="p">()</span></code></pre></figure>
-<p>that finds the sizes available for that particular image</p>
-<ul>
-  <li>Another private method</li>
-</ul>
-<figure class="highlight"><pre><code class="language-php" data-lang="php"><span class="nx">_get_author</span><span class="p">()</span></code></pre></figure>
-<p>that gets the information for the image and returns the name of the author, to be displayed in the watermark</p>
+<p>Will output the following stylesheet tag:</p>
 
-<p>The</p>
-<figure class="highlight"><pre><code class="language-php" data-lang="php"><span class="nx">search</span><span class="p">()</span></code></pre></figure>
-<p>method returns as soon as it finds an image of at least the required size.</p>
+<figure class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">"stylesheet"</span> <span class="na">href=</span><span class="s">"/assets/css/css.min.css"</span> <span class="na">type=</span><span class="s">"text/css"</span> <span class="na">media=</span><span class="s">"screen"</span> <span class="nt">/&gt;</span></code></pre></figure>
 
-<p>The controller private method</p>
-<figure class="highlight"><pre><code class="language-php" data-lang="php"><span class="nx">_get_image</span><span class="p">()</span></code></pre></figure>
-<p>then takes charge of resizing, cropping and watermarking the image, using codeigniter’s <a title="Codeigniter image manipulation class manual" href="http://codeigniter.com/user_guide/libraries/image_lib.html">image manipulation library</a> to keep things quick and simple. I just tweaked the watermarking method of that class to allow for semi-transparent watermarks.</p>
-
-<p>The controller then sends the image to the browser with the proper headers.</p>
-
-<h3 id="end-of-the-story">End of the story!</h3>
-
-<p><strong>UPDATE</strong>: Flickholdr is now open sourced and the code is available on <a href="https://github.com/jfoucher/flickholdr">github</a></p>
+<h3>Get It!</h3>
+<p>You can <a href="https://github.com/jfoucher/codeigniter-css-library">get it from GitHub</a>. Don’t forget to fork it if you think you can make it better!</p>
+<h3>Finally</h3>
+<p>I’m not sure the way I’ve done it, using a</p>
+<figure class="highlight"><pre><code class="language-php" data-lang="php"><span class="nv">$config</span></code></pre></figure>
+<p>array and so on, is the best way. It might be a bit overkill for such a simple library. I’d love to hear your thoughts on the subject.</p>
 
   </div>
 
   <h3 style="text-align: center; margin-top: 2em">Older posts</h3>
 
   <ul class="posts noList">
+
+    
+      <li>
+        <span class="date">April 03, 2011</span>
+        <h3><a class="post-link" href="/2011/04/the-making-of-flickholdr-an-image-placeholder-generator.html">The making of flickholdr.com, an image placeholder generator</a></h3>
+        <p class="meta">April 03, 2011 | <span class="time">3</span> Minutes Read</p>
+        <p class="description">Flickholdr.com takes your chosen image dimensions, your tags, and returns Creative Commons licensed images from flickr that fit your criteria.</p>
+      </li>
 
     
       <li>
@@ -184,14 +184,6 @@
         <h3><a class="post-link" href="/2011/01/python-skype-notifier-for-ubuntu.html">Python skype notifier for Ubuntu</a></h3>
         <p class="meta">January 14, 2011 | <span class="time">33</span> Minutes Read</p>
         <p class="description">Learning python by building a semi-useful Skype instant message notifier.</p>
-      </li>
-
-    
-      <li>
-        <span class="date">January 12, 2011</span>
-        <h3><a class="post-link" href="/2011/01/compile-custom-kernel-on-ubuntu-10-10.html">Compile custom kernel on Ubuntu 10.10</a></h3>
-        <p class="meta">January 12, 2011 | <span class="time">5</span> Minutes Read</p>
-        <p class="description">My experience compiling a custom kernel from source, using Ubuntu 10.10 Maverick Meerkat, on a Sony Vaio F111 series.</p>
       </li>
 
     

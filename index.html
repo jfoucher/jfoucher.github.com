@@ -107,7 +107,7 @@
     <p class="meta">February 28, 2021 | <span class="time">7</span> Minutes Read</p>
     <h3 id="retro-computing">Retro computing</h3>
 
-<p>Going back to the roots of your field can provide new insights into your day to day experience. For me, the roots are located in the 70s / 80s a time when personal computers where much simpler and could be fully understood by a regular person. This is a time when the most popular computers were the Vic20, Apple II and later Commodore 64.</p>
+<p>Going back to the roots of your field can provide new insights into your day to day experience. For me, the roots are located in the 70s / 80s a time when personal computers were much simpler and could be fully understood by a regular person. This is a time when the most popular computers were the Vic20, Apple II and later Commodore 64.</p>
 
 <p><img src="/uploads/2021/02/VIC-20.jpg" alt="Vic-20" class="left-image" />
 <img src="/uploads/2021/02/Apple_II.jpg" alt="Apple II" class="right-image" /></p>
@@ -118,19 +118,19 @@
 
 <h3 id="what-to-build">What to build?</h3>
 
-<p>So, since I was increasingly interested in electronics since doing a project for a friend, I thought to myself “How hard can it be?” Well, as it turns out, quite, but that’s hardly the point right now. The point is: what should I build. So I started by building a simple 6502 based computer on a breadboard. I soon realised that if I was to have anything half useful I was going to need the entire breadboard production of China to be delivered to my house. Also breadboard computers are buggy and you can’t move them around because then a cable will come loose and you will spend five hours troubleshooting your code instead.</p>
+<p>I was increasingly interested in electronics since doing a project for a friend, so I thought to myself “How hard can it be?” Well, as it turns out, quite, but that’s hardly the point right now. The point is: what should I build? I started by building a simple 6502 based computer on a breadboard. I soon realised that if I was to have anything half useful I was going to need the entire breadboard production of China to be delivered to my house. Also breadboard computers are buggy and you can’t move them around because then a cable will come loose and you will spend five hours troubleshooting your code instead.</p>
 
 <p>So I decided I would convert it to PCBs. They are pretty cheap to get delivered from China, but since they take about a month to arrive the rate of iteration is not so great. Better to get it right the first time obviously.</p>
 
-<p>Well I almost did. The first one was very simple, only having a 6502 processor and an 6522 parallel port interface. I interfaced with from my computer via SPI through an arduino: the 6522 Versatile Interface Adapter can bit bang SPI easily enough. The Arduino Uno/Nano can be an SPI slave easily enough and receive that data. It can then transmit that data to my computer using serial over USB.</p>
+<p>Well I almost did. The first one was very simple, only having a 6502 processor and an 6522 parallel port interface. I interfaced with it from my computer via SPI through an arduino: the 6522 Versatile Interface Adapter can bit bang SPI easily enough. The Arduino Uno/Nano can be an SPI slave easily enough and receive that data. It can then transmit that data to my computer using serial over USB.</p>
 
-<p>That worked fine (after a couple of boge wires) but was a bit kludgy, having the Arduino sort of hanging there by a few cables.</p>
+<p>That worked fine (after a couple of bodge wires) but was a bit kludgy, having the Arduino sort of hanging there by a few cables.</p>
 
-<p>I then tried to design a single board computer with everything I would ever want on it: serial communication, parrallel port, SPI port(s), i2c port(s), PS/2 port for a keyboard, sound chip, VGA output, etc… The board to house all of this was very big and thus very expensive. Combining this with the previous point regaring getting it right the first time, a single board computer suddenly seemed like not that great of an idea.</p>
+<p>I then tried to design a single board computer with everything I would ever want on it: serial communication, parrallel port, SPI port(s), i2c port(s), PS/2 port for a keyboard, sound chip, VGA output, etc… The board to house all of this was very big and thus very expensive. Combining this with the previous point regarding getting it right the first time, a single board computer suddenly seemed like not that great of an idea.</p>
 
 <h3 id="the-plan">The plan</h3>
 
-<p>So then I decided to build a board with basic circuitry into which other boards that provided actual functionality will be able to plug in. Turns out that already exists and is called a <a href="https://en.wikipedia.org/wiki/Backplane">backplane</a></p>
+<p>I then decided to build a board with basic circuitry into which other boards that provided actual functionality will be able to plug in. Turns out that already exists and is called a <a href="https://en.wikipedia.org/wiki/Backplane">backplane</a></p>
 
 <p>So backplane it is then. The size limit for this board and all others will be 10cm x 10cm as that it the cheap price limit for most cheap board houses (yes I’m cheap and I like cheap, preferably cheap that works).</p>
 

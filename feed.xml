@@ -5,15 +5,15 @@
     <description>Jonathan Foucher's blog &amp; web development notebook</description>
     <link>https://jfoucher.com/</link>
     <atom:link href="https://jfoucher.com/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 01 Mar 2021 00:54:43 +0100</pubDate>
-    <lastBuildDate>Mon, 01 Mar 2021 00:54:43 +0100</lastBuildDate>
+    <pubDate>Mon, 01 Mar 2021 16:16:18 +0100</pubDate>
+    <lastBuildDate>Mon, 01 Mar 2021 16:16:18 +0100</lastBuildDate>
     <generator>Stati (https://stati.jfoucher.com)</generator>
     
       <item>
         <title>Planck 6502, an open hardware extensible retro computer</title>
         <description>&lt;h3 id=&quot;retro-computing&quot;&gt;Retro computing&lt;/h3&gt;
 
-&lt;p&gt;Going back to the roots of your field can provide new insights into your day to day experience. For me, the roots are located in the 70s / 80s a time when personal computers where much simpler and could be fully understood by a regular person. This is a time when the most popular computers were the Vic20, Apple II and later Commodore 64.&lt;/p&gt;
+&lt;p&gt;Going back to the roots of your field can provide new insights into your day to day experience. For me, the roots are located in the 70s / 80s a time when personal computers were much simpler and could be fully understood by a regular person. This is a time when the most popular computers were the Vic20, Apple II and later Commodore 64.&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&quot;/uploads/2021/02/VIC-20.jpg&quot; alt=&quot;Vic-20&quot; class=&quot;left-image&quot; /&gt;
 &lt;img src=&quot;/uploads/2021/02/Apple_II.jpg&quot; alt=&quot;Apple II&quot; class=&quot;right-image&quot; /&gt;&lt;/p&gt;
@@ -24,19 +24,19 @@
 
 &lt;h3 id=&quot;what-to-build&quot;&gt;What to build?&lt;/h3&gt;
 
-&lt;p&gt;So, since I was increasingly interested in electronics since doing a project for a friend, I thought to myself “How hard can it be?” Well, as it turns out, quite, but that’s hardly the point right now. The point is: what should I build. So I started by building a simple 6502 based computer on a breadboard. I soon realised that if I was to have anything half useful I was going to need the entire breadboard production of China to be delivered to my house. Also breadboard computers are buggy and you can’t move them around because then a cable will come loose and you will spend five hours troubleshooting your code instead.&lt;/p&gt;
+&lt;p&gt;I was increasingly interested in electronics since doing a project for a friend, so I thought to myself “How hard can it be?” Well, as it turns out, quite, but that’s hardly the point right now. The point is: what should I build? I started by building a simple 6502 based computer on a breadboard. I soon realised that if I was to have anything half useful I was going to need the entire breadboard production of China to be delivered to my house. Also breadboard computers are buggy and you can’t move them around because then a cable will come loose and you will spend five hours troubleshooting your code instead.&lt;/p&gt;
 
 &lt;p&gt;So I decided I would convert it to PCBs. They are pretty cheap to get delivered from China, but since they take about a month to arrive the rate of iteration is not so great. Better to get it right the first time obviously.&lt;/p&gt;
 
-&lt;p&gt;Well I almost did. The first one was very simple, only having a 6502 processor and an 6522 parallel port interface. I interfaced with from my computer via SPI through an arduino: the 6522 Versatile Interface Adapter can bit bang SPI easily enough. The Arduino Uno/Nano can be an SPI slave easily enough and receive that data. It can then transmit that data to my computer using serial over USB.&lt;/p&gt;
+&lt;p&gt;Well I almost did. The first one was very simple, only having a 6502 processor and an 6522 parallel port interface. I interfaced with it from my computer via SPI through an arduino: the 6522 Versatile Interface Adapter can bit bang SPI easily enough. The Arduino Uno/Nano can be an SPI slave easily enough and receive that data. It can then transmit that data to my computer using serial over USB.&lt;/p&gt;
 
-&lt;p&gt;That worked fine (after a couple of boge wires) but was a bit kludgy, having the Arduino sort of hanging there by a few cables.&lt;/p&gt;
+&lt;p&gt;That worked fine (after a couple of bodge wires) but was a bit kludgy, having the Arduino sort of hanging there by a few cables.&lt;/p&gt;
 
-&lt;p&gt;I then tried to design a single board computer with everything I would ever want on it: serial communication, parrallel port, SPI port(s), i2c port(s), PS/2 port for a keyboard, sound chip, VGA output, etc… The board to house all of this was very big and thus very expensive. Combining this with the previous point regaring getting it right the first time, a single board computer suddenly seemed like not that great of an idea.&lt;/p&gt;
+&lt;p&gt;I then tried to design a single board computer with everything I would ever want on it: serial communication, parrallel port, SPI port(s), i2c port(s), PS/2 port for a keyboard, sound chip, VGA output, etc… The board to house all of this was very big and thus very expensive. Combining this with the previous point regarding getting it right the first time, a single board computer suddenly seemed like not that great of an idea.&lt;/p&gt;
 
 &lt;h3 id=&quot;the-plan&quot;&gt;The plan&lt;/h3&gt;
 
-&lt;p&gt;So then I decided to build a board with basic circuitry into which other boards that provided actual functionality will be able to plug in. Turns out that already exists and is called a &lt;a href=&quot;https://en.wikipedia.org/wiki/Backplane&quot;&gt;backplane&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;I then decided to build a board with basic circuitry into which other boards that provided actual functionality will be able to plug in. Turns out that already exists and is called a &lt;a href=&quot;https://en.wikipedia.org/wiki/Backplane&quot;&gt;backplane&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;So backplane it is then. The size limit for this board and all others will be 10cm x 10cm as that it the cheap price limit for most cheap board houses (yes I’m cheap and I like cheap, preferably cheap that works).&lt;/p&gt;
 

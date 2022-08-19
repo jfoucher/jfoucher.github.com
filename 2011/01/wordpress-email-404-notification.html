@@ -82,8 +82,12 @@
                      <a href="/contact.html">Contact</a>
                  </li> 
                  
-                 <li class="element   last">
+                 <li class="element   ">
                      <a href="/projects.html">Projects</a>
+                 </li> 
+                 
+                 <li class="element   last">
+                     <a href="/videos.html">Videos</a>
                  </li> 
                  
 
@@ -105,27 +109,27 @@
 <p>Check it out:</p>
 
 <figure class="highlight"><pre><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
-<span class="k">function</span> <span class="nf">email_error</span><span class="p">(){</span>
+<span class="k">function</span> <span class="n">email_error</span><span class="p">(){</span>
     <span class="k">global</span> <span class="nv">$wp_query</span><span class="p">;</span>
     <span class="nv">$location</span><span class="o">=</span><span class="nv">$_SERVER</span><span class="p">[</span><span class="s1">'REQUEST_URI'</span><span class="p">];</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nv">$wp_query</span><span class="o">-&amp;</span><span class="nx">gt</span><span class="p">;</span><span class="nx">is_404</span><span class="p">){</span>
-        <span class="nx">email_admin</span><span class="p">(</span><span class="nv">$location</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nv">$wp_query</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">is_404</span><span class="p">){</span>
+        <span class="nf">email_admin</span><span class="p">(</span><span class="nv">$location</span><span class="p">);</span>
     <span class="p">}</span>
 <span class="p">}</span>
-<span class="nx">add_action</span><span class="p">(</span><span class="s1">'get_header'</span><span class="p">,</span> <span class="s1">'email_error'</span><span class="p">);</span>
+<span class="nf">add_action</span><span class="p">(</span><span class="s1">'get_header'</span><span class="p">,</span> <span class="s1">'email_error'</span><span class="p">);</span>
 <span class="cp">?&gt;</span></code></pre></figure>
 
-<p>This is the main part of the code, the one gets executed everytime the <code class="highlighter-rouge">get_header</code> hook is called. It basically just checks the $wp_query object to see if the current url gives a 404 error and then passes that url to the email_admin function</p>
+<p>This is the main part of the code, the one gets executed everytime the <code class="language-plaintext highlighter-rouge">get_header</code> hook is called. It basically just checks the $wp_query object to see if the current url gives a 404 error and then passes that url to the email_admin function</p>
 
 <figure class="highlight"><pre><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
-<span class="k">function</span> <span class="nf">email_admin</span><span class="p">(</span><span class="nv">$location</span><span class="p">){</span>
-    <span class="nv">$name</span><span class="o">=</span><span class="nx">get_option</span><span class="p">(</span><span class="s1">'blogname'</span><span class="p">);</span>
-    <span class="nv">$email</span> <span class="o">=</span> <span class="nx">get_option</span><span class="p">(</span><span class="s1">'admin_email'</span><span class="p">);</span>
+<span class="k">function</span> <span class="n">email_admin</span><span class="p">(</span><span class="nv">$location</span><span class="p">){</span>
+    <span class="nv">$name</span><span class="o">=</span><span class="nf">get_option</span><span class="p">(</span><span class="s1">'blogname'</span><span class="p">);</span>
+    <span class="nv">$email</span> <span class="o">=</span> <span class="nf">get_option</span><span class="p">(</span><span class="s1">'admin_email'</span><span class="p">);</span>
     <span class="nv">$headers</span>  <span class="o">=</span> <span class="s2">"MIME-Version: 1.0</span><span class="se">\r\n</span><span class="s2">"</span><span class="p">;</span>
-    <span class="nv">$headers</span> <span class="o">.=</span> <span class="s2">"Content-type: text/plain; charset=UTF-8</span><span class="se">\r\n</span><span class="s2">"</span><span class="p">;</span>
-    <span class="nv">$headers</span> <span class="o">.=</span> <span class="s1">'From: "'</span> <span class="o">.</span> <span class="nv">$name</span> <span class="o">.</span> <span class="s1">'" &amp;lt;'</span> <span class="o">.</span><span class="nv">$email</span><span class="o">.</span> <span class="s2">"&amp;gt;</span><span class="se">\r\n</span><span class="s2">"</span><span class="p">;</span>
-    <span class="nv">$subject</span><span class="o">=</span><span class="s1">'404 error in '</span><span class="o">.</span><span class="nv">$name</span><span class="p">;</span>
-    <span class="nv">$body</span><span class="o">=</span><span class="s1">'A 404 error occured at the following url: '</span><span class="o">.</span><span class="nv">$_SERVER</span><span class="p">[</span><span class="s1">'SERVER_NAME'</span><span class="p">]</span><span class="o">.</span><span class="nv">$location</span><span class="p">;</span>
+    <span class="nv">$headers</span> <span class="mf">.</span><span class="o">=</span> <span class="s2">"Content-type: text/plain; charset=UTF-8</span><span class="se">\r\n</span><span class="s2">"</span><span class="p">;</span>
+    <span class="nv">$headers</span> <span class="mf">.</span><span class="o">=</span> <span class="s1">'From: "'</span> <span class="mf">.</span> <span class="nv">$name</span> <span class="mf">.</span> <span class="s1">'" &amp;lt;'</span> <span class="mf">.</span><span class="nv">$email</span><span class="mf">.</span> <span class="s2">"&amp;gt;</span><span class="se">\r\n</span><span class="s2">"</span><span class="p">;</span>
+    <span class="nv">$subject</span><span class="o">=</span><span class="s1">'404 error in '</span><span class="mf">.</span><span class="nv">$name</span><span class="p">;</span>
+    <span class="nv">$body</span><span class="o">=</span><span class="s1">'A 404 error occured at the following url: '</span><span class="mf">.</span><span class="nv">$_SERVER</span><span class="p">[</span><span class="s1">'SERVER_NAME'</span><span class="p">]</span><span class="mf">.</span><span class="nv">$location</span><span class="p">;</span>
     <span class="o">@</span><span class="nb">mail</span><span class="p">(</span><span class="nv">$email</span><span class="p">,</span><span class="nv">$subject</span><span class="p">,</span><span class="nv">$body</span><span class="p">,</span><span class="nv">$headers</span><span class="p">);</span>
 <span class="p">}</span>
 <span class="cp">?&gt;</span></code></pre></figure>
@@ -163,7 +167,7 @@
    
    <div class="footer">
    <div class="container">
-      <p class="copy">&copy; 2021 <a href="http://jfoucher.com">Jonathan Foucher.</a></p>
+      <p class="copy">&copy; 2022 <a href="http://jfoucher.com">Jonathan Foucher.</a></p>
 
       <div class="footer-links"> 
          <ul class="noList"> 
@@ -235,6 +239,10 @@
             </li>
          </ul>
       </div>
+   </div>
+   <div class="container">
+      <a href="https://6px.fr">Je créé des application sur mesure pour les TPE / PME</a> et j'écris aussi
+      <a href="https://6px.fr/articles"></a>des articles sur la meilleur utilisation des outils digitaux pour les entreprises</a>
    </div>
 </div><!-- end .footer -->
 

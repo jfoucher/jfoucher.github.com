@@ -109,8 +109,12 @@ Et ça a l’air de marcher avec tous les schémas de réécriture.
                      <a href="/contact.html">Contact</a>
                  </li> 
                  
-                 <li class="element   last">
+                 <li class="element   ">
                      <a href="/projects.html">Projects</a>
+                 </li> 
+                 
+                 <li class="element   last">
+                     <a href="/videos.html">Videos</a>
                  </li> 
                  
 
@@ -131,7 +135,7 @@ Et ça a l’air de marcher avec tous les schémas de réécriture.
 
 <p>C’est que si vous utilisez une structure des permaliens où l’id du billet n’est pas présente, telle que celle-ci:</p>
 
-<figure class="highlight"><pre><code class="language-php" data-lang="php">     <span class="o">/%</span><span class="nx">year</span><span class="o">%/%</span><span class="nx">monthnum</span><span class="o">%/%</span><span class="nx">day</span><span class="o">%/%</span><span class="nx">postname</span><span class="o">%/</span></code></pre></figure>
+<figure class="highlight"><pre><code class="language-php" data-lang="php">     <span class="o">/%</span><span class="n">year</span><span class="o">%/%</span><span class="n">monthnum</span><span class="o">%/%</span><span class="n">day</span><span class="o">%/%</span><span class="n">postname</span><span class="o">%/</span></code></pre></figure>
 
 <p>L’id du billet n’est pas ajouté à la table de Stat Traq, ce qui fait que mon plugin <a href="http://jfoucher.com/2004/10/popular-posts-wordpress-plugin">Populaires</a> ne comprend plus ce qu’il lui arrive. La solution est en fait très simple</p>
 
@@ -150,8 +154,8 @@ Et ça a l’air de marcher avec tous les schémas de réécriture.
 
 <p>Il faut donc remplacer les lignes ci-dessus par celles-la</p>
 
-<figure class="highlight"><pre><code class="language-php" data-lang="php">     <span class="k">if</span> <span class="p">((</span><span class="nv">$post</span><span class="o">-&gt;</span><span class="na">ID</span> <span class="o">!=</span> <span class="s1">''</span><span class="p">)){</span>
-     <span class="nv">$p</span> <span class="o">=</span> <span class="nb">intval</span><span class="p">(</span><span class="nv">$post</span><span class="o">-&gt;</span><span class="na">ID</span><span class="p">);</span></code></pre></figure>
+<figure class="highlight"><pre><code class="language-php" data-lang="php">     <span class="k">if</span> <span class="p">((</span><span class="nv">$post</span><span class="o">-&gt;</span><span class="no">ID</span> <span class="o">!=</span> <span class="s1">''</span><span class="p">)){</span>
+     <span class="nv">$p</span> <span class="o">=</span> <span class="nb">intval</span><span class="p">(</span><span class="nv">$post</span><span class="o">-&gt;</span><span class="no">ID</span><span class="p">);</span></code></pre></figure>
 
 <p>Et ça a l’air de marcher avec tous les schémas de réécriture.</p>
 
@@ -183,7 +187,7 @@ Et ça a l’air de marcher avec tous les schémas de réécriture.
    
    <div class="footer">
    <div class="container">
-      <p class="copy">&copy; 2021 <a href="http://jfoucher.com">Jonathan Foucher.</a></p>
+      <p class="copy">&copy; 2022 <a href="http://jfoucher.com">Jonathan Foucher.</a></p>
 
       <div class="footer-links"> 
          <ul class="noList"> 
@@ -255,6 +259,10 @@ Et ça a l’air de marcher avec tous les schémas de réécriture.
             </li>
          </ul>
       </div>
+   </div>
+   <div class="container">
+      <a href="https://6px.fr">Je créé des application sur mesure pour les TPE / PME</a> et j'écris aussi
+      <a href="https://6px.fr/articles"></a>des articles sur la meilleur utilisation des outils digitaux pour les entreprises</a>
    </div>
 </div><!-- end .footer -->
 

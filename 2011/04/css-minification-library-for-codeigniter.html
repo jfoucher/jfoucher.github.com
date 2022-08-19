@@ -82,8 +82,12 @@
                      <a href="/contact.html">Contact</a>
                  </li> 
                  
-                 <li class="element   last">
+                 <li class="element   ">
                      <a href="/projects.html">Projects</a>
+                 </li> 
+                 
+                 <li class="element   last">
+                     <a href="/videos.html">Videos</a>
                  </li> 
                  
 
@@ -101,7 +105,7 @@
   <p class="meta">April 11, 2011 | <span class="time">3</span> Minute Read</p>
   
   <p>For my latest project, I wanted to be able to easily minify CSS stylesheets, using the simplest syntax possible, ideally using a simple tag in the header, like</p>
-<figure class="highlight"><pre><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">css</span><span class="o">-&gt;</span><span class="na">link</span><span class="p">(</span><span class="k">array</span><span class="p">(</span><span class="s1">'/assets/css/fonts.css'</span><span class="p">,</span><span class="s1">'/assets/css/layout.css'</span><span class="p">);</span><span class="cp">?&gt;</span></code></pre></figure>
+<figure class="highlight"><pre><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">css</span><span class="o">-&gt;</span><span class="nb">link</span><span class="p">(</span><span class="k">array</span><span class="p">(</span><span class="s1">'/assets/css/fonts.css'</span><span class="p">,</span><span class="s1">'/assets/css/layout.css'</span><span class="p">);</span><span class="cp">?&gt;</span></code></pre></figure>
 
 <p>After some searching, I found a css minification library for PHP, <a href="https://code.google.com/p/minify/">minify</a></p>
 
@@ -117,15 +121,18 @@ I modelled the interaction on the image library, as I guess that’s what most p
 <p>The following code, which should go in your controller, will look very familiar to Codeigniter users.</p>
 
 <figure class="highlight"><pre><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
-<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">load</span><span class="o">-&gt;</span><span class="na">library</span><span class="p">(</span><span class="s1">'css'</span><span class="p">);</span>
+<span class="nv">$this</span><span class="o">-&gt;</span><span class="n">load</span><span class="o">-&gt;</span><span class="nf">library</span><span class="p">(</span><span class="s1">'css'</span><span class="p">);</span>
 <span class="c1">//array of files to concatenate and minify
-</span><span class="nv">$config</span><span class="p">[</span><span class="s1">'source_file'</span><span class="p">]</span><span class="o">=</span><span class="k">array</span><span class="p">(</span><span class="s1">'/assets/css/layout.css'</span><span class="p">,</span><span class="s1">'/assets/css/fonts.css'</span><span class="p">);</span>
+</span>
+<span class="nv">$config</span><span class="p">[</span><span class="s1">'source_file'</span><span class="p">]</span><span class="o">=</span><span class="k">array</span><span class="p">(</span><span class="s1">'/assets/css/layout.css'</span><span class="p">,</span><span class="s1">'/assets/css/fonts.css'</span><span class="p">);</span>
 <span class="c1">//where to output the result
-</span><span class="nv">$config</span><span class="p">[</span><span class="s1">'dest_file'</span><span class="p">]</span><span class="s1">'/assets/css/css.min.css'</span><span class="p">;</span>
+</span>
+<span class="nv">$config</span><span class="p">[</span><span class="s1">'dest_file'</span><span class="p">]</span><span class="s1">'/assets/css/css.min.css'</span><span class="p">;</span>
 <span class="c1">//Cache time in hours
-</span><span class="nv">$config</span><span class="p">[</span><span class="s1">'cache_time'</span><span class="p">]</span><span class="o">=</span><span class="mi">48</span><span class="p">;</span>
-<span class="nv">$this</span><span class="o">-&gt;</span><span class="na">css</span><span class="o">-&gt;</span><span class="na">initialize</span><span class="p">(</span><span class="nv">$config</span><span class="p">);</span>
-<span class="k">echo</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">css</span><span class="o">-&gt;</span><span class="na">link</span><span class="p">();</span>
+</span>
+<span class="nv">$config</span><span class="p">[</span><span class="s1">'cache_time'</span><span class="p">]</span><span class="o">=</span><span class="mi">48</span><span class="p">;</span>
+<span class="nv">$this</span><span class="o">-&gt;</span><span class="n">css</span><span class="o">-&gt;</span><span class="nf">initialize</span><span class="p">(</span><span class="nv">$config</span><span class="p">);</span>
+<span class="k">echo</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">css</span><span class="o">-&gt;</span><span class="nb">link</span><span class="p">();</span>
 <span class="cp">?&gt;</span></code></pre></figure>
 
 <p>Will output the following stylesheet tag:</p>
@@ -167,7 +174,7 @@ I modelled the interaction on the image library, as I guess that’s what most p
    
    <div class="footer">
    <div class="container">
-      <p class="copy">&copy; 2021 <a href="http://jfoucher.com">Jonathan Foucher.</a></p>
+      <p class="copy">&copy; 2022 <a href="http://jfoucher.com">Jonathan Foucher.</a></p>
 
       <div class="footer-links"> 
          <ul class="noList"> 
@@ -239,6 +246,10 @@ I modelled the interaction on the image library, as I guess that’s what most p
             </li>
          </ul>
       </div>
+   </div>
+   <div class="container">
+      <a href="https://6px.fr">Je créé des application sur mesure pour les TPE / PME</a> et j'écris aussi
+      <a href="https://6px.fr/articles"></a>des articles sur la meilleur utilisation des outils digitaux pour les entreprises</a>
    </div>
 </div><!-- end .footer -->
 

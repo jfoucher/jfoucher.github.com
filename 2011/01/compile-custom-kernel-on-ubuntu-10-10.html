@@ -82,8 +82,12 @@
                      <a href="/contact.html">Contact</a>
                  </li> 
                  
-                 <li class="element   last">
+                 <li class="element   ">
                      <a href="/projects.html">Projects</a>
+                 </li> 
+                 
+                 <li class="element   last">
+                     <a href="/videos.html">Videos</a>
                  </li> 
                  
 
@@ -100,23 +104,23 @@
   <h1 class="postTitle"><a href="">Compile custom kernel on Ubuntu 10.10</a></h1>
   <p class="meta">January 12, 2011 | <span class="time">5</span> Minute Read</p>
   
-  <p>First off, you want to grab the latest kernel source from <a href="http://kernel.org/">http://kernel.org/</a> and save it to a folder on your computer. I used my browser’s default : <code class="highlighter-rouge">~/Downloads</code>. Right click on the archive and select “extract here”</p>
+  <p>First off, you want to grab the latest kernel source from <a href="http://kernel.org/">http://kernel.org/</a> and save it to a folder on your computer. I used my browser’s default : <code class="language-plaintext highlighter-rouge">~/Downloads</code>. Right click on the archive and select “extract here”</p>
 
 <h3 id="configuration">Configuration</h3>
 
-<p>Open a terminal, “cd” to your source directory, in my case <code class="highlighter-rouge">cd ~/Downloads/linux-2.6.37</code> and run <code class="highlighter-rouge">make gconfig</code> if using Ubuntu or <code class="highlighter-rouge">make kconfig</code> if running Kubuntu. At that point, you’ll need to know a fair bit about your system’s hardware, to select only the options that are applicable. I like to reuse my current config as a starting point, so if you are using the default ubuntu kernel, the configuration used is stored in the <code class="highlighter-rouge">boot</code> directory, with names like <code class="highlighter-rouge">config-2.6.35-24-generic</code></p>
+<p>Open a terminal, “cd” to your source directory, in my case <code class="language-plaintext highlighter-rouge">cd ~/Downloads/linux-2.6.37</code> and run <code class="language-plaintext highlighter-rouge">make gconfig</code> if using Ubuntu or <code class="language-plaintext highlighter-rouge">make kconfig</code> if running Kubuntu. At that point, you’ll need to know a fair bit about your system’s hardware, to select only the options that are applicable. I like to reuse my current config as a starting point, so if you are using the default ubuntu kernel, the configuration used is stored in the <code class="language-plaintext highlighter-rouge">boot</code> directory, with names like <code class="language-plaintext highlighter-rouge">config-2.6.35-24-generic</code></p>
 
-<p>Copy the latest one to your linux source directory. When the configuration editor is loaded, choose <code class="highlighter-rouge">File &gt;&gt; Load</code> and select the file you just copied over. Now the Ubuntu default configuration is loaded. If you were to compile your kernel you would get the same kind of system you have now : functional but suboptimal.</p>
+<p>Copy the latest one to your linux source directory. When the configuration editor is loaded, choose <code class="language-plaintext highlighter-rouge">File &gt;&gt; Load</code> and select the file you just copied over. Now the Ubuntu default configuration is loaded. If you were to compile your kernel you would get the same kind of system you have now : functional but suboptimal.</p>
 
 <h3 id="well-try-and-better-that-a-bit">We’ll try and better that a bit.</h3>
 
 <p>The first submenu I open is Processor type and features. In there, I disable everything related to SMP and Paravirtualized guest support as I do not plan to run this as a VM guest. I choose the type of processor appropriate to my machine, in this case “new Xeon”</p>
 
-<p>You can use <code class="highlighter-rouge">make localmodconfig</code> which will disable all the modules not currently loaded from your config file. Be careful though, because if there are devices and/of file systems you’re not using at the moment, the drivers won’t be added.</p>
+<p>You can use <code class="language-plaintext highlighter-rouge">make localmodconfig</code> which will disable all the modules not currently loaded from your config file. Be careful though, because if there are devices and/of file systems you’re not using at the moment, the drivers won’t be added.</p>
 
 <h3 id="compiling-and-instalation">Compiling and instalation</h3>
 
-<p>Once you’re happy with the configuration, save and close the editor, and run <code class="highlighter-rouge">make all</code> or <code class="highlighter-rouge">make -j4 all</code> on multicore processors to run several processes in parallel, which will compile the kernel and the modules specified in the <code class="highlighter-rouge">.config</code> file</p>
+<p>Once you’re happy with the configuration, save and close the editor, and run <code class="language-plaintext highlighter-rouge">make all</code> or <code class="language-plaintext highlighter-rouge">make -j4 all</code> on multicore processors to run several processes in parallel, which will compile the kernel and the modules specified in the <code class="language-plaintext highlighter-rouge">.config</code> file</p>
 
 <p>That’s the regular debian method, in which you have to run mkinitrd afterwards. I ended up doing it <a href="https://help.ubuntu.com/community/Kernel/Compile">the ubuntu way</a>, where you create .deb packages you can later install with your preferred package manager.</p>
 
@@ -172,7 +176,7 @@
    
    <div class="footer">
    <div class="container">
-      <p class="copy">&copy; 2021 <a href="http://jfoucher.com">Jonathan Foucher.</a></p>
+      <p class="copy">&copy; 2022 <a href="http://jfoucher.com">Jonathan Foucher.</a></p>
 
       <div class="footer-links"> 
          <ul class="noList"> 
@@ -244,6 +248,10 @@
             </li>
          </ul>
       </div>
+   </div>
+   <div class="container">
+      <a href="https://6px.fr">Je créé des application sur mesure pour les TPE / PME</a> et j'écris aussi
+      <a href="https://6px.fr/articles"></a>des articles sur la meilleur utilisation des outils digitaux pour les entreprises</a>
    </div>
 </div><!-- end .footer -->
 

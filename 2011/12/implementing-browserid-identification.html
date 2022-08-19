@@ -82,8 +82,12 @@
                      <a href="/contact.html">Contact</a>
                  </li> 
                  
-                 <li class="element   last">
+                 <li class="element   ">
                      <a href="/projects.html">Projects</a>
+                 </li> 
+                 
+                 <li class="element   last">
+                     <a href="/videos.html">Videos</a>
                  </li> 
                  
 
@@ -108,7 +112,7 @@
 
 <h4 id="include-the-following-javascript-snippet-in-your-page">Include the following javascript snippet in your page</h4>
 
-<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript">    <span class="o">&lt;</span><span class="nx">script</span> <span class="nx">src</span><span class="o">=</span><span class="s2">"https://browserid.org/include.js"</span> <span class="nx">type</span><span class="o">=</span><span class="s2">"text/javascript"</span><span class="o">&gt;&lt;</span><span class="sr">/script&gt;</span></code></pre></figure>
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript">    <span class="o">&lt;</span><span class="nx">script</span> <span class="nx">src</span><span class="o">=</span><span class="dl">"</span><span class="s2">https://browserid.org/include.js</span><span class="dl">"</span> <span class="nx">type</span><span class="o">=</span><span class="dl">"</span><span class="s2">text/javascript</span><span class="dl">"</span><span class="o">&gt;&lt;</span><span class="sr">/script&gt;</span></code></pre></figure>
 
 <h4 id="identify-the-user">Identify the user</h4>
 
@@ -116,10 +120,13 @@
 
 <figure class="highlight"><pre><code class="language-javascript" data-lang="javascript">    <span class="nb">navigator</span><span class="p">.</span><span class="nx">id</span><span class="p">.</span><span class="nx">getVerifiedEmail</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">assertion</span><span class="p">)</span> <span class="p">{</span>
         <span class="k">if</span> <span class="p">(</span><span class="nx">assertion</span><span class="p">)</span> <span class="p">{</span>
-            <span class="c1">// This code will be invoked once the user has successfully</span>
-            <span class="c1">// selected an email address they control to sign in with.</span>
+            <span class="c1">// This code will be invoked once the user has successfully
+</span>
+            <span class="c1">// selected an email address they control to sign in with.
+</span>
         <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-            <span class="c1">// something went wrong!  the user isn't logged in.</span>
+            <span class="c1">// something went wrong!  the user isn't logged in.
+</span>
         <span class="p">}</span>
     <span class="p">});</span></code></pre></figure>
 
@@ -127,22 +134,27 @@
 
 <h4 id="verify-the-assertion">Verify the assertion</h4>
 
-<p>To do so, and once you have the <code class="highlighter-rouge">assertion</code>, you have to make a POST request to <a href="http://browserid.org/verify">http://browserid.org/verify</a>, with two parameters: the assertion and the audience, which is simply the hostname of your site. This has to be done from your server. For security reasons, it won’t work if you do it as an ajax request from the user’s browser. What I suggest is that you call a url on your server from the javascript callback which will be in charge of itself making the request to browserid.org. Do it as a POST request as that assertion is a <em>long</em> string. This an example implementation for the <a href="http://www.slimframework.com/">Slim framework</a>:</p>
+<p>To do so, and once you have the <code class="language-plaintext highlighter-rouge">assertion</code>, you have to make a POST request to <a href="http://browserid.org/verify">http://browserid.org/verify</a>, with two parameters: the assertion and the audience, which is simply the hostname of your site. This has to be done from your server. For security reasons, it won’t work if you do it as an ajax request from the user’s browser. What I suggest is that you call a url on your server from the javascript callback which will be in charge of itself making the request to browserid.org. Do it as a POST request as that assertion is a <em>long</em> string. This an example implementation for the <a href="http://www.slimframework.com/">Slim framework</a>:</p>
 
 <figure class="highlight"><pre><code class="language-php" data-lang="php">    <span class="cp">&lt;?php</span>
-    <span class="nv">$app</span><span class="o">-&gt;</span><span class="na">post</span><span class="p">(</span><span class="s1">'/browserid'</span><span class="p">,</span> <span class="k">function</span> <span class="p">()</span> <span class="k">use</span> <span class="p">(</span><span class="nv">$app</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nv">$assertion</span><span class="o">=</span><span class="nv">$app</span><span class="o">-&gt;</span><span class="na">request</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">post</span><span class="p">(</span><span class="s1">'assertion'</span><span class="p">);</span>
+    <span class="nv">$app</span><span class="o">-&gt;</span><span class="nf">post</span><span class="p">(</span><span class="s1">'/browserid'</span><span class="p">,</span> <span class="k">function</span> <span class="p">()</span> <span class="k">use</span> <span class="p">(</span><span class="nv">$app</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nv">$assertion</span><span class="o">=</span><span class="nv">$app</span><span class="o">-&gt;</span><span class="nf">request</span><span class="p">()</span><span class="o">-&gt;</span><span class="nf">post</span><span class="p">(</span><span class="s1">'assertion'</span><span class="p">);</span>
             <span class="c1">//get the POSTed assertion
-</span>            <span class="nv">$post_data</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span><span class="s1">'assertion'</span> <span class="o">=&gt;</span> <span class="nv">$assertion</span><span class="p">,</span> <span class="s1">'audience'</span> <span class="o">=&gt;</span> <span class="nx">SERVER</span><span class="p">);</span>
+</span>
+            <span class="nv">$post_data</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span><span class="s1">'assertion'</span> <span class="o">=&gt;</span> <span class="nv">$assertion</span><span class="p">,</span> <span class="s1">'audience'</span> <span class="o">=&gt;</span> <span class="no">SERVER</span><span class="p">);</span>
             <span class="c1">//SERVER is my site's hostname
-</span>            <span class="nv">$r</span> <span class="o">=</span> <span class="nx">Http</span><span class="o">::</span><span class="na">post</span><span class="p">(</span><span class="s1">'https://browserid.org/verify'</span><span class="p">,</span><span class="nv">$post_data</span><span class="p">);</span>
+</span>
+            <span class="nv">$r</span> <span class="o">=</span> <span class="nc">Http</span><span class="o">::</span><span class="nf">post</span><span class="p">(</span><span class="s1">'https://browserid.org/verify'</span><span class="p">,</span><span class="nv">$post_data</span><span class="p">);</span>
             <span class="c1">//This makes a post request to browserid.org
-</span>            <span class="nv">$result</span><span class="o">=</span><span class="nb">json_decode</span><span class="p">(</span><span class="nv">$r</span><span class="p">,</span><span class="kc">true</span><span class="p">);</span>
+</span>
+            <span class="nv">$result</span><span class="o">=</span><span class="nb">json_decode</span><span class="p">(</span><span class="nv">$r</span><span class="p">,</span><span class="kc">true</span><span class="p">);</span>
             <span class="k">if</span><span class="p">(</span><span class="nv">$result</span><span class="p">[</span><span class="s1">'status'</span><span class="p">]</span><span class="o">==</span><span class="s1">'okay'</span><span class="p">){</span>
-                <span class="nx">handle_users</span><span class="p">(</span><span class="nv">$app</span><span class="p">,</span><span class="nv">$result</span><span class="p">);</span>
+                <span class="nf">handle_users</span><span class="p">(</span><span class="nv">$app</span><span class="p">,</span><span class="nv">$result</span><span class="p">);</span>
                 <span class="c1">//This logs the user in if we have an account for that email address,
-</span>                <span class="c1">//or creates it otherwise
-</span>            <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+</span>
+                <span class="c1">//or creates it otherwise
+</span>
+            <span class="p">}</span><span class="k">else</span><span class="p">{</span>
                 <span class="nv">$msg</span><span class="o">=</span><span class="s1">'Could not log you in'</span><span class="p">;</span>
                 <span class="nv">$status</span><span class="o">=</span><span class="kc">false</span><span class="p">;</span>
                 <span class="k">echo</span> <span class="nb">json_encode</span><span class="p">(</span><span class="k">array</span><span class="p">(</span><span class="s1">'message'</span><span class="o">=&gt;</span><span class="nv">$msg</span><span class="p">,</span><span class="s1">'status'</span><span class="o">=&gt;</span><span class="nv">$status</span><span class="p">));</span>
@@ -154,11 +166,11 @@
 <p>This call to the browserID API returns some json_encoded stuff, for example something like this :</p>
 
 <figure class="highlight"><pre><code class="language-javascript" data-lang="javascript">    <span class="p">{</span>
-        <span class="s2">"status"</span><span class="p">:</span> <span class="s2">"okay"</span><span class="p">,</span>
-        <span class="s2">"email"</span><span class="p">:</span> <span class="s2">"lloyd@example.com"</span><span class="p">,</span>
-        <span class="s2">"audience"</span><span class="p">:</span> <span class="s2">"https://mysite.com"</span><span class="p">,</span>
-        <span class="s2">"expires"</span><span class="p">:</span> <span class="mi">1308859352261</span><span class="p">,</span>
-        <span class="s2">"issuer"</span><span class="p">:</span> <span class="s2">"browserid.org"</span>
+        <span class="dl">"</span><span class="s2">status</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">okay</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">email</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">lloyd@example.com</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">audience</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">https://mysite.com</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">expires</span><span class="dl">"</span><span class="p">:</span> <span class="mi">1308859352261</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">issuer</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">browserid.org</span><span class="dl">"</span>
     <span class="p">}</span></code></pre></figure>
 
 <h4 id="login-or-register">Login or register</h4>
@@ -201,7 +213,7 @@
    
    <div class="footer">
    <div class="container">
-      <p class="copy">&copy; 2021 <a href="http://jfoucher.com">Jonathan Foucher.</a></p>
+      <p class="copy">&copy; 2022 <a href="http://jfoucher.com">Jonathan Foucher.</a></p>
 
       <div class="footer-links"> 
          <ul class="noList"> 
@@ -273,6 +285,10 @@
             </li>
          </ul>
       </div>
+   </div>
+   <div class="container">
+      <a href="https://6px.fr">Je créé des application sur mesure pour les TPE / PME</a> et j'écris aussi
+      <a href="https://6px.fr/articles"></a>des articles sur la meilleur utilisation des outils digitaux pour les entreprises</a>
    </div>
 </div><!-- end .footer -->
 

@@ -82,8 +82,12 @@
                      <a href="/contact.html">Contact</a>
                  </li> 
                  
-                 <li class="element   last">
+                 <li class="element   ">
                      <a href="/projects.html">Projects</a>
+                 </li> 
+                 
+                 <li class="element   last">
+                     <a href="/videos.html">Videos</a>
                  </li> 
                  
 
@@ -104,8 +108,8 @@
 It took me… a few months to finally find the time figure out how to set up everything properly, so I hope this post can help someone, somewhere. But don’t worry: it retrospect, it’s not that difficult at all.</p>
 <h3>First things first : install xdebug</h3>
 <p>On Ubuntu and Debian, it couldn’t be easier: just open a terminal and type</p>
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">sudo </span>apt-get install
-php5-xdebug</code></pre></figure>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">sudo </span>apt-get <span class="nb">install
+</span>php5-xdebug</code></pre></figure>
 <p>This will also install Apache and PHP if you don’t have them already.</p>
 <h3>Setup Xdebug on server</h3>
 <p>Done? Right, so this created a config file in /etc/php5/conf.d called xdebug.ini, which is read by php and contains xdebug’s configuration options. You’ll need to open this file for editing as root, as we need to make a few changes in there. you can copy/paste the command below in the terminal, or do it your own way.</p>
@@ -177,7 +181,7 @@ php5-xdebug</code></pre></figure>
    
    <div class="footer">
    <div class="container">
-      <p class="copy">&copy; 2021 <a href="http://jfoucher.com">Jonathan Foucher.</a></p>
+      <p class="copy">&copy; 2022 <a href="http://jfoucher.com">Jonathan Foucher.</a></p>
 
       <div class="footer-links"> 
          <ul class="noList"> 
@@ -249,6 +253,10 @@ php5-xdebug</code></pre></figure>
             </li>
          </ul>
       </div>
+   </div>
+   <div class="container">
+      <a href="https://6px.fr">Je créé des application sur mesure pour les TPE / PME</a> et j'écris aussi
+      <a href="https://6px.fr/articles"></a>des articles sur la meilleur utilisation des outils digitaux pour les entreprises</a>
    </div>
 </div><!-- end .footer -->
 

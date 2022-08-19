@@ -10,6 +10,69 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="External links:
 
+The little images that appear after an external link on this site used to be created by pure CSS, using the following rules:
+
+.commentlist a[href*="http"], .storycontent a[href*="http"]
+{
+    padding-right: 12px;
+    background: url('/wp-images/ext-link.gif') right top no-repeat;
+}
+.commentlist a[href*="jfoucher.info"], .storycontent a[href*="jfoucher.info"]
+{
+    padding-right: 0;
+    background-image: none;
+}
+
+
+But, as you may know, this does not work in Internet Explorer. So I decided to write a little plugin that would give a specific class attribute to all external links, so that they can be styled in a manner recognizable to IE.
+
+Languages
+
+Additionally, as this is a bilingual blog, I like to show an language text after each link, like this. I used to do it in pure CSS, like so:
+
+ a[hreflang]:after {
+      content:"000a0[" attr(hreflang) "]";
+      color:#999;
+      background:transparent;
+      font-size:0.8em
+ }
+
+
+but you guessed it, it doesn’t work in IE, so this little plugin takes care of that as well… All you need to do is add an hreflang=”whatever” attribute to your links.
+
+Installation:
+
+
+  Download the gzip file
+  Extract it
+  Upload the resulting file to your wp-content/plugins directory
+  Activate through the admin interface
+
+
+That’s it ! Now you can define styles:
+
+For example:
+
+ /* External links style */
+ a.external-link, a.external-link:visited
+ {
+      padding-right:12px;
+      background:url(/wp-images/ext-link.png) right top no-repeat;
+      margin-right:0
+ }
+ /* Hovering external links */
+ a.external-link:hover
+ {
+      padding-right:12px;
+      background:url(/wp-images/ext-link-hover.png) right top no-repeat;
+      margin-right:0
+ }
+ /* Language attribute */
+ .hreflang {
+      font-size:0.8em;
+      color:#bbb
+ }
+
 ">
     <meta name="generator" content="Stati (https://stati.jfoucher.com)" />
     
@@ -84,8 +147,12 @@
                      <a href="/contact.html">Contact</a>
                  </li> 
                  
-                 <li class="element   last">
+                 <li class="element   ">
                      <a href="/projects.html">Projects</a>
+                 </li> 
+                 
+                 <li class="element   last">
+                     <a href="/videos.html">Videos</a>
                  </li> 
                  
 
@@ -106,7 +173,7 @@
 
 <p>The little images that appear after an external link on this site used to be created by pure CSS, using the following rules:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>.commentlist a[href*="http"], .storycontent a[href*="http"]
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>.commentlist a[href*="http"], .storycontent a[href*="http"]
 {
     padding-right: 12px;
     background: url('/wp-images/ext-link.gif') right top no-repeat;
@@ -124,7 +191,7 @@
 
 <p>Additionally, as this is a bilingual blog, I like to show an language text after each link, like <a href="http://daniel.glazman.free.fr/weblog/archived/2002_09_15_glazblogarc.html#81664011" hreflang="en">this</a>. I used to do it in pure CSS, like so:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> a[hreflang]:after {
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> a[hreflang]:after {
       content:"000a0[" attr(hreflang) "]";
       color:#999;
       background:transparent;
@@ -147,7 +214,7 @@
 
 <h3 id="for-example">For example:</h3>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> /* External links style */
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> /* External links style */
  a.external-link, a.external-link:visited
  {
       padding-right:12px;
@@ -196,7 +263,7 @@
    
    <div class="footer">
    <div class="container">
-      <p class="copy">&copy; 2021 <a href="http://jfoucher.com">Jonathan Foucher.</a></p>
+      <p class="copy">&copy; 2022 <a href="http://jfoucher.com">Jonathan Foucher.</a></p>
 
       <div class="footer-links"> 
          <ul class="noList"> 
@@ -268,6 +335,10 @@
             </li>
          </ul>
       </div>
+   </div>
+   <div class="container">
+      <a href="https://6px.fr">Je créé des application sur mesure pour les TPE / PME</a> et j'écris aussi
+      <a href="https://6px.fr/articles"></a>des articles sur la meilleur utilisation des outils digitaux pour les entreprises</a>
    </div>
 </div><!-- end .footer -->
 

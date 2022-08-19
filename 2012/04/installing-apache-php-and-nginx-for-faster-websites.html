@@ -82,8 +82,12 @@
                      <a href="/contact.html">Contact</a>
                  </li> 
                  
-                 <li class="element   last">
+                 <li class="element   ">
                      <a href="/projects.html">Projects</a>
+                 </li> 
+                 
+                 <li class="element   last">
+                     <a href="/videos.html">Videos</a>
                  </li> 
                  
 
@@ -108,11 +112,11 @@
 
 <h3 id="install-required-software">Install required software</h3>
 
-<p>I’m using Ubuntu, but the steps below should be fairly easy to adapt to your distribution of choice. To install everything from scratch, just run <code class="highlighter-rouge">sudo apt-get install php5 apache2 mysql-server php5-mysql nginx</code>. This installs mysql, Apache, PHP and Nginx</p>
+<p>I’m using Ubuntu, but the steps below should be fairly easy to adapt to your distribution of choice. To install everything from scratch, just run <code class="language-plaintext highlighter-rouge">sudo apt-get install php5 apache2 mysql-server php5-mysql nginx</code>. This installs mysql, Apache, PHP and Nginx</p>
 
 <h3 id="configure-apache-and-nginx">Configure Apache and Nginx</h3>
 
-<p>I created one bash script that creates the necessary virtual hosts files for Apache and Nginx, by taking a template a doing a search/replace with sed. Here is the apache virtual host template that goes into <code class="highlighter-rouge">/etc/apache2/sites-available</code>:</p>
+<p>I created one bash script that creates the necessary virtual hosts files for Apache and Nginx, by taking a template a doing a search/replace with sed. Here is the apache virtual host template that goes into <code class="language-plaintext highlighter-rouge">/etc/apache2/sites-available</code>:</p>
 
 <figure class="highlight"><pre><code class="language-apache" data-lang="apache">    <span class="p">&lt;</span><span class="nl">VirtualHost</span><span class="sr"> *:8080</span><span class="p">&gt;
 </span>        <span class="nc">ServerAdmin</span> webmaster@localhost
@@ -127,18 +131,20 @@
 </span>                <span class="nc">Options</span> <span class="ss">Indexes</span> <span class="ss">FollowSymLinks</span> <span class="ss">MultiViews</span>
                 <span class="nc">AllowOverride</span> <span class="ss">All</span>
                 <span class="nc">Order</span> allow,deny
-                <span class="nc">allow</span> <span class="ss">from</span> all
+                <span class="nc">allow</span> <span class="ss">from</span> <span class="ss">all</span>
         <span class="p">&lt;/</span><span class="nl">Directory</span><span class="p">&gt;
 </span>        <span class="nc">ScriptAlias</span> /cgi-bin/ /usr/lib/cgi-bin/
         <span class="p">&lt;</span><span class="nl">Directory</span><span class="sr"> "/usr/lib/cgi-bin"</span><span class="p">&gt;
 </span>                <span class="nc">AllowOverride</span> <span class="ss">None</span>
                 <span class="nc">Options</span> +ExecCGI -MultiViews +SymLinksIfOwnerMatch
                 <span class="nc">Order</span> allow,deny
-                <span class="nc">Allow</span> <span class="ss">from</span> all
+                <span class="nc">Allow</span> <span class="ss">from</span> <span class="ss">all</span>
         <span class="p">&lt;/</span><span class="nl">Directory</span><span class="p">&gt;
 </span>        <span class="nc">ErrorLog</span> ${APACHE_LOG_DIR}/error.log
-        <span class="c"># Possible values include: debug, info, notice, warn, error, crit,</span>
-        <span class="c"># alert, emerg.</span>
+        <span class="c"># Possible values include: debug, info, notice, warn, error, crit,
+</span>
+        <span class="c"># alert, emerg.
+</span>
         <span class="nc">LogLevel</span> warn
         <span class="nc">CustomLog</span> ${APACHE_LOG_DIR}/access.log combined
         <span class="nc">Alias</span> /doc/ "/usr/share/doc/"
@@ -146,28 +152,33 @@
 </span>            <span class="nc">Options</span> <span class="ss">Indexes</span> <span class="ss">MultiViews</span> <span class="ss">FollowSymLinks</span>
             <span class="nc">AllowOverride</span> <span class="ss">None</span>
             <span class="nc">Order</span> deny,allow
-            <span class="nc">Deny</span> <span class="ss">from</span> all
+            <span class="nc">Deny</span> <span class="ss">from</span> <span class="ss">all</span>
             <span class="nc">Allow</span> <span class="ss">from</span> 127.0.0.0/255.0.0.0 ::1/128
         <span class="p">&lt;/</span><span class="nl">Directory</span><span class="p">&gt;
 </span>    <span class="p">&lt;/</span><span class="nl">VirtualHost</span><span class="p">&gt;</span></code></pre></figure>
 
-<p>You’ll notice that Apache listens on port 8080. You need to change the port from 80 to 8080 in <code class="highlighter-rouge">/etc/apache2/ports.conf</code> as well, this is what mine looks like after the change :</p>
+<p>You’ll notice that Apache listens on port 8080. You need to change the port from 80 to 8080 in <code class="language-plaintext highlighter-rouge">/etc/apache2/ports.conf</code> as well, this is what mine looks like after the change :</p>
 
 <figure class="highlight"><pre><code class="language-apache" data-lang="apache">    <span class="nc">NameVirtualHost</span> *:8080
     <span class="nc">Listen</span> 8080
     <span class="p">&lt;</span><span class="nl">IfModule</span><span class="sr"> mod_ssl.c</span><span class="p">&gt;
-</span>        <span class="c"># If you add NameVirtualHost *:443 here, you will also have to change</span>
-        <span class="c"># the VirtualHost statement in /etc/apache2/sites-available/default-ssl</span>
-        <span class="c"># to &lt;VirtualHost *:443&gt;</span>
-        <span class="c"># Server Name Indication for SSL named virtual hosts is currently not</span>
-        <span class="c"># supported by MSIE on Windows XP.</span>
+</span>        <span class="c"># If you add NameVirtualHost *:443 here, you will also have to change
+</span>
+        <span class="c"># the VirtualHost statement in /etc/apache2/sites-available/default-ssl
+</span>
+        <span class="c"># to &lt;VirtualHost *:443&gt;
+</span>
+        <span class="c"># Server Name Indication for SSL named virtual hosts is currently not
+</span>
+        <span class="c"># supported by MSIE on Windows XP.
+</span>
         <span class="nc">Listen</span> 443
     <span class="p">&lt;/</span><span class="nl">IfModule</span><span class="p">&gt;
 </span>    <span class="p">&lt;</span><span class="nl">IfModule</span><span class="sr"> mod_gnutls.c</span><span class="p">&gt;
 </span>        <span class="nc">Listen</span> 443
     <span class="p">&lt;/</span><span class="nl">IfModule</span><span class="p">&gt;</span></code></pre></figure>
 
-<p>Next up is the template for the default nginx site, which is much simpler and goes in <code class="highlighter-rouge">/etc/nginx/sites-available</code>:</p>
+<p>Next up is the template for the default nginx site, which is much simpler and goes in <code class="language-plaintext highlighter-rouge">/etc/nginx/sites-available</code>:</p>
 
 <figure class="highlight"><pre><code class="language-nginx" data-lang="nginx">    <span class="k">server</span> <span class="p">{</span>
         <span class="kn">listen</span> <span class="mi">80</span><span class="p">;</span>
@@ -189,41 +200,47 @@
 
 <p>All that does is proxy everything to apache on localhost, port 8080</p>
 
-<p>So, our virtual host templates are ready, and if you only have one or two sites you could copy the contents to a new file by hand and change the word <code class="highlighter-rouge">template</code> for your actual domain name / folder, but as I had quite a few sites to convert, I created a small bash script that takes car of it for me, by just calling it with the hostname:</p>
+<p>So, our virtual host templates are ready, and if you only have one or two sites you could copy the contents to a new file by hand and change the word <code class="language-plaintext highlighter-rouge">template</code> for your actual domain name / folder, but as I had quite a few sites to convert, I created a small bash script that takes car of it for me, by just calling it with the hostname:</p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash">    <span class="c">#!/bin/bash</span>
-    <span class="nv">CMDLN_ARGS</span><span class="o">=</span><span class="s2">"</span><span class="nv">$@</span><span class="s2">"</span> <span class="c"># Command line arguments for this script</span>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">    <span class="c">#!/bin/bash
+</span>
+    <span class="nv">CMDLN_ARGS</span><span class="o">=</span><span class="s2">"</span><span class="nv">$@</span><span class="s2">"</span> <span class="c"># Command line arguments for this script
+</span>
     <span class="nb">export </span>CMDLN_ARGS
-    <span class="c"># Run this script as root if not already.</span>
+    <span class="c"># Run this script as root if not already.
+</span>
     chk_root <span class="o">()</span> <span class="o">{</span>
-     <span class="k">if</span> <span class="o">[</span> <span class="o">!</span> <span class="k">$(</span> id <span class="nt">-u</span> <span class="k">)</span> <span class="nt">-eq</span> 0 <span class="o">]</span><span class="p">;</span> <span class="k">then
+     <span class="k">if</span> <span class="o">[</span> <span class="o">!</span> <span class="si">$(</span> <span class="nb">id</span> <span class="nt">-u</span> <span class="si">)</span> <span class="nt">-eq</span> 0 <span class="o">]</span><span class="p">;</span> <span class="k">then
        </span><span class="nb">echo</span> <span class="s2">"Please enter your password."</span>
-       <span class="nb">exec sudo </span>su <span class="nt">-c</span> <span class="s2">"</span><span class="k">${</span><span class="nv">0</span><span class="k">}</span><span class="s2"> </span><span class="k">${</span><span class="nv">CMDLN_ARGS</span><span class="k">}</span><span class="s2">"</span> <span class="c"># Call this prog as root</span>
-       <span class="nb">exit</span> <span class="k">${</span><span class="p">?</span><span class="k">}</span>  <span class="c"># since we're 'execing' above, we wont reach this exit</span>
-                  <span class="c"># unless something goes wrong.</span>
+       <span class="nb">exec sudo </span>su <span class="nt">-c</span> <span class="s2">"</span><span class="k">${</span><span class="nv">0</span><span class="k">}</span><span class="s2"> </span><span class="k">${</span><span class="nv">CMDLN_ARGS</span><span class="k">}</span><span class="s2">"</span> <span class="c"># Call this prog as root
+</span>
+       <span class="nb">exit</span> <span class="k">${</span><span class="p">?</span><span class="k">}</span>  <span class="c"># since we're 'execing' above, we wont reach this exit
+</span>
+                  <span class="c"># unless something goes wrong.
+</span>
      <span class="k">fi</span>
     <span class="o">}</span>
     chk_root
-    <span class="nb">cat</span> /etc/apache2/sites-available/template | sed <span class="s2">"s/template/</span><span class="nv">$1</span><span class="s2">/g"</span> |cat <span class="o">&gt;</span> /etc/apache2/sites-available/<span class="nv">$1</span>
-    ln <span class="nt">-s</span> /etc/apache2/sites-available/<span class="nv">$1</span> /etc/apache2/sites-enabled/<span class="nv">$1</span>
-    <span class="nb">cat</span> /etc/nginx/sites-available/template | sed <span class="s2">"s/template/</span><span class="nv">$1</span><span class="s2">/g"</span> |cat <span class="o">&gt;</span> /etc/nginx/sites-available/<span class="nv">$1</span>
-    ln <span class="nt">-s</span> /etc/nginx/sites-available/<span class="nv">$1</span> /etc/nginx/sites-enabled/<span class="nv">$1</span>
+    <span class="nb">cat</span> /etc/apache2/sites-available/template | <span class="nb">sed</span> <span class="s2">"s/template/</span><span class="nv">$1</span><span class="s2">/g"</span> |cat <span class="o">&gt;</span> /etc/apache2/sites-available/<span class="nv">$1</span>
+    <span class="nb">ln</span> <span class="nt">-s</span> /etc/apache2/sites-available/<span class="nv">$1</span> /etc/apache2/sites-enabled/<span class="nv">$1</span>
+    <span class="nb">cat</span> /etc/nginx/sites-available/template | <span class="nb">sed</span> <span class="s2">"s/template/</span><span class="nv">$1</span><span class="s2">/g"</span> |cat <span class="o">&gt;</span> /etc/nginx/sites-available/<span class="nv">$1</span>
+    <span class="nb">ln</span> <span class="nt">-s</span> /etc/nginx/sites-available/<span class="nv">$1</span> /etc/nginx/sites-enabled/<span class="nv">$1</span>
     <span class="k">if</span> <span class="o">[</span> <span class="nt">-d</span> /var/www/<span class="nv">$1</span> <span class="o">]</span><span class="p">;</span>
     <span class="k">then
       </span><span class="nb">echo</span> <span class="s2">"host directory exists"</span><span class="p">;</span>
     <span class="k">else
       </span><span class="nb">echo</span> <span class="s2">"creating directory"</span>
-      mkdir <span class="s2">"/var/www/</span><span class="nv">$1</span><span class="s2">"</span>
+      <span class="nb">mkdir</span> <span class="s2">"/var/www/</span><span class="nv">$1</span><span class="s2">"</span>
     <span class="k">fi
-    </span>chown <span class="nt">-R</span> www-data:www-data /var/www/<span class="nv">$1</span>
+    </span><span class="nb">chown</span> <span class="nt">-R</span> www-data:www-data /var/www/<span class="nv">$1</span>
     /etc/init.d/apache2 restart
     /etc/init.d/nginx restart</code></pre></figure>
 
-<p>Put this say in your home folder and give it executable permission with <code class="highlighter-rouge">chmod 755 new_host</code> or whatever you named the file.</p>
+<p>Put this say in your home folder and give it executable permission with <code class="language-plaintext highlighter-rouge">chmod 755 new_host</code> or whatever you named the file.</p>
 
-<p>Then run it with <code class="highlighter-rouge">./new_host example.com</code></p>
+<p>Then run it with <code class="language-plaintext highlighter-rouge">./new_host example.com</code></p>
 
-<p>This will create a folder in <code class="highlighter-rouge">/var/www/example.com</code>, copy the updated template virtual host configuration to the required location and restart apache and nginx.</p>
+<p>This will create a folder in <code class="language-plaintext highlighter-rouge">/var/www/example.com</code>, copy the updated template virtual host configuration to the required location and restart apache and nginx.</p>
 
 <p>Now put some content in that folder and configure your mysql connection if neccesary</p>
 
@@ -231,9 +248,9 @@
 
 <p>These are some rough numbers for <a href="http://6px.eu">Six Pixels</a>, built with Kohana2 without any caching mechanism</p>
 
-<p><code class="highlighter-rouge">ab -c20 -n200 http://6px.eu:8080/</code> is hitting Apache on port 8080</p>
+<p><code class="language-plaintext highlighter-rouge">ab -c20 -n200 http://6px.eu:8080/</code> is hitting Apache on port 8080</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Server Hostname:        6px.eu
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Server Hostname:        6px.eu
 Server Port:            8080
 
 Document Path:          /
@@ -252,9 +269,9 @@ Time per request:       1413.397 [ms] (mean, across all concurrent requests)
 Transfer rate:          8.59 [Kbytes/sec] received
 </code></pre></div></div>
 
-<p>Now with nginx <code class="highlighter-rouge">ab -c20 -n200 http://6px.eu/</code></p>
+<p>Now with nginx <code class="language-plaintext highlighter-rouge">ab -c20 -n200 http://6px.eu/</code></p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Server Hostname:        6px.eu
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Server Hostname:        6px.eu
 Server Port:            80
 
 Document Path:          /
@@ -289,17 +306,17 @@ So the way to get better performance is to get nginx to cache the results from a
     <span class="k">proxy_cache_valid</span>       <span class="mi">404</span> <span class="mi">1m</span><span class="p">;</span>
     <span class="k">proxy_cache_valid</span>       <span class="s">any</span> <span class="mi">15m</span><span class="p">;</span></code></pre></figure>
 
-<p>where the <code class="highlighter-rouge">proxy_cache</code> named <code class="highlighter-rouge">one</code> is defined in nginx.conf as such :</p>
+<p>where the <code class="language-plaintext highlighter-rouge">proxy_cache</code> named <code class="language-plaintext highlighter-rouge">one</code> is defined in nginx.conf as such :</p>
 
 <figure class="highlight"><pre><code class="language-nginx" data-lang="nginx">    <span class="k">proxy_cache_path</span> <span class="n">/usr/local/nginx/proxy</span> <span class="s">levels=1:2</span> <span class="s">keys_zone=one:15m</span> <span class="s">inactive=7d</span> <span class="s">max_size=1000m</span><span class="p">;</span></code></pre></figure>
 
-<p>The <code class="highlighter-rouge">proxy_cache_valid</code> entries above define different cache times for various response codes</p>
+<p>The <code class="language-plaintext highlighter-rouge">proxy_cache_valid</code> entries above define different cache times for various response codes</p>
 
 <p>And here are the real benchmarks :</p>
 
 <h4 id="apache">Apache:</h4>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Server Hostname:        direct.6px.eu
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Server Hostname:        direct.6px.eu
 Server Port:            8080
 
 Document Path:          /
@@ -320,7 +337,7 @@ Transfer rate:          151.43 [Kbytes/sec] received
 
 <h4 id="nginx">Nginx:</h4>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Server Hostname:        direct.6px.eu
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Server Hostname:        direct.6px.eu
 Server Port:            80
 
 Document Path:          /
@@ -346,7 +363,7 @@ Transfer rate:          23351.88 [Kbytes/sec] received
 <figure class="highlight"><pre><code class="language-nginx" data-lang="nginx">    <span class="k">proxy_cache_bypass</span> <span class="nv">$cookie_session</span><span class="p">;</span>
     <span class="k">proxy_no_cache</span> <span class="nv">$cookie_session</span><span class="p">;</span></code></pre></figure>
 
-<p>where <code class="highlighter-rouge">session</code> is the name of your cookie</p>
+<p>where <code class="language-plaintext highlighter-rouge">session</code> is the name of your cookie</p>
 
 
   </div>
@@ -378,7 +395,7 @@ Transfer rate:          23351.88 [Kbytes/sec] received
    
    <div class="footer">
    <div class="container">
-      <p class="copy">&copy; 2021 <a href="http://jfoucher.com">Jonathan Foucher.</a></p>
+      <p class="copy">&copy; 2022 <a href="http://jfoucher.com">Jonathan Foucher.</a></p>
 
       <div class="footer-links"> 
          <ul class="noList"> 
@@ -450,6 +467,10 @@ Transfer rate:          23351.88 [Kbytes/sec] received
             </li>
          </ul>
       </div>
+   </div>
+   <div class="container">
+      <a href="https://6px.fr">Je créé des application sur mesure pour les TPE / PME</a> et j'écris aussi
+      <a href="https://6px.fr/articles"></a>des articles sur la meilleur utilisation des outils digitaux pour les entreprises</a>
    </div>
 </div><!-- end .footer -->
 

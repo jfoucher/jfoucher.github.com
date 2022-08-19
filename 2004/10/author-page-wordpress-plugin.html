@@ -10,6 +10,67 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="This plugin shows a specific page for each author, showing the number of posts published and some of the data entered in the Wordpress admin section, i.e. URL, AIM ICQ number, etc… except email! But it can provide a contact form that will send an email to the author’s address.
 
+You can use it as an ‘About’ page for a personnal weblog or to give each author their own page in a collaborative blog.
+
+To install it, download the source code and save it in a php file or get the gzip file and unpack it.
+
+Upload the resulting file to your wp-content/plugins directory and activate it from the admin interface.
+
+To use it put the author() function in you index.php template,
+where it normally shows the message that there are no posts.
+
+In the default template, it looks like this:
+
+ &lt;?php endforeach; else: ?&gt;
+ &lt;p&gt;&lt;?php _e('Sorry, no posts matched your criteria.'); ?&gt;&lt;/p&gt;
+ &lt;?php endif; ?&gt;
+
+
+Replace this by :
+
+ &lt;?php endforeach; else: ?&gt;
+ &lt;?php author(true, 5); ?&gt;
+ &lt;?php endif; ?&gt;
+
+
+The first optionnal boolean parameter gives you the opportunity to show or hide
+a contact form for the author. Defaults to ‘true’ (show the form).
+
+In version 0.2+, the second parameter is an integer an defines the number of latest posts to show. The default is ‘0’.
+You may want to change some of the text in the plugin file to your own language.
+
+To do a link to the author page, you have to do something like this:
+
+ &lt;a href="index.php?author_name=&lt;?php the_author_login(); ?&gt;"&gt;
+ &lt;?php the_author(); ?&gt;&lt;/a&gt;
+
+
+if you do not wish to or can’t use rewrite rules.
+
+On this site, I use the following rewrite rule:
+
+ RewriteRule ^about/? /index.php?author_name=jonathan [QSA]
+
+
+With a link to the ‘About’ page simply like this :
+
+ &lt;a href="http://jfoucher.com/about/"&gt;About&lt;/a&gt;
+
+
+On a multiuser blog, you could do this:
+
+RewriteRule ^author/?(.*)/? /index.php?author_name=$1 [QSA]
+
+
+and so the link to the page is like this:
+
+ &lt;a href="http://jfoucher.com/author/&lt;?php the_author_login(); ?&gt;
+ &lt;?php the_author(); ?&gt;&lt;/a&gt;
+
+
+Version 0.3+ use native Wordpress functions to display the author data, making it more compatible (I hope) with future versions of Wordpress.
+
+En Français
 ">
     <meta name="generator" content="Stati (https://stati.jfoucher.com)" />
     
@@ -84,8 +145,12 @@
                      <a href="/contact.html">Contact</a>
                  </li> 
                  
-                 <li class="element   last">
+                 <li class="element   ">
                      <a href="/projects.html">Projects</a>
+                 </li> 
+                 
+                 <li class="element   last">
+                     <a href="/videos.html">Videos</a>
                  </li> 
                  
 
@@ -115,14 +180,14 @@ where it normally shows the message that there are no posts.</p>
 
 <p>In the default template, it looks like this:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> &lt;?php endforeach; else: ?&gt;
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> &lt;?php endforeach; else: ?&gt;
  &lt;p&gt;&lt;?php _e('Sorry, no posts matched your criteria.'); ?&gt;&lt;/p&gt;
  &lt;?php endif; ?&gt;
 </code></pre></div></div>
 
 <p>Replace this by :</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> &lt;?php endforeach; else: ?&gt;
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> &lt;?php endforeach; else: ?&gt;
  &lt;?php author(true, 5); ?&gt;
  &lt;?php endif; ?&gt;
 </code></pre></div></div>
@@ -135,7 +200,7 @@ You may want to change some of the text in the plugin file to your own language.
 
 <p>To do a link to the author page, you have to do something like this:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> &lt;a href="index.php?author_name=&lt;?php the_author_login(); ?&gt;"&gt;
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> &lt;a href="index.php?author_name=&lt;?php the_author_login(); ?&gt;"&gt;
  &lt;?php the_author(); ?&gt;&lt;/a&gt;
 </code></pre></div></div>
 
@@ -143,22 +208,22 @@ You may want to change some of the text in the plugin file to your own language.
 
 <p>On this site, I use the following rewrite rule:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> RewriteRule ^about/? /index.php?author_name=jonathan [QSA]
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> RewriteRule ^about/? /index.php?author_name=jonathan [QSA]
 </code></pre></div></div>
 
 <p>With a link to the ‘About’ page simply like this :</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> &lt;a href="http://jfoucher.com/about/"&gt;About&lt;/a&gt;
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> &lt;a href="http://jfoucher.com/about/"&gt;About&lt;/a&gt;
 </code></pre></div></div>
 
 <p>On a multiuser blog, you could do this:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>RewriteRule ^author/?(.*)/? /index.php?author_name=$1 [QSA]
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>RewriteRule ^author/?(.*)/? /index.php?author_name=$1 [QSA]
 </code></pre></div></div>
 
 <p>and so the link to the page is like this:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> &lt;a href="http://jfoucher.com/author/&lt;?php the_author_login(); ?&gt;
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> &lt;a href="http://jfoucher.com/author/&lt;?php the_author_login(); ?&gt;
  &lt;?php the_author(); ?&gt;&lt;/a&gt;
 </code></pre></div></div>
 
@@ -194,7 +259,7 @@ You may want to change some of the text in the plugin file to your own language.
    
    <div class="footer">
    <div class="container">
-      <p class="copy">&copy; 2021 <a href="http://jfoucher.com">Jonathan Foucher.</a></p>
+      <p class="copy">&copy; 2022 <a href="http://jfoucher.com">Jonathan Foucher.</a></p>
 
       <div class="footer-links"> 
          <ul class="noList"> 
@@ -266,6 +331,10 @@ You may want to change some of the text in the plugin file to your own language.
             </li>
          </ul>
       </div>
+   </div>
+   <div class="container">
+      <a href="https://6px.fr">Je créé des application sur mesure pour les TPE / PME</a> et j'écris aussi
+      <a href="https://6px.fr/articles"></a>des articles sur la meilleur utilisation des outils digitaux pour les entreprises</a>
    </div>
 </div><!-- end .footer -->
 

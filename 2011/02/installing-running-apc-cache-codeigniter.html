@@ -82,8 +82,12 @@
                      <a href="/contact.html">Contact</a>
                  </li> 
                  
-                 <li class="element   last">
+                 <li class="element   ">
                      <a href="/projects.html">Projects</a>
+                 </li> 
+                 
+                 <li class="element   last">
+                     <a href="/videos.html">Videos</a>
                  </li> 
                  
 
@@ -103,13 +107,13 @@
   <p>Codeigniter 2 now includes an excellent cache driver, which makes it dead easy to use any one of the great available cache librairies such as <a href="http://php.net/apc">APC</a> o <a href="http://www.memcached.org/">memcached</a>. In this post I will focus on APC, it’s installation on an <a href="/?p=193">Ubuntu 10.04 server</a>, and a few benchmarks to compare the various cache systems.  For my testing, I will use an Ubuntu Server installation, on a VirtualBox virtual machine with 256 Mb of RAM and a single processor. This enables me to test things until everything breaks, than just scrap that VM and start with a clean one. However, a description of this setup is a story for another day…</p>
 <h3>Installation</h3>
 <p>On Ubuntu, and on other debian based linuxes, you can install APC by typing</p>
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">sudo </span>apt-get install php-apc</code></pre></figure>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">sudo </span>apt-get <span class="nb">install </span>php-apc</code></pre></figure>
 <p>on the command line. Of course, you will have to install Apache and php before that, but that is really easy:</p>
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">sudo </span>apt-get install php5</code></pre></figure>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">sudo </span>apt-get <span class="nb">install </span>php5</code></pre></figure>
 <p>will install <a href="http://php.net">PHP</a> and all needed dependencies, including <a href="http://apache.org">apache</a> So now that APC is installed, just restart apache</p>
 <figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">sudo</span> /etc/init.d/apache2 restart</code></pre></figure>
 <p>and you’re ready to go.  In codeigniter, you don’t need to do anything special. Just turn the cache on by putting the following line somewhere in your controller:</p>
-<figure class="highlight"><pre><code class="language-php" data-lang="php"><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">output</span><span class="o">-&gt;</span><span class="na">cache</span><span class="p">(</span><span class="nx">n</span><span class="p">);</span></code></pre></figure>
+<figure class="highlight"><pre><code class="language-php" data-lang="php"><span class="nv">$this</span><span class="o">-&gt;</span><span class="n">output</span><span class="o">-&gt;</span><span class="nf">cache</span><span class="p">(</span><span class="n">n</span><span class="p">);</span></code></pre></figure>
 <p>Where ‘n’ is the number of minutes to cache that particular content.  The cache library is clever enough to pick the best cache driver from the four available ones (memcached, APC, file and dummy). Forget about the dummy driver: it doesn’t do anything</p>
 <h3>Benchmarks</h3>
 <p>These are the results for 50 concurrent connections : For APC we get about 43 requests/s, with the file caching mecanism around 25, requests/s, and with no cache at all we are below 18 requests/s</p>
@@ -152,7 +156,7 @@
    
    <div class="footer">
    <div class="container">
-      <p class="copy">&copy; 2021 <a href="http://jfoucher.com">Jonathan Foucher.</a></p>
+      <p class="copy">&copy; 2022 <a href="http://jfoucher.com">Jonathan Foucher.</a></p>
 
       <div class="footer-links"> 
          <ul class="noList"> 
@@ -224,6 +228,10 @@
             </li>
          </ul>
       </div>
+   </div>
+   <div class="container">
+      <a href="https://6px.fr">Je créé des application sur mesure pour les TPE / PME</a> et j'écris aussi
+      <a href="https://6px.fr/articles"></a>des articles sur la meilleur utilisation des outils digitaux pour les entreprises</a>
    </div>
 </div><!-- end .footer -->
 

@@ -84,8 +84,12 @@
                      <a href="/contact.html">Contact</a>
                  </li> 
                  
-                 <li class="element   last">
+                 <li class="element   ">
                      <a href="/projects.html">Projects</a>
+                 </li> 
+                 
+                 <li class="element   last">
+                     <a href="/videos.html">Videos</a>
                  </li> 
                  
 
@@ -124,27 +128,28 @@
   <p><em>“Inter-frame communication is like inter-process communication”</em> <br /><small>- My buddy who does C (or C++ maybe?)</small></p>
 </blockquote>
 
-<p>Oh I forgot to say, I want to store somewhat structured data about the edits, not just the raw HTML, to enable easier further edits if necessary. <a href="https://github.com/bustle/mobiledoc-kit">mobiledoc</a> seemed promising. I spent about an hour investigating it (my internet was slow that day, I swear!) before I realised it’s basically markdown. I thought adapting it to my use case, but it felt futile (as in: too much work). So what was I on about ? ah yes, iframes ! Mmmm who doesn’t love a  good iframe? You don’t? Good, ‘cause me neither. Anyway, inter-frame communication is like inter-process communication (or so says my buddy that does printer drivers for HP – Yeah, I’ll curse him on your behalf if you have an HP printer): you have to pass messages around, in our case with <a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage"><code class="highlighter-rouge">window.postMessage()</code></a>. It works, it’s great!</p>
+<p>Oh I forgot to say, I want to store somewhat structured data about the edits, not just the raw HTML, to enable easier further edits if necessary. <a href="https://github.com/bustle/mobiledoc-kit">mobiledoc</a> seemed promising. I spent about an hour investigating it (my internet was slow that day, I swear!) before I realised it’s basically markdown. I thought adapting it to my use case, but it felt futile (as in: too much work). So what was I on about ? ah yes, iframes ! Mmmm who doesn’t love a  good iframe? You don’t? Good, ‘cause me neither. Anyway, inter-frame communication is like inter-process communication (or so says my buddy that does printer drivers for HP – Yeah, I’ll curse him on your behalf if you have an HP printer): you have to pass messages around, in our case with <a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage"><code class="language-plaintext highlighter-rouge">window.postMessage()</code></a>. It works, it’s great!</p>
 
 <p>Anyway, here’s how it works: I like to think of it as communication between say a frontend and an API, mostly because of the asynchronous nature of the communication. So basically, the parent page get ready to receive messages from the iframe by listening to the “message” event, like so:</p>
 
-<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nb">window</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">'message'</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">handleFrameTasks</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="k">this</span><span class="p">))</span>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nb">window</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="dl">'</span><span class="s1">message</span><span class="dl">'</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">handleFrameTasks</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="k">this</span><span class="p">))</span>
 </code></pre></div></div>
 
-<p>I’m using react for the frontend, so this went in the <code class="highlighter-rouge">componentDidMount()</code> method, but you could place it anywhere, really, as long as it runs when you want to start editing on the iframe side.</p>
+<p>I’m using react for the frontend, so this went in the <code class="language-plaintext highlighter-rouge">componentDidMount()</code> method, but you could place it anywhere, really, as long as it runs when you want to start editing on the iframe side.</p>
 
 <p>And then on the iframe side I have something like this:</p>
 
-<figure class="highlight"><pre><code class="language-js" data-lang="js">    <span class="c1">// Send message to react</span>
+<figure class="highlight"><pre><code class="language-js" data-lang="js">    <span class="c1">// Send message to react
+</span>
     <span class="kd">var</span> <span class="nx">data</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="na">action</span><span class="p">:</span> <span class="s1">'deleteBlock'</span><span class="p">,</span>
+        <span class="na">action</span><span class="p">:</span> <span class="dl">'</span><span class="s1">deleteBlock</span><span class="dl">'</span><span class="p">,</span>
         <span class="na">blockId</span><span class="p">:</span> <span class="nx">blockId</span><span class="p">,</span>
     <span class="p">};</span>
-    <span class="nx">top</span><span class="p">.</span><span class="nx">postMessage</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="s1">'*'</span><span class="p">);</span></code></pre></figure>
+    <span class="nx">top</span><span class="p">.</span><span class="nx">postMessage</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="dl">'</span><span class="s1">*</span><span class="dl">'</span><span class="p">);</span></code></pre></figure>
 
-<p>In fact at the start I was <code class="highlighter-rouge">JSON.stringify()</code>ing the data I sent, as I remember it being necessary a few years ago, but that’s not required anymore.</p>
+<p>In fact at the start I was <code class="language-plaintext highlighter-rouge">JSON.stringify()</code>ing the data I sent, as I remember it being necessary a few years ago, but that’s not required anymore.</p>
 
-<p>Then on the parent React side, the <code class="highlighter-rouge">handleFrameTasks</code> dispatches the actions required depending on what the iframe requested. For example in the case above it will delete the page block with id <code class="highlighter-rouge">blockId</code> from it’s page data structure.</p>
+<p>Then on the parent React side, the <code class="language-plaintext highlighter-rouge">handleFrameTasks</code> dispatches the actions required depending on what the iframe requested. For example in the case above it will delete the page block with id <code class="language-plaintext highlighter-rouge">blockId</code> from it’s page data structure.</p>
 
 <p>Did I mention that the iframe content is generated dynamically and injected in the iframe src with a data blob URL? Well then, maybe I’ll post about that the next time.</p>
 
@@ -189,7 +194,7 @@
    
    <div class="footer">
    <div class="container">
-      <p class="copy">&copy; 2021 <a href="http://jfoucher.com">Jonathan Foucher.</a></p>
+      <p class="copy">&copy; 2022 <a href="http://jfoucher.com">Jonathan Foucher.</a></p>
 
       <div class="footer-links"> 
          <ul class="noList"> 
@@ -261,6 +266,10 @@
             </li>
          </ul>
       </div>
+   </div>
+   <div class="container">
+      <a href="https://6px.fr">Je créé des application sur mesure pour les TPE / PME</a> et j'écris aussi
+      <a href="https://6px.fr/articles"></a>des articles sur la meilleur utilisation des outils digitaux pour les entreprises</a>
    </div>
 </div><!-- end .footer -->
 

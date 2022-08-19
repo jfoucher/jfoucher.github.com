@@ -82,8 +82,12 @@
                      <a href="/contact.html">Contact</a>
                  </li> 
                  
-                 <li class="element   last">
+                 <li class="element   ">
                      <a href="/projects.html">Projects</a>
+                 </li> 
+                 
+                 <li class="element   last">
+                     <a href="/videos.html">Videos</a>
                  </li> 
                  
 
@@ -127,7 +131,7 @@
 <h3 id="create-the-custom-phing-task">Create the custom phing task</h3>
 
 <p>Next up is creating the actual task PHP class. Create an empty file named TwitterUpdateTask.php</p>
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">sudo </span>touch /usr/share/php/phing/tasks/my/TwitterUpdateTask.php</code></pre></figure>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">sudo touch</span> /usr/share/php/phing/tasks/my/TwitterUpdateTask.php</code></pre></figure>
 <p>and open it for editing with your favorite editor. We’ll use gedit :</p>
 <figure class="highlight"><pre><code class="language-bash" data-lang="bash">gksu gedit /usr/share/php/phing/tasks/my/TwitterUpdateTask.php</code></pre></figure>
 
@@ -141,27 +145,27 @@
     <span class="nb">define</span><span class="p">(</span><span class="s1">'CONSUMER_SECRET'</span><span class="p">,</span> <span class="s1">'Your Consumer Secret Here'</span><span class="p">);</span>
     <span class="nb">define</span><span class="p">(</span><span class="s1">'OAUTH_TOKEN'</span><span class="p">,</span> <span class="s1">'Your OAuth Token Here'</span><span class="p">);</span>
     <span class="nb">define</span><span class="p">(</span><span class="s1">'OAUTH_TOKEN_SECRET'</span><span class="p">,</span> <span class="s1">'Your Oauth Token Secret Here'</span><span class="p">);</span>
-    <span class="k">class</span> <span class="nc">TwitterUpdateTask</span> <span class="k">extends</span> <span class="nx">Task</span> <span class="p">{</span>
+    <span class="kd">class</span> <span class="nc">TwitterUpdateTask</span> <span class="kd">extends</span> <span class="nc">Task</span> <span class="p">{</span>
         <span class="k">private</span> <span class="nv">$message</span><span class="p">;</span>
         <span class="cm">/*
          * The setter for the status message
          */</span>
-        <span class="k">public</span> <span class="k">function</span> <span class="nf">setMessage</span><span class="p">(</span><span class="nv">$str</span><span class="p">){</span>
-            <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">message</span><span class="o">=</span><span class="nv">$str</span><span class="p">;</span>
+        <span class="k">public</span> <span class="k">function</span> <span class="n">setMessage</span><span class="p">(</span><span class="nv">$str</span><span class="p">){</span>
+            <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">message</span><span class="o">=</span><span class="nv">$str</span><span class="p">;</span>
         <span class="p">}</span>
-        <span class="k">public</span> <span class="k">function</span> <span class="nf">main</span><span class="p">(){</span>
+        <span class="k">public</span> <span class="k">function</span> <span class="n">main</span><span class="p">(){</span>
             <span class="cm">/* Connect to twitter */</span>
-            <span class="nv">$connection</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">TwitterOAuth</span><span class="p">(</span><span class="nx">CONSUMER_KEY</span><span class="p">,</span> <span class="nx">CONSUMER_SECRET</span><span class="p">,</span> <span class="nx">OAUTH_TOKEN</span><span class="p">,</span> <span class="nx">OAUTH_TOKEN_SECRET</span><span class="p">);</span>
+            <span class="nv">$connection</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">TwitterOAuth</span><span class="p">(</span><span class="no">CONSUMER_KEY</span><span class="p">,</span> <span class="no">CONSUMER_SECRET</span><span class="p">,</span> <span class="no">OAUTH_TOKEN</span><span class="p">,</span> <span class="no">OAUTH_TOKEN_SECRET</span><span class="p">);</span>
             <span class="cm">/* Pass the status message as a parameter */</span>
-            <span class="nv">$parameters</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span><span class="s1">'status'</span> <span class="o">=&gt;</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">message</span><span class="p">);</span>
+            <span class="nv">$parameters</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span><span class="s1">'status'</span> <span class="o">=&gt;</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">message</span><span class="p">);</span>
             <span class="cm">/* Post the data to the API endpoint */</span>
-            <span class="nv">$status</span> <span class="o">=</span> <span class="nv">$connection</span><span class="o">-&gt;</span><span class="na">post</span><span class="p">(</span><span class="s1">'statuses/update'</span><span class="p">,</span> <span class="nv">$parameters</span><span class="p">);</span>
-            <span class="k">if</span> <span class="p">(</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$status</span><span class="o">-&gt;</span><span class="na">error</span><span class="p">)){</span>
+            <span class="nv">$status</span> <span class="o">=</span> <span class="nv">$connection</span><span class="o">-&gt;</span><span class="nf">post</span><span class="p">(</span><span class="s1">'statuses/update'</span><span class="p">,</span> <span class="nv">$parameters</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="k">isset</span><span class="p">(</span><span class="nv">$status</span><span class="o">-&gt;</span><span class="n">error</span><span class="p">)){</span>
                 <span class="cm">/* if there is an error, fail the build */</span>
-                <span class="k">throw</span> <span class="k">new</span> <span class="nx">BuildException</span><span class="p">(</span><span class="nv">$status</span><span class="o">-&gt;</span><span class="na">error</span><span class="p">);</span>
+                <span class="k">throw</span> <span class="k">new</span> <span class="nc">BuildException</span><span class="p">(</span><span class="nv">$status</span><span class="o">-&gt;</span><span class="n">error</span><span class="p">);</span>
             <span class="p">}</span><span class="k">else</span><span class="p">{</span>
                 <span class="cm">/* if there is no error, show a success message */</span>
-                <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">log</span> <span class="p">(</span><span class="s2">"Status posted to twitter"</span><span class="p">);</span>
+                <span class="nv">$this</span><span class="o">-&gt;</span><span class="nb">log</span> <span class="p">(</span><span class="s2">"Status posted to twitter"</span><span class="p">);</span>
             <span class="p">}</span>
         <span class="p">}</span>
     <span class="p">}</span></code></pre></figure>
@@ -205,7 +209,7 @@
     <span class="nt">&lt;phingcall</span> <span class="na">target=</span><span class="s">"tweet"</span> <span class="nt">/&gt;</span></code></pre></figure>
 
 <p>This will post the message to twitter, replacing the</p>
-<figure class="highlight"><pre><code class="language-php" data-lang="php"><span class="err">$</span><span class="p">{</span><span class="nx">build</span><span class="o">.</span><span class="nb">time</span><span class="p">}</span></code></pre></figure>
+<figure class="highlight"><pre><code class="language-php" data-lang="php"><span class="err">$</span><span class="p">{</span><span class="n">build</span><span class="mf">.</span><span class="n">time</span><span class="p">}</span></code></pre></figure>
 <p>token by the actual build and time.</p>
 
 <p>Do you use Phing for your webapp build and deployment? If so, please share any custom tasks you might have created.</p>
@@ -239,7 +243,7 @@
    
    <div class="footer">
    <div class="container">
-      <p class="copy">&copy; 2021 <a href="http://jfoucher.com">Jonathan Foucher.</a></p>
+      <p class="copy">&copy; 2022 <a href="http://jfoucher.com">Jonathan Foucher.</a></p>
 
       <div class="footer-links"> 
          <ul class="noList"> 
@@ -311,6 +315,10 @@
             </li>
          </ul>
       </div>
+   </div>
+   <div class="container">
+      <a href="https://6px.fr">Je créé des application sur mesure pour les TPE / PME</a> et j'écris aussi
+      <a href="https://6px.fr/articles"></a>des articles sur la meilleur utilisation des outils digitaux pour les entreprises</a>
    </div>
 </div><!-- end .footer -->
 

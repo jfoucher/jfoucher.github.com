@@ -82,8 +82,12 @@
                      <a href="/contact.html">Contact</a>
                  </li> 
                  
-                 <li class="element   last">
+                 <li class="element   ">
                      <a href="/projects.html">Projects</a>
+                 </li> 
+                 
+                 <li class="element   last">
+                     <a href="/videos.html">Videos</a>
                  </li> 
                  
 
@@ -107,40 +111,43 @@
 by the following one :</p>
 
 <figure class="highlight"><pre><code class="language-php" data-lang="php">    <span class="cp">&lt;?php</span>
-      <span class="k">function</span> <span class="nf">get_series_order</span><span class="p">(</span><span class="nv">$posts</span><span class="p">,</span> <span class="nv">$postid</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nv">$skip</span> <span class="o">=</span> <span class="k">TRUE</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">function</span> <span class="n">get_series_order</span><span class="p">(</span><span class="nv">$posts</span><span class="p">,</span> <span class="nv">$postid</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nv">$skip</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">)</span> <span class="p">{</span>
       <span class="k">global</span> <span class="nv">$wpdb</span><span class="p">;</span>
-      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$posts</span><span class="p">))</span> <span class="k">return</span> <span class="kc">false</span><span class="p">;</span> <span class="c1">//don't have the posts array so can't do anything
-</span>      <span class="k">if</span> <span class="p">(</span> <span class="o">!</span><span class="nb">is_array</span><span class="p">(</span> <span class="nv">$posts</span> <span class="p">)</span>
+      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">isset</span><span class="p">(</span><span class="nv">$posts</span><span class="p">))</span> <span class="k">return</span> <span class="kc">false</span><span class="p">;</span> <span class="c1">//don't have the posts array so can't do anything
+</span>
+      <span class="k">if</span> <span class="p">(</span> <span class="o">!</span><span class="nb">is_array</span><span class="p">(</span> <span class="nv">$posts</span> <span class="p">)</span>
       <span class="nv">$posts</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span><span class="nv">$posts</span><span class="p">);</span>
       <span class="nv">$series_posts</span> <span class="o">=</span> <span class="k">array</span><span class="p">();</span>
       <span class="nv">$key</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
       <span class="k">foreach</span> <span class="p">(</span><span class="nv">$posts</span> <span class="k">as</span> <span class="nv">$spost</span><span class="p">)</span> <span class="p">{</span>
         <span class="k">if</span> <span class="p">(</span><span class="nb">array_key_exists</span><span class="p">(</span><span class="s1">'object_id'</span><span class="p">,</span> <span class="nv">$posts</span><span class="p">))</span> <span class="p">{</span>
           <span class="k">if</span> <span class="p">(</span><span class="nv">$key</span><span class="o">!=</span><span class="mi">0</span><span class="p">){</span>
-            <span class="nv">$spost_id</span> <span class="o">.=</span> <span class="s2">","</span><span class="o">.</span><span class="nv">$spost</span><span class="p">[</span><span class="s1">'object_id'</span><span class="p">];</span>
+            <span class="nv">$spost_id</span> <span class="mf">.</span><span class="o">=</span> <span class="s2">","</span><span class="mf">.</span><span class="nv">$spost</span><span class="p">[</span><span class="s1">'object_id'</span><span class="p">];</span>
           <span class="p">}</span><span class="k">else</span><span class="p">{</span>
-            <span class="nv">$spost_id</span> <span class="o">.=</span> <span class="nv">$spost</span><span class="p">[</span><span class="s1">'object_id'</span><span class="p">];</span>
+            <span class="nv">$spost_id</span> <span class="mf">.</span><span class="o">=</span> <span class="nv">$spost</span><span class="p">[</span><span class="s1">'object_id'</span><span class="p">];</span>
           <span class="p">}</span>
         <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
           <span class="k">if</span> <span class="p">(</span><span class="nv">$key</span><span class="o">!=</span><span class="mi">0</span><span class="p">){</span>
-            <span class="nv">$spost_id</span> <span class="o">.=</span> <span class="s2">","</span><span class="o">.</span><span class="nv">$spost</span><span class="p">;</span>
+            <span class="nv">$spost_id</span> <span class="mf">.</span><span class="o">=</span> <span class="s2">","</span><span class="mf">.</span><span class="nv">$spost</span><span class="p">;</span>
           <span class="p">}</span><span class="k">else</span><span class="p">{</span>
-            <span class="nv">$spost_id</span> <span class="o">.=</span> <span class="nv">$spost</span><span class="p">;</span>
+            <span class="nv">$spost_id</span> <span class="mf">.</span><span class="o">=</span> <span class="nv">$spost</span><span class="p">;</span>
           <span class="p">}</span>
         <span class="p">}</span>
         <span class="nv">$key</span><span class="o">++</span><span class="p">;</span>
       <span class="p">}</span>
       <span class="c1">//Optimized : 1 SQL query instead of 2* number ofposts in series//
-</span>      <span class="nv">$results</span><span class="o">=</span><span class="nv">$wpdb</span><span class="o">-&gt;</span><span class="na">get_results</span><span class="p">(</span><span class="s2">"SELECT </span><span class="nv">$wpdb-&gt;posts</span><span class="s2">.ID, </span><span class="nv">$wpdb-&gt;postmeta</span><span class="s2">.meta_value
+</span>
+      <span class="nv">$results</span><span class="o">=</span><span class="nv">$wpdb</span><span class="o">-&gt;</span><span class="nf">get_results</span><span class="p">(</span><span class="s2">"SELECT </span><span class="nv">$wpdb-&gt;posts</span><span class="s2">.ID, </span><span class="nv">$wpdb-&gt;postmeta</span><span class="s2">.meta_value
       FROM </span><span class="nv">$wpdb-&gt;posts</span><span class="s2"> LEFT JOIN </span><span class="nv">$wpdb-&gt;postmeta</span><span class="s2">
       ON(</span><span class="nv">$wpdb-&gt;posts</span><span class="s2">.ID = </span><span class="nv">$wpdb-&gt;postmeta</span><span class="s2">.post_id)
       WHERE post_status = 'publish' AND </span><span class="nv">$wpdb-&gt;posts</span><span class="s2">.ID
-      IN ("</span><span class="o">.</span><span class="nv">$spost_id</span><span class="o">.</span><span class="s2">") AND ener_postmeta.meta_key='"</span><span class="o">.</span><span class="nx">SERIES_PART_KEY</span><span class="o">.</span><span class="s2">"'"</span><span class="p">);</span>
+      IN ("</span><span class="mf">.</span><span class="nv">$spost_id</span><span class="mf">.</span><span class="s2">") AND ener_postmeta.meta_key='"</span><span class="mf">.</span><span class="no">SERIES_PART_KEY</span><span class="mf">.</span><span class="s2">"'"</span><span class="p">);</span>
       <span class="cm">/* 208 - fix by Matt Porter - to make sure unpublished posts are not made part of a series */</span>
       <span class="k">foreach</span> <span class="p">(</span><span class="nv">$results</span> <span class="k">as</span> <span class="nv">$num</span><span class="o">=&gt;</span><span class="nv">$result</span><span class="p">)</span> <span class="p">{</span>
         <span class="c1">//echo "&lt;h1&gt;resultat".$result-&gt;ID.$result&gt;meta_value."&lt;/h1&gt;";
-</span>        <span class="nv">$series_posts</span><span class="p">[</span><span class="nv">$num</span><span class="p">][</span><span class="s1">'id'</span><span class="p">]</span> <span class="o">=</span><span class="nv">$result</span><span class="o">-&gt;</span><span class="na">ID</span><span class="p">;</span>
-        <span class="nv">$series_posts</span><span class="p">[</span><span class="nv">$num</span><span class="p">][</span><span class="s1">'part'</span><span class="p">]</span> <span class="o">=</span> <span class="nv">$result</span><span class="o">-&gt;</span><span class="na">meta_value</span><span class="p">;</span>
+</span>
+        <span class="nv">$series_posts</span><span class="p">[</span><span class="nv">$num</span><span class="p">][</span><span class="s1">'id'</span><span class="p">]</span> <span class="o">=</span><span class="nv">$result</span><span class="o">-&gt;</span><span class="no">ID</span><span class="p">;</span>
+        <span class="nv">$series_posts</span><span class="p">[</span><span class="nv">$num</span><span class="p">][</span><span class="s1">'part'</span><span class="p">]</span> <span class="o">=</span> <span class="nv">$result</span><span class="o">-&gt;</span><span class="n">meta_value</span><span class="p">;</span>
       <span class="p">}</span>
       <span class="k">if</span> <span class="p">(</span><span class="nb">count</span><span class="p">(</span><span class="nv">$series_posts</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span>
         <span class="nb">usort</span><span class="p">(</span> <span class="nv">$series_posts</span><span class="p">,</span> <span class="s1">'_usort_series_by_part'</span> <span class="p">);</span>
@@ -178,7 +185,7 @@ by the following one :</p>
    
    <div class="footer">
    <div class="container">
-      <p class="copy">&copy; 2021 <a href="http://jfoucher.com">Jonathan Foucher.</a></p>
+      <p class="copy">&copy; 2022 <a href="http://jfoucher.com">Jonathan Foucher.</a></p>
 
       <div class="footer-links"> 
          <ul class="noList"> 
@@ -250,6 +257,10 @@ by the following one :</p>
             </li>
          </ul>
       </div>
+   </div>
+   <div class="container">
+      <a href="https://6px.fr">Je créé des application sur mesure pour les TPE / PME</a> et j'écris aussi
+      <a href="https://6px.fr/articles"></a>des articles sur la meilleur utilisation des outils digitaux pour les entreprises</a>
    </div>
 </div><!-- end .footer -->
 

@@ -84,8 +84,12 @@
                      <a href="/contact.html">Contact</a>
                  </li> 
                  
-                 <li class="element   last">
+                 <li class="element   ">
                      <a href="/projects.html">Projects</a>
+                 </li> 
+                 
+                 <li class="element   last">
+                     <a href="/videos.html">Videos</a>
                  </li> 
                  
 
@@ -111,32 +115,32 @@
 <p>So anyway, note to self : this is how you do timeseries graphs in chart.js</p>
 
 <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
-<span class="kd">const</span> <span class="nx">ctx</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'chartCanvas'</span><span class="p">).</span><span class="nx">getContext</span><span class="p">(</span><span class="s1">'2d'</span><span class="p">);</span>
+<span class="kd">const</span> <span class="nx">ctx</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="dl">'</span><span class="s1">chartCanvas</span><span class="dl">'</span><span class="p">).</span><span class="nx">getContext</span><span class="p">(</span><span class="dl">'</span><span class="s1">2d</span><span class="dl">'</span><span class="p">);</span>
 <span class="kd">const</span> <span class="nx">data</span> <span class="o">=</span> <span class="p">{</span>
     <span class="c1">// Labels should be Date objects</span>
     <span class="na">labels</span><span class="p">:</span> <span class="p">[</span><span class="k">new</span> <span class="nb">Date</span><span class="p">(</span><span class="mi">2017</span><span class="p">,</span> <span class="mi">08</span><span class="p">,</span> <span class="mi">16</span><span class="p">),</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">(</span><span class="mi">2017</span><span class="p">,</span> <span class="mi">08</span><span class="p">,</span> <span class="mi">17</span><span class="p">),</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">(</span><span class="mi">2017</span><span class="p">,</span> <span class="mi">08</span><span class="p">,</span> <span class="mi">18</span><span class="p">)],</span>
     <span class="na">datasets</span><span class="p">:</span> <span class="p">[{</span>
         <span class="na">fill</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
-        <span class="na">label</span><span class="p">:</span> <span class="s1">'Page Views'</span><span class="p">,</span>
+        <span class="na">label</span><span class="p">:</span> <span class="dl">'</span><span class="s1">Page Views</span><span class="dl">'</span><span class="p">,</span>
         <span class="na">data</span><span class="p">:</span> <span class="p">[</span><span class="mi">280</span><span class="p">,</span> <span class="mi">250</span><span class="p">,</span> <span class="mi">340</span><span class="p">],</span>
-        <span class="na">borderColor</span><span class="p">:</span> <span class="s1">'#fe8b36'</span><span class="p">,</span>
-        <span class="na">backgroundColor</span><span class="p">:</span> <span class="s1">'#fe8b36'</span><span class="p">,</span>
+        <span class="na">borderColor</span><span class="p">:</span> <span class="dl">'</span><span class="s1">#fe8b36</span><span class="dl">'</span><span class="p">,</span>
+        <span class="na">backgroundColor</span><span class="p">:</span> <span class="dl">'</span><span class="s1">#fe8b36</span><span class="dl">'</span><span class="p">,</span>
         <span class="na">lineTension</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
     <span class="p">}]</span>
 <span class="p">}</span>
 <span class="kd">const</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="na">type</span><span class="p">:</span> <span class="s1">'line'</span><span class="p">,</span>
+    <span class="na">type</span><span class="p">:</span> <span class="dl">'</span><span class="s1">line</span><span class="dl">'</span><span class="p">,</span>
     <span class="na">data</span><span class="p">:</span> <span class="nx">data</span><span class="p">,</span>
     <span class="na">options</span><span class="p">:</span> <span class="p">{</span>
         <span class="na">fill</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
         <span class="na">responsive</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
         <span class="na">scales</span><span class="p">:</span> <span class="p">{</span>
             <span class="na">xAxes</span><span class="p">:</span> <span class="p">[{</span>
-                <span class="na">type</span><span class="p">:</span> <span class="s1">'time'</span><span class="p">,</span>
+                <span class="na">type</span><span class="p">:</span> <span class="dl">'</span><span class="s1">time</span><span class="dl">'</span><span class="p">,</span>
                 <span class="na">display</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
                 <span class="na">scaleLabel</span><span class="p">:</span> <span class="p">{</span>
                     <span class="na">display</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
-                    <span class="na">labelString</span><span class="p">:</span> <span class="s2">"Date"</span><span class="p">,</span>
+                    <span class="na">labelString</span><span class="p">:</span> <span class="dl">"</span><span class="s2">Date</span><span class="dl">"</span><span class="p">,</span>
                 <span class="p">}</span>
             <span class="p">}],</span>
             <span class="na">yAxes</span><span class="p">:</span> <span class="p">[{</span>
@@ -146,7 +150,7 @@
                 <span class="na">display</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
                 <span class="na">scaleLabel</span><span class="p">:</span> <span class="p">{</span>
                     <span class="na">display</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
-                    <span class="na">labelString</span><span class="p">:</span> <span class="s2">"Page Views"</span><span class="p">,</span>
+                    <span class="na">labelString</span><span class="p">:</span> <span class="dl">"</span><span class="s2">Page Views</span><span class="dl">"</span><span class="p">,</span>
                 <span class="p">}</span>
             <span class="p">}]</span>
         <span class="p">}</span>
@@ -245,7 +249,7 @@ const chart = new Chart(ctx, options);
    
    <div class="footer">
    <div class="container">
-      <p class="copy">&copy; 2021 <a href="http://jfoucher.com">Jonathan Foucher.</a></p>
+      <p class="copy">&copy; 2022 <a href="http://jfoucher.com">Jonathan Foucher.</a></p>
 
       <div class="footer-links"> 
          <ul class="noList"> 
@@ -317,6 +321,10 @@ const chart = new Chart(ctx, options);
             </li>
          </ul>
       </div>
+   </div>
+   <div class="container">
+      <a href="https://6px.fr">Je créé des application sur mesure pour les TPE / PME</a> et j'écris aussi
+      <a href="https://6px.fr/articles"></a>des articles sur la meilleur utilisation des outils digitaux pour les entreprises</a>
    </div>
 </div><!-- end .footer -->
 

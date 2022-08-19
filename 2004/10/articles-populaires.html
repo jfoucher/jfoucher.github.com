@@ -10,6 +10,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Ce plugin est une autre extension de StatTraq de ma création, donc n’oubliez pas de télécharger StatTraq. Ce plugin récupère les articles les plus lus de la table de StatTraq et les affiche selon le format de votre choix.
 
+Téléchargez le fichier gzip (ou bien jetez un oeil au code source)
+
+Décompressez le fichier et mettez le dans votre dossier wp-content/plugins, puis activez le dans l’interface d’administration.
+Pour utiliser le plugin, vous devez mettre le code ci-dessous dans votre fichier index.php.
+
+  &lt;?php 
+ popular('chaîne', entier);
+ ?&gt;
+
+
+Où ‘chaîne’ représente le format de sortie que vous souhaitez obtenir. La chaîne par défaut est :
+
+ '&lt;li&gt;&lt;a href="%u" title="%t"&gt;%t (%v views)&lt;/a&gt;&lt;/li&gt;'
+
+
+Dans cette chaîne, %u sera remplacé par l’url de l’article, %t par son titre, et %v par le nombre de fois que cet article a été lu. Il est ainsi très facile de choisir le format de sortie que vous souhaitez.
+
+Le deuxième paramètre (un nombre entier) d?finit le nombre d’articles que vous souhaitez afficher.
+
+Versions
+
+0.1: Première sortie
+
+0.12: Devrait fonctionner avec toutes les structures de parmaliens, merci de me faire savoir si ce n’est pas le cas. Applique le filtre pour ‘the_title’.
 ">
     <meta name="generator" content="Stati (https://stati.jfoucher.com)" />
     
@@ -84,8 +108,12 @@
                      <a href="/contact.html">Contact</a>
                  </li> 
                  
-                 <li class="element   last">
+                 <li class="element   ">
                      <a href="/projects.html">Projects</a>
+                 </li> 
+                 
+                 <li class="element   last">
+                     <a href="/videos.html">Videos</a>
                  </li> 
                  
 
@@ -109,14 +137,14 @@
 <p>Décompressez le fichier et mettez le dans votre dossier wp-content/plugins, puis activez le dans l’interface d’administration.
 Pour utiliser le plugin, vous devez mettre le code ci-dessous dans votre fichier index.php.</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  &lt;?php 
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  &lt;?php 
  popular('chaîne', entier);
  ?&gt;
 </code></pre></div></div>
 
 <p>Où ‘chaîne’ représente le format de sortie que vous souhaitez obtenir. La chaîne par défaut est :</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> '&lt;li&gt;&lt;a href="%u" title="%t"&gt;%t (%v views)&lt;/a&gt;&lt;/li&gt;'
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> '&lt;li&gt;&lt;a href="%u" title="%t"&gt;%t (%v views)&lt;/a&gt;&lt;/li&gt;'
 </code></pre></div></div>
 
 <p>Dans cette chaîne, %u sera remplacé par l’url de l’article, %t par son titre, et %v par le nombre de fois que cet article a été lu. Il est ainsi très facile de choisir le format de sortie que vous souhaitez.</p>
@@ -157,7 +185,7 @@ Pour utiliser le plugin, vous devez mettre le code ci-dessous dans votre fichier
    
    <div class="footer">
    <div class="container">
-      <p class="copy">&copy; 2021 <a href="http://jfoucher.com">Jonathan Foucher.</a></p>
+      <p class="copy">&copy; 2022 <a href="http://jfoucher.com">Jonathan Foucher.</a></p>
 
       <div class="footer-links"> 
          <ul class="noList"> 
@@ -229,6 +257,10 @@ Pour utiliser le plugin, vous devez mettre le code ci-dessous dans votre fichier
             </li>
          </ul>
       </div>
+   </div>
+   <div class="container">
+      <a href="https://6px.fr">Je créé des application sur mesure pour les TPE / PME</a> et j'écris aussi
+      <a href="https://6px.fr/articles"></a>des articles sur la meilleur utilisation des outils digitaux pour les entreprises</a>
    </div>
 </div><!-- end .footer -->
 

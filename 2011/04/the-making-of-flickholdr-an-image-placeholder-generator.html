@@ -82,8 +82,12 @@
                      <a href="/contact.html">Contact</a>
                  </li> 
                  
-                 <li class="element   last">
+                 <li class="element   ">
                      <a href="/projects.html">Projects</a>
+                 </li> 
+                 
+                 <li class="element   last">
+                     <a href="/videos.html">Videos</a>
                  </li> 
                  
 
@@ -120,25 +124,25 @@
 <ul>
   <li>A public method called</li>
 </ul>
-<figure class="highlight"><pre><code class="language-php" data-lang="php"><span class="nx">search</span><span class="p">()</span></code></pre></figure>
+<figure class="highlight"><pre><code class="language-php" data-lang="php"><span class="nf">search</span><span class="p">()</span></code></pre></figure>
 <p>that gets images using the <a href="http://www.flickr.com/services/api/">flickr API</a></p>
 <ul>
   <li>A private method called</li>
 </ul>
-<figure class="highlight"><pre><code class="language-php" data-lang="php"><span class="nx">_get_sizes</span><span class="p">()</span></code></pre></figure>
+<figure class="highlight"><pre><code class="language-php" data-lang="php"><span class="nf">_get_sizes</span><span class="p">()</span></code></pre></figure>
 <p>that finds the sizes available for that particular image</p>
 <ul>
   <li>Another private method</li>
 </ul>
-<figure class="highlight"><pre><code class="language-php" data-lang="php"><span class="nx">_get_author</span><span class="p">()</span></code></pre></figure>
+<figure class="highlight"><pre><code class="language-php" data-lang="php"><span class="nf">_get_author</span><span class="p">()</span></code></pre></figure>
 <p>that gets the information for the image and returns the name of the author, to be displayed in the watermark</p>
 
 <p>The</p>
-<figure class="highlight"><pre><code class="language-php" data-lang="php"><span class="nx">search</span><span class="p">()</span></code></pre></figure>
+<figure class="highlight"><pre><code class="language-php" data-lang="php"><span class="nf">search</span><span class="p">()</span></code></pre></figure>
 <p>method returns as soon as it finds an image of at least the required size.</p>
 
 <p>The controller private method</p>
-<figure class="highlight"><pre><code class="language-php" data-lang="php"><span class="nx">_get_image</span><span class="p">()</span></code></pre></figure>
+<figure class="highlight"><pre><code class="language-php" data-lang="php"><span class="nf">_get_image</span><span class="p">()</span></code></pre></figure>
 <p>then takes charge of resizing, cropping and watermarking the image, using codeigniter’s <a title="Codeigniter image manipulation class manual" href="http://codeigniter.com/user_guide/libraries/image_lib.html">image manipulation library</a> to keep things quick and simple. I just tweaked the watermarking method of that class to allow for semi-transparent watermarks.</p>
 
 <p>The controller then sends the image to the browser with the proper headers.</p>
@@ -175,7 +179,7 @@
    
    <div class="footer">
    <div class="container">
-      <p class="copy">&copy; 2021 <a href="http://jfoucher.com">Jonathan Foucher.</a></p>
+      <p class="copy">&copy; 2022 <a href="http://jfoucher.com">Jonathan Foucher.</a></p>
 
       <div class="footer-links"> 
          <ul class="noList"> 
@@ -247,6 +251,10 @@
             </li>
          </ul>
       </div>
+   </div>
+   <div class="container">
+      <a href="https://6px.fr">Je créé des application sur mesure pour les TPE / PME</a> et j'écris aussi
+      <a href="https://6px.fr/articles"></a>des articles sur la meilleur utilisation des outils digitaux pour les entreprises</a>
    </div>
 </div><!-- end .footer -->
 

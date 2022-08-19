@@ -104,51 +104,143 @@
   <div class="post">
     
     <!-- <div class="featuredImage">
-      <img src="/uploads/2019/02/mailocal.png" alt="" />
+      <img src="/uploads/2021/02/1.png" alt="" />
     </div> -->
     
-    <h1 class="postTitle"><a href="/2019/02/mailocal-a-local-smtp-server-to-debug-your-emails.html">Mailocal, a simple SMTP server and web interface to debug your emails</a></h1>
-    <p class="meta">February 28, 2019 | <span class="time"><h3 id="testing-emails">Testing emails</h3>
+    <h1 class="postTitle"><a href="/2021/02/planck-6502-open-hardware-computer.html">Planck 6502, an open hardware extensible retro computer</a></h1>
+    <p class="meta">February 28, 2021 | <span class="time"><h3 id="retro-computing">Retro computing</h3>
 
-<p>The way I used to do it is to have all emails sent to me via a configuration setting in either Symfony or Laravel. This works fine but there can be a significant delay between the moment when the email is sent and the moment it is received, which is annoying. I have heard about mailtrap, which is a hosted service that does more or less what <a href="https://mailocal.jfoucher.com">Mailocal</a> does. But I’m not a fan of sending my customers’ info to a third party.</p>
+<p>Going back to the roots of your field can provide new insights into your day to day experience. For me, the roots are located in the 70s / 80s a time when personal computers were much simpler and could be fully understood by a regular person. This is a time when the most popular computers were the Vic20, Apple II and later Commodore 64.</p>
 
-<h3 id="mailocal">Mailocal</h3>
+<p><img src="/uploads/2021/02/VIC-20.jpg" alt="Vic-20" class="left-image" />
+<img src="/uploads/2021/02/Apple_II.jpg" alt="Apple II" class="right-image" /></p>
 
-<p>So over a couple of days I developed <a href="https://mailocal.jfoucher.com">Mailocal</a> which is a smtp server you run locally, with a web interface to view the emails is has received.</p>
+<div style="clear:both"></div>
 
-<p>It is built almost fully with PHP (Symfony) with only a light smattering of javascript for the front-end.
-It works pretty good for the time I spent on it, although I can’t be sure it will parse all emails equally well.</p>
+<p>These computers booted in less than a second to a raw basic prompt. To be clear: you turn on your computer, and less than one second later you start programming. How wonderful would that be, in our land of a thousand node dependencies, failing composer upgrades and wrong vagrant configurations?</p>
 
-<p>Obviously this is something that should not be run on a production server because I haven’t looked at the security aspects much, but that’s not the use case anyway.</p>
+<h3 id="what-to-build">What to build?</h3>
 
-<p>So I hope you enjoy it and <a href="mailto:jfoucher@gmail.com">let me know</a> if you find any issues.</p>
+<p>I was increasingly interested in electronics since doing a project for a friend, so I thought to myself “How hard can it be?” Well, as it turns out, quite, but that’s hardly the point right now. The point is: what should I build? I started by building a simple 6502 based computer on a breadboard. I soon realised that if I was to have anything half useful I was going to need the entire breadboard production of China to be delivered to my house. Also breadboard computers are buggy and you can’t move them around because then a cable will come loose and you will spend five hours troubleshooting your code instead.</p>
 
-<p><a href="https://mailocal.jfoucher.com">Mailocal documentation</a>
-<a href="https://github.com/jfoucher/mailocal">Source code</a></p>
+<p>So I decided I would convert it to PCBs. They are pretty cheap to get delivered from China, but since they take about a month to arrive the rate of iteration is not so great. Better to get it right the first time obviously.</p>
+
+<p>Well I almost did. The first one was very simple, only having a 6502 processor and an 6522 parallel port interface. I interfaced with it from my computer via SPI through an arduino: the 6522 Versatile Interface Adapter can bit bang SPI easily enough. The Arduino Uno/Nano can be an SPI slave easily enough and receive that data. It can then transmit that data to my computer using serial over USB.</p>
+
+<p>That worked fine (after a couple of bodge wires) but was a bit kludgy, having the Arduino sort of hanging there by a few cables.</p>
+
+<p>I then tried to design a single board computer with everything I would ever want on it: serial communication, parrallel port, SPI port(s), i2c port(s), PS/2 port for a keyboard, sound chip, VGA output, etc… The board to house all of this was very big and thus very expensive. Combining this with the previous point regarding getting it right the first time, a single board computer suddenly seemed like not that great of an idea.</p>
+
+<h3 id="the-plan">The plan</h3>
+
+<p>I then decided to build a board with basic circuitry into which other boards that provided actual functionality will be able to plug in. Turns out that already exists and is called a <a href="https://en.wikipedia.org/wiki/Backplane">backplane</a></p>
+
+<p>So backplane it is then. The size limit for this board and all others will be 10cm x 10cm as that it the cheap price limit for most cheap board houses (yes I’m cheap and I like cheap, preferably cheap that works).</p>
+
+<p>Here is the backplane design:</p>
+
+<p><img src="/uploads/2021/02/backplane.png" alt="backplane 3D view" /></p>
+
+<p>As you can see, it is mostly just slots to plug in the extension boards. The only active components are the clock generation circuit, and some decoding to activate the expansion slots when they are needed.</p>
+
+<p>The rightmost slot is reserved for the CPU card. The CPU card includes some RAM and ROM, which means the computer is already functional with just this single board plugged in, although admittedly it won’t <em>do</em> much in that configuration.</p>
+
+<p>To get the computer to do stuff it’s best to plug in some additional boards.</p>
+
+<p>The initial design includes an IO board with PS/2 port, SPI ports and a parallel port (and LEDs, of course it has LEDs!) as well as a serial board to allow the user to communicate with the computer.</p>
+
+<p>After waiting patiently forever for the boards to arrive, I put it all together and gave it a try. It did not work at all. Of course there were mistakes on the boards, which confirmed the soudness of my choice of not doing one huge board at once.
+However not all the boards were defective, and the bad ones were quickly fixed with a few wires here and there.</p>
+
+<p>After which, plugging a usb to serial adapter into the serial board, and into a usb port on my computer, I could see the Planck computer doing something!</p>
+
+<p>Here it is running <a href="https://en.wikipedia.org/wiki/Forth_(programming_language)">Forth</a> over serial</p>
+
+<p><img src="/uploads/2021/02/running-forth.jpg" alt="Forth over serial on the Planck computer" /></p>
+
+<p>I am currently working on more expansion boards, such as an LCD board, a sound card, and a VGA card. <a href="/feed.xml">Stay tuned</a> for more.</p>
+
+<p>For more details about this project, please use the links below:</p>
+
+<ul>
+  <li><a href="https://planck6502.jfoucher.com">Project website</a></li>
+  <li><a href="https://gitlab.com/planck-6502/planck-6502">Hardware and source code</a></li>
+</ul>
+
 </span> Minutes Read</p>
-    <h3 id="testing-emails">Testing emails</h3>
+    <h3 id="retro-computing">Retro computing</h3>
 
-<p>The way I used to do it is to have all emails sent to me via a configuration setting in either Symfony or Laravel. This works fine but there can be a significant delay between the moment when the email is sent and the moment it is received, which is annoying. I have heard about mailtrap, which is a hosted service that does more or less what <a href="https://mailocal.jfoucher.com">Mailocal</a> does. But I’m not a fan of sending my customers’ info to a third party.</p>
+<p>Going back to the roots of your field can provide new insights into your day to day experience. For me, the roots are located in the 70s / 80s a time when personal computers were much simpler and could be fully understood by a regular person. This is a time when the most popular computers were the Vic20, Apple II and later Commodore 64.</p>
 
-<h3 id="mailocal">Mailocal</h3>
+<p><img src="/uploads/2021/02/VIC-20.jpg" alt="Vic-20" class="left-image" />
+<img src="/uploads/2021/02/Apple_II.jpg" alt="Apple II" class="right-image" /></p>
 
-<p>So over a couple of days I developed <a href="https://mailocal.jfoucher.com">Mailocal</a> which is a smtp server you run locally, with a web interface to view the emails is has received.</p>
+<div style="clear:both"></div>
 
-<p>It is built almost fully with PHP (Symfony) with only a light smattering of javascript for the front-end.
-It works pretty good for the time I spent on it, although I can’t be sure it will parse all emails equally well.</p>
+<p>These computers booted in less than a second to a raw basic prompt. To be clear: you turn on your computer, and less than one second later you start programming. How wonderful would that be, in our land of a thousand node dependencies, failing composer upgrades and wrong vagrant configurations?</p>
 
-<p>Obviously this is something that should not be run on a production server because I haven’t looked at the security aspects much, but that’s not the use case anyway.</p>
+<h3 id="what-to-build">What to build?</h3>
 
-<p>So I hope you enjoy it and <a href="mailto:jfoucher@gmail.com">let me know</a> if you find any issues.</p>
+<p>I was increasingly interested in electronics since doing a project for a friend, so I thought to myself “How hard can it be?” Well, as it turns out, quite, but that’s hardly the point right now. The point is: what should I build? I started by building a simple 6502 based computer on a breadboard. I soon realised that if I was to have anything half useful I was going to need the entire breadboard production of China to be delivered to my house. Also breadboard computers are buggy and you can’t move them around because then a cable will come loose and you will spend five hours troubleshooting your code instead.</p>
 
-<p><a href="https://mailocal.jfoucher.com">Mailocal documentation</a>
-<a href="https://github.com/jfoucher/mailocal">Source code</a></p>
+<p>So I decided I would convert it to PCBs. They are pretty cheap to get delivered from China, but since they take about a month to arrive the rate of iteration is not so great. Better to get it right the first time obviously.</p>
+
+<p>Well I almost did. The first one was very simple, only having a 6502 processor and an 6522 parallel port interface. I interfaced with it from my computer via SPI through an arduino: the 6522 Versatile Interface Adapter can bit bang SPI easily enough. The Arduino Uno/Nano can be an SPI slave easily enough and receive that data. It can then transmit that data to my computer using serial over USB.</p>
+
+<p>That worked fine (after a couple of bodge wires) but was a bit kludgy, having the Arduino sort of hanging there by a few cables.</p>
+
+<p>I then tried to design a single board computer with everything I would ever want on it: serial communication, parrallel port, SPI port(s), i2c port(s), PS/2 port for a keyboard, sound chip, VGA output, etc… The board to house all of this was very big and thus very expensive. Combining this with the previous point regarding getting it right the first time, a single board computer suddenly seemed like not that great of an idea.</p>
+
+<h3 id="the-plan">The plan</h3>
+
+<p>I then decided to build a board with basic circuitry into which other boards that provided actual functionality will be able to plug in. Turns out that already exists and is called a <a href="https://en.wikipedia.org/wiki/Backplane">backplane</a></p>
+
+<p>So backplane it is then. The size limit for this board and all others will be 10cm x 10cm as that it the cheap price limit for most cheap board houses (yes I’m cheap and I like cheap, preferably cheap that works).</p>
+
+<p>Here is the backplane design:</p>
+
+<p><img src="/uploads/2021/02/backplane.png" alt="backplane 3D view" /></p>
+
+<p>As you can see, it is mostly just slots to plug in the extension boards. The only active components are the clock generation circuit, and some decoding to activate the expansion slots when they are needed.</p>
+
+<p>The rightmost slot is reserved for the CPU card. The CPU card includes some RAM and ROM, which means the computer is already functional with just this single board plugged in, although admittedly it won’t <em>do</em> much in that configuration.</p>
+
+<p>To get the computer to do stuff it’s best to plug in some additional boards.</p>
+
+<p>The initial design includes an IO board with PS/2 port, SPI ports and a parallel port (and LEDs, of course it has LEDs!) as well as a serial board to allow the user to communicate with the computer.</p>
+
+<p>After waiting patiently forever for the boards to arrive, I put it all together and gave it a try. It did not work at all. Of course there were mistakes on the boards, which confirmed the soudness of my choice of not doing one huge board at once.
+However not all the boards were defective, and the bad ones were quickly fixed with a few wires here and there.</p>
+
+<p>After which, plugging a usb to serial adapter into the serial board, and into a usb port on my computer, I could see the Planck computer doing something!</p>
+
+<p>Here it is running <a href="https://en.wikipedia.org/wiki/Forth_(programming_language)">Forth</a> over serial</p>
+
+<p><img src="/uploads/2021/02/running-forth.jpg" alt="Forth over serial on the Planck computer" /></p>
+
+<p>I am currently working on more expansion boards, such as an LCD board, a sound card, and a VGA card. <a href="/feed.xml">Stay tuned</a> for more.</p>
+
+<p>For more details about this project, please use the links below:</p>
+
+<ul>
+  <li><a href="https://planck6502.jfoucher.com">Project website</a></li>
+  <li><a href="https://gitlab.com/planck-6502/planck-6502">Hardware and source code</a></li>
+</ul>
+
 
   </div>
 
   <h3 style="text-align: center; margin-top: 2em">Older posts</h3>
 
   <ul class="posts noList">
+
+    
+      <li>
+        <span class="date">February 28, 2019</span>
+        <h3><a class="post-link" href="/2019/02/mailocal-a-local-smtp-server-to-debug-your-emails.html">Mailocal, a simple SMTP server and web interface to debug your emails</a></h3>
+        <p class="meta">February 28, 2019 | <span class="time">1</span> Minutes Read</p>
+        <p class="description">Do you know Mailtrap.io? Well this is the same, but without sending (possibly) confidential data to a third party</p>
+      </li>
 
     
       <li>
@@ -180,14 +272,6 @@ It works pretty good for the time I spent on it, although I can’t be sure it w
         <h3><a class="post-link" href="/2017/08/interframe-communication-with-postmessage.html">Communication between iframes with React and postMessage for an html template editor</a></h3>
         <p class="meta">August 10, 2017 | <span class="time">6</span> Minutes Read</p>
         <p class="description">I decided to roll my own HTML template editor because most opensource ones, while good looking and well designed, are impossible to use.</p>
-      </li>
-
-    
-      <li>
-        <span class="date">March 01, 2017</span>
-        <h3><a class="post-link" href="/2017/03/one-project-per-month-first-budget-tracking.html">One project per month during 2017. Here are my first two for January and february</a></h3>
-        <p class="meta">March 01, 2017 | <span class="time">3</span> Minutes Read</p>
-        <p class="description">This year I decided to try and develop one project every month. Here's how January and February went</p>
       </li>
 
     

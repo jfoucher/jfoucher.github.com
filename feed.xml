@@ -5,9 +5,87 @@
     <description>Jonathan Foucher&apos;s blog &amp; web development notebook</description>
     <link>https://jfoucher.com/</link>
     <atom:link href="https://jfoucher.com/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 19 Aug 2022 23:03:10 +0200</pubDate>
-    <lastBuildDate>Fri, 19 Aug 2022 23:03:10 +0200</lastBuildDate>
+    <pubDate>Fri, 19 Aug 2022 23:17:23 +0200</pubDate>
+    <lastBuildDate>Fri, 19 Aug 2022 23:17:23 +0200</lastBuildDate>
     <generator>Stati (https://stati.jfoucher.com)</generator>
+    
+      <item>
+        <title>Planck 6502, an open hardware extensible retro computer</title>
+        <description>&lt;h3 id=&quot;retro-computing&quot;&gt;Retro computing&lt;/h3&gt;
+
+&lt;p&gt;Going back to the roots of your field can provide new insights into your day to day experience. For me, the roots are located in the 70s / 80s a time when personal computers were much simpler and could be fully understood by a regular person. This is a time when the most popular computers were the Vic20, Apple II and later Commodore 64.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/uploads/2021/02/VIC-20.jpg&quot; alt=&quot;Vic-20&quot; class=&quot;left-image&quot; /&gt;
+&lt;img src=&quot;/uploads/2021/02/Apple_II.jpg&quot; alt=&quot;Apple II&quot; class=&quot;right-image&quot; /&gt;&lt;/p&gt;
+
+&lt;div style=&quot;clear:both&quot;&gt;&lt;/div&gt;
+
+&lt;p&gt;These computers booted in less than a second to a raw basic prompt. To be clear: you turn on your computer, and less than one second later you start programming. How wonderful would that be, in our land of a thousand node dependencies, failing composer upgrades and wrong vagrant configurations?&lt;/p&gt;
+
+&lt;h3 id=&quot;what-to-build&quot;&gt;What to build?&lt;/h3&gt;
+
+&lt;p&gt;I was increasingly interested in electronics since doing a project for a friend, so I thought to myself “How hard can it be?” Well, as it turns out, quite, but that’s hardly the point right now. The point is: what should I build? I started by building a simple 6502 based computer on a breadboard. I soon realised that if I was to have anything half useful I was going to need the entire breadboard production of China to be delivered to my house. Also breadboard computers are buggy and you can’t move them around because then a cable will come loose and you will spend five hours troubleshooting your code instead.&lt;/p&gt;
+
+&lt;p&gt;So I decided I would convert it to PCBs. They are pretty cheap to get delivered from China, but since they take about a month to arrive the rate of iteration is not so great. Better to get it right the first time obviously.&lt;/p&gt;
+
+&lt;p&gt;Well I almost did. The first one was very simple, only having a 6502 processor and an 6522 parallel port interface. I interfaced with it from my computer via SPI through an arduino: the 6522 Versatile Interface Adapter can bit bang SPI easily enough. The Arduino Uno/Nano can be an SPI slave easily enough and receive that data. It can then transmit that data to my computer using serial over USB.&lt;/p&gt;
+
+&lt;p&gt;That worked fine (after a couple of bodge wires) but was a bit kludgy, having the Arduino sort of hanging there by a few cables.&lt;/p&gt;
+
+&lt;p&gt;I then tried to design a single board computer with everything I would ever want on it: serial communication, parrallel port, SPI port(s), i2c port(s), PS/2 port for a keyboard, sound chip, VGA output, etc… The board to house all of this was very big and thus very expensive. Combining this with the previous point regarding getting it right the first time, a single board computer suddenly seemed like not that great of an idea.&lt;/p&gt;
+
+&lt;h3 id=&quot;the-plan&quot;&gt;The plan&lt;/h3&gt;
+
+&lt;p&gt;I then decided to build a board with basic circuitry into which other boards that provided actual functionality will be able to plug in. Turns out that already exists and is called a &lt;a href=&quot;https://en.wikipedia.org/wiki/Backplane&quot;&gt;backplane&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;So backplane it is then. The size limit for this board and all others will be 10cm x 10cm as that it the cheap price limit for most cheap board houses (yes I’m cheap and I like cheap, preferably cheap that works).&lt;/p&gt;
+
+&lt;p&gt;Here is the backplane design:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/uploads/2021/02/backplane.png&quot; alt=&quot;backplane 3D view&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;As you can see, it is mostly just slots to plug in the extension boards. The only active components are the clock generation circuit, and some decoding to activate the expansion slots when they are needed.&lt;/p&gt;
+
+&lt;p&gt;The rightmost slot is reserved for the CPU card. The CPU card includes some RAM and ROM, which means the computer is already functional with just this single board plugged in, although admittedly it won’t &lt;em&gt;do&lt;/em&gt; much in that configuration.&lt;/p&gt;
+
+&lt;p&gt;To get the computer to do stuff it’s best to plug in some additional boards.&lt;/p&gt;
+
+&lt;p&gt;The initial design includes an IO board with PS/2 port, SPI ports and a parallel port (and LEDs, of course it has LEDs!) as well as a serial board to allow the user to communicate with the computer.&lt;/p&gt;
+
+&lt;p&gt;After waiting patiently forever for the boards to arrive, I put it all together and gave it a try. It did not work at all. Of course there were mistakes on the boards, which confirmed the soudness of my choice of not doing one huge board at once.
+However not all the boards were defective, and the bad ones were quickly fixed with a few wires here and there.&lt;/p&gt;
+
+&lt;p&gt;After which, plugging a usb to serial adapter into the serial board, and into a usb port on my computer, I could see the Planck computer doing something!&lt;/p&gt;
+
+&lt;p&gt;Here it is running &lt;a href=&quot;https://en.wikipedia.org/wiki/Forth_(programming_language)&quot;&gt;Forth&lt;/a&gt; over serial&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/uploads/2021/02/running-forth.jpg&quot; alt=&quot;Forth over serial on the Planck computer&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;I am currently working on more expansion boards, such as an LCD board, a sound card, and a VGA card. &lt;a href=&quot;/feed.xml&quot;&gt;Stay tuned&lt;/a&gt; for more.&lt;/p&gt;
+
+&lt;p&gt;For more details about this project, please use the links below:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://planck6502.jfoucher.com&quot;&gt;Project website&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://gitlab.com/planck-6502/planck-6502&quot;&gt;Hardware and source code&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+</description>
+        
+          <description>I have designed a 6502 based computer that can be easily extended</description>
+        
+        <pubDate>Sun, 28 Feb 2021 11:32:07 +0100</pubDate>
+        <link>https://jfoucher.com/2021/02/planck-6502-open-hardware-computer.html</link>
+        <guid isPermaLink="true">https://jfoucher.com/2021/02/planck-6502-open-hardware-computer.html</guid>
+        
+        <category>retro</category>
+        
+        <category>computer</category>
+        
+        <category>6502</category>
+        
+        
+      </item>
     
       <item>
         <title>Mailocal, a simple SMTP server and web interface to debug your emails</title>
@@ -869,103 +947,6 @@ Transfer rate:          23351.88 [Kbytes/sec] received
         <category>php</category>
         
         <category>server admin</category>
-        
-        
-      </item>
-    
-      <item>
-        <title>Import contacts from Google by entering your email and password</title>
-        <description>&lt;p&gt;What I wanted to do was something similar to what Dropbox does for their referral program: Allow the user to input their email and password, show them a list of their contacts and allow them to select who to invite. The invited contacts’ emails would then be saved directly to database and an email sent to them.&lt;/p&gt;
-
-&lt;p&gt;This is what google calls the &lt;a href=&quot;https://developers.google.com/accounts/docs/AuthForInstalledApps#Using&quot;&gt;ClientLogin&lt;/a&gt; method of authentication. It allow your user to simply input their username and password and see a list of their contacts displayed, where they can select which ones to invite, in this case.&lt;/p&gt;
-
-&lt;p&gt;The way to do that is pretty easy, first we have to make a POST request to google to get an authentification token for the subsequent authenticated requests. I chose to use the &lt;a href=&quot;https://github.com/kriswallsmith/Buzz&quot;&gt;Buzz PHP library&lt;/a&gt; as my HTTP client. It makes everything easy and removes the necessity of countless &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;curl_set_opts()&lt;/code&gt;. Buzz requires PHP 5.3, but I’m using Symfony2 which also does, so that’s not a problem, actually more of a boon as I find PHP5.3 code generally cleaner.&lt;/p&gt;
-
-&lt;p&gt;I created a class &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Importer&lt;/code&gt; with a protected variable &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$browser&lt;/code&gt; which is the Buzz\Browser instance we’ll be using to connect to google. Google returns the data in a line based format, so I used a little helper function to convert it to a PHP array:&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;    &lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;protected&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;unserializeGoogleData&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
-            &lt;span class=&quot;nv&quot;&gt;$returns&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;array&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;foreach&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;explode&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$line&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-            &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-                &lt;span class=&quot;nv&quot;&gt;$line&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;trim&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$line&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-                &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$line&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;continue&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-                &lt;span class=&quot;k&quot;&gt;list&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$k&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$v&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;explode&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;=&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$line&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-                &lt;span class=&quot;nv&quot;&gt;$returns&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$k&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$v&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-            &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$returns&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;cp&quot;&gt;?&amp;gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;So first we need to get the auth token from google:&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;    &lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
-    &lt;span class=&quot;nv&quot;&gt;$params&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;array&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
-        &lt;span class=&quot;s1&quot;&gt;&apos;accountType&apos;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&apos;HOSTED_OR_GOOGLE&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-        &lt;span class=&quot;s1&quot;&gt;&apos;Email&apos;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&apos;email&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;
-        &lt;span class=&quot;s1&quot;&gt;&apos;Passwd&apos;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&apos;password&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;
-        &lt;span class=&quot;s1&quot;&gt;&apos;service&apos;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&apos;cp&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-        &lt;span class=&quot;s1&quot;&gt;&apos;source&apos;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&apos;mention-web-1.0&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;nv&quot;&gt;$output&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;browser&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;post&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&apos;https://www.google.com/accounts/ClientLogin&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;array&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(),&lt;/span&gt;
-        &lt;span class=&quot;nb&quot;&gt;http_build_query&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$params&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;));&lt;/span&gt;
-    &lt;span class=&quot;nv&quot;&gt;$returns&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;unserializeGoogleData&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$output&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;getContent&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;());&lt;/span&gt;
-    &lt;span class=&quot;cp&quot;&gt;?&amp;gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;Where &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$data[&apos;email&apos;]&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$data[&apos;password&apos;]&lt;/code&gt; are the user’s email and password, respectively.&lt;/p&gt;
-
-&lt;p&gt;If everything went fine, the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$returns&lt;/code&gt; variable now contains an associative array with a key &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Auth&lt;/code&gt;, so we can proceed with the next step, actually getting the contacts:&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;    &lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;isset&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$returns&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&apos;Auth&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]))&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;nv&quot;&gt;$feed_url&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;https://www.google.com/m8/feeds/contacts/&quot;&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;.&lt;/span&gt;
-            &lt;span class=&quot;nb&quot;&gt;urlencode&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&apos;email&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;.&lt;/span&gt;
-            &lt;span class=&quot;s2&quot;&gt;&quot;/full?alt=json&amp;amp;max-results=500&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;nv&quot;&gt;$header&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;array&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
-            &lt;span class=&quot;s1&quot;&gt;&apos;Authorization: GoogleLogin auth=&apos;&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$returns&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&apos;Auth&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;
-        &lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;nv&quot;&gt;$result&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;browser&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$feed_url&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$header&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;nv&quot;&gt;$r&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;json_decode&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$result&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;getContent&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(),&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;//return $r;
-&lt;/span&gt;
-        &lt;span class=&quot;nv&quot;&gt;$results&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;array&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;isset&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$r&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&apos;feed&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;][&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&apos;entry&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;empty&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$r&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&apos;feed&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;][&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&apos;entry&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])){&lt;/span&gt;
-            &lt;span class=&quot;nv&quot;&gt;$results&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;array_map&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$el&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
-                &lt;span class=&quot;nv&quot;&gt;$r&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;array&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
-                &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;isset&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$el&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&apos;gd$email&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])){&lt;/span&gt;
-                    &lt;span class=&quot;nv&quot;&gt;$r&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&apos;email&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$el&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&apos;gd$email&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;][&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;][&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&apos;address&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;
-                    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;isset&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$el&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&apos;title&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;][&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&apos;$t&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])){&lt;/span&gt;
-                        &lt;span class=&quot;nv&quot;&gt;$r&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&apos;name&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$el&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&apos;title&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;][&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&apos;$t&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;
-                    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-                &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-                &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$r&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-            &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$r&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&apos;feed&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;][&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&apos;entry&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]);&lt;/span&gt;
-        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$results&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;cp&quot;&gt;?&amp;gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;If the user and password were incorrect, the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Auth&lt;/code&gt; key will not be present in the array, and so we simply return &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;false&lt;/code&gt;. It is recommended to see if Google requires the user to solve a catcha, in which case it should be displayed. But as that was not necessary in this case, it will be left as an exercise for the reader.
-On the other hand, if everything was ok, the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$results&lt;/code&gt; array is now populated with the user’s contacts, so the next step is to walk over the array extracting the data we need, in this case only the main email and the full name of the contact. We populate an array with the required data and simply return it for the caller to use.&lt;/p&gt;
-
-&lt;p&gt;I hope this will be useful to someone, but please note that Google &lt;a href=&quot;https://developers.google.com/accounts/docs/AuthForInstalledApps&quot;&gt;recommends&lt;/a&gt; you use OAuth for that kind of things.&lt;/p&gt;
-
-</description>
-        
-          <description>In some sites like for example Dropbox, you invite people from your Gmail contacts by simply entering your email and password: this is how it&apos;s done.</description>
-        
-        <pubDate>Sun, 15 Apr 2012 09:17:07 +0200</pubDate>
-        <link>https://jfoucher.com/2012/04/getting-your-users-gmail-contacts.html</link>
-        <guid isPermaLink="true">https://jfoucher.com/2012/04/getting-your-users-gmail-contacts.html</guid>
-        
-        <category>webdev</category>
-        
-        <category>php</category>
-        
-        <category>google</category>
         
         
       </item>
